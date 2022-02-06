@@ -9,6 +9,7 @@
     >
       Go back
     </button>
+    <p class="text-sm mb-4">{{ path }}</p>
 
     <div style="width: 100%; display: flex; justify-content: center">
       <div
@@ -31,7 +32,7 @@ Chart.register(...registerables);
 const levelMap = ["Company", "Group", "Studio/Publisher", "Game/Franchise"];
 const tooltipMap = ["B Market Cap", "B Market Cap", "M Revenue", "M Sales"];
 
-const About = {
+export default {
   setup() {
     const chartRef = ref(null);
     const state = reactive({ indexes: [] });
@@ -41,6 +42,20 @@ const About = {
     let skippedGroup = false;
 
     const level = computed(() => levelMap[state.indexes.length]);
+    const path = computed(() =>
+      state.indexes.length
+        ? getKeys(0, gameData[state.indexes[0]]).join(" > ")
+        : "Click a segment to get more detail"
+    );
+
+    const getKeys = (level, data) => [
+      ...(data.children.length === 1 && data.children[0].children.length
+        ? []
+        : [data.key]),
+      ...(level !== state.indexes.length - 1
+        ? getKeys(level + 1, data.children[state.indexes[level + 1]])
+        : []),
+    ];
 
     const refreshChart = () => {
       currentData = gameData;
@@ -106,9 +121,7 @@ const About = {
       refreshChart();
     });
 
-    return { chartRef, chart, drillup, state, level };
+    return { chartRef, chart, drillup, state, level, path };
   },
 };
-
-export default About;
 </script>
