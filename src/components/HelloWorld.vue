@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="about container mx-auto py-6">
     <h1 class="text-4xl mb-7 underline">Game studio market share</h1>
     <p class="text-lg mb-5">{{ level }}</p>
     <button
@@ -28,7 +28,7 @@ import { gameData, chartData, getLabels, getData } from "@/data/gameData.js";
 
 Chart.register(...registerables);
 
-const levelMap = ["Company", "Group", "Studio", "Game"];
+const levelMap = ["Company", "Group", "Studio/Publisher", "Game/Franchise"];
 
 const About = {
   setup() {
@@ -37,6 +37,7 @@ const About = {
 
     let chart;
     let currentData = gameData;
+    let skippedGroup = false;
 
     const level = computed(() => levelMap[state.indexes.length]);
 
@@ -58,14 +59,28 @@ const About = {
         true
       )[0].index;
 
-      if (currentData[index].children.length) {
+      const children = currentData[index].children;
+
+      if (children.length) {
         state.indexes.push(index);
+
+        if (children.length === 1 && children[0].children.length) {
+          skippedGroup = true;
+          state.indexes.push(0);
+        }
+
         refreshChart();
       }
     };
 
     const drillup = () => {
       state.indexes.pop();
+
+      if (skippedGroup && state.indexes.length === 1) {
+        state.indexes.pop();
+        skippedGroup = false;
+      }
+
       refreshChart();
     };
 
