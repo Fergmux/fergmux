@@ -29,6 +29,7 @@ import { gameData, chartData, getLabels, getData } from "@/data/gameData.js";
 Chart.register(...registerables);
 
 const levelMap = ["Company", "Group", "Studio/Publisher", "Game/Franchise"];
+const tooltipMap = ["B Market Cap", "B Market Cap", "M Revenue", "M Sales"];
 
 const About = {
   setup() {
@@ -46,6 +47,16 @@ const About = {
       state.indexes.forEach(
         (index) => (currentData = currentData[index].children)
       );
+
+      const prefix = state.indexes.length === 3 ? "" : "$";
+      const suffix = tooltipMap[state.indexes.length];
+
+      Chart.overrides.doughnut.plugins.tooltip = {
+        callbacks: {
+          label: (tooltipItem) => prefix + tooltipItem.parsed + suffix,
+        },
+      };
+
       chart.data.labels = getLabels(currentData);
       chart.data.datasets[0].data = getData(currentData);
       chart.update();
@@ -84,12 +95,6 @@ const About = {
       refreshChart();
     };
 
-    Chart.overrides.doughnut.plugins.tooltip = {
-      callbacks: {
-        label: (tooltipItem) => `$${tooltipItem.parsed}B`,
-      },
-    };
-
     onMounted(() => {
       chart = new Chart(chartRef.value, {
         type: "doughnut",
@@ -98,6 +103,7 @@ const About = {
           onClick: drilldown,
         },
       });
+      refreshChart();
     });
 
     return { chartRef, chart, drillup, state, level };
