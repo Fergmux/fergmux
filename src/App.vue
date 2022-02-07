@@ -1,74 +1,69 @@
 <template>
-  <div
-    @click="toggleDark"
-    class="material-icons md-dark cursor-pointer m-2 text-lg"
-  >
-    {{ darkMode ? "light_mode" : "dark_mode" }}
+  <div class="h-full relative">
+    <router-link to="/" class="material-icons md-dark cursor-pointer m-2 text-lg float-left"> home </router-link>
+    <div @click="toggleDark" class="material-icons md-dark cursor-pointer m-2 text-lg float-right">
+      {{ darkMode ? 'light_mode' : 'dark_mode' }}
+    </div>
+    <router-view></router-view>
+    <div class="absolute bottom-0 flex justify-center w-full items-center my-4">
+      <a class="mx-3" href="https://github.com/Fergmux">
+        <img :src="githubImage" alt="GitHub" />
+      </a>
+
+      <a class="mx-3" href="https://www.linkedin.com/in/fergusmull/">
+        <img src="@/assets/linkedin.svg" alt="LinkedIn" />
+      </a>
+
+      <form class="mx-3" action="https://www.paypal.com/donate" method="post" target="_top">
+        <input type="hidden" name="hosted_button_id" value="XCT76DGPUL6AN" />
+        <button
+          type="submit"
+          name="submit"
+          title="PayPal - The safer, easier way to pay online!"
+          alt="Donate with PayPal button"
+        >
+          <img src="@/assets/paypal.svg" />
+        </button>
+      </form>
+    </div>
   </div>
-  <GameChart />
-  <form
-    action="https://www.paypal.com/donate"
-    style="margin: 20px; float: right"
-    method="post"
-    target="_top"
-  >
-    <input type="hidden" name="hosted_button_id" value="XCT76DGPUL6AN" />
-    <input
-      type="image"
-      src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif"
-      border="0"
-      name="submit"
-      title="PayPal - The safer, easier way to pay online!"
-      alt="Donate with PayPal button"
-    />
-    <img
-      alt=""
-      border="0"
-      src="https://www.paypal.com/en_GB/i/scr/pixel.gif"
-      width="1"
-      height="1"
-    />
-  </form>
 </template>
 
 <script>
-import { provide, ref, onMounted } from "vue";
-import GameChart from "./components/GameChart.vue";
-import "./index.css";
+import { computed, provide, ref, onMounted } from 'vue'
+import './index.css'
+import githubBlack from '@/assets/github.svg'
+import githubWhite from '@/assets/github-dark.svg'
 
 export default {
-  components: {
-    GameChart,
-  },
   setup() {
-    const darkMode = ref(false);
+    const darkMode = ref(false)
+    const githubImage = computed(() => (darkMode.value ? githubWhite : githubBlack))
 
-    provide("dark", darkMode);
+    provide('dark', darkMode)
 
     const toggleDark = () => {
-      darkMode.value = !darkMode.value;
-      document.querySelector("html").classList.toggle("dark");
-      localStorage.setItem("darkMode", JSON.stringify(darkMode.value));
-    };
+      darkMode.value = !darkMode.value
+      document.querySelector('html').classList.toggle('dark')
+      localStorage.setItem('darkMode', JSON.stringify(darkMode.value))
+    }
 
     onMounted(() => {
-      const localDark = JSON.parse(localStorage.getItem("darkMode"));
-      const systemDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      console.log(darkMode.value, localDark);
+      const localDark = JSON.parse(localStorage.getItem('darkMode'))
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
       if (localDark != null) {
         if (darkMode.value !== localDark) {
-          toggleDark();
+          toggleDark()
         }
       } else if (systemDark) {
-        toggleDark();
+        toggleDark()
       }
-    });
+    })
 
-    return { darkMode, toggleDark };
+    return { githubImage, darkMode, toggleDark }
   },
-};
+}
 </script>
 
 <style>

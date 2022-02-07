@@ -9,6 +9,7 @@
   "dependencies": {
     "chart.js": "^3.7.0",
     "vue": "^3.2.25",
+    "vue-router": "^4.0.12",
     "vue3-simple-typeahead": "^1.0.5"
   },
   "devDependencies": {

@@ -21,11 +21,13 @@ specifiers:
   tailwindcss: ^3.0.18
   vite: ^2.7.2
   vue: ^3.2.25
+  vue-router: ^4.0.12
   vue3-simple-typeahead: ^1.0.5
 
 dependencies:
   chart.js: 3.7.0
   vue: 3.2.29
+  vue-router: 4.0.12_vue@3.2.29
   vue3-simple-typeahead: 1.0.5_vue@3.2.29
 
 devDependencies:
@@ -1875,6 +1877,10 @@ packages:
     optionalDependencies:
       prettier: 2.5.1
     dev: true
+
+  /@vue/devtools-api/6.0.0:
+    resolution: {integrity: sha512-v6i9kWtUZ3iiOGOj43tkisp0o5RJ9jOG3/tDA48J51TZt31DG4sr49mjaZOG8CkWFVE52bkzyozZmwcNrGNviQ==}
+    dev: false
 
   /@vue/eslint-config-prettier/6.0.0_4adef71036e25249dceaf9dc58301895:
     resolution: {integrity: sha512-wFQmv45c3ige5EA+ngijq40YpVcIkAy0Lihupnsnd1Dao5CBbPyfCzqtejFLZX1EwH/kCJdpz3t6s+5wd3+KxQ==}
@@ -9364,6 +9370,15 @@ packages:
       webpack: 4.46.0
     dev: true
     optional: true
+
+  /vue-router/4.0.12_vue@3.2.29:
+    resolution: {integrity: sha512-CPXvfqe+mZLB1kBWssssTiWg4EQERyqJZes7USiqfW9B5N2x+nHlnsM1D3b5CaJ6qgCvMmYJnz+G0iWjNCvXrg==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@vue/devtools-api': 6.0.0
+      vue: 3.2.29
+    dev: false
 
   /vue-style-loader/4.1.3:
     resolution: {integrity: sha512-sFuh0xfbtpRlKfm39ss/ikqs9AbKCoXZBpHeVZ8Tx650o0k0q/YCM7FRvigtxpACezfq6af+a7JeqVTWvncqDg==}

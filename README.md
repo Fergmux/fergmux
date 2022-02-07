@@ -1,6 +1,12 @@
-# Vue 3 + Vite
+# fergmux.com
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This repo contains the source code to my personal website.
+
+This project uses Vue 3 with the composition api, Vite, pnpm, and Tailwind CSS.
+
+# Deployment commands
+
+To run the code locally please install pnpm globally (`npm install -g pnpm`) and run `pnpm run dev` in the root directory to serve the project locally.
 
 ## Recommended IDE Setup
 
