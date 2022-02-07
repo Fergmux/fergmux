@@ -1,10 +1,12 @@
 <template>
-  <div class="h-full relative">
+  <div class="screen-height relative">
     <router-link to="/" class="material-icons md-dark cursor-pointer m-2 text-lg float-left"> home </router-link>
     <div @click="toggleDark" class="material-icons md-dark cursor-pointer m-2 text-lg float-right">
       {{ darkMode ? 'light_mode' : 'dark_mode' }}
     </div>
-    <router-view></router-view>
+
+    <router-view class="pt-10"></router-view>
+
     <div class="absolute bottom-0 flex justify-center w-full items-center my-4">
       <a class="mx-3" href="https://github.com/Fergmux">
         <img :src="githubImage" alt="GitHub" />
@@ -30,13 +32,14 @@
 </template>
 
 <script>
-import { computed, provide, ref, onMounted } from 'vue'
+import { computed, provide, ref, onMounted, onBeforeUnmount } from 'vue'
 import './index.css'
 import githubBlack from '@/assets/github.svg'
 import githubWhite from '@/assets/github-dark.svg'
 
 export default {
   setup() {
+    let resize
     const darkMode = ref(false)
     const githubImage = computed(() => (darkMode.value ? githubWhite : githubBlack))
 
@@ -48,7 +51,19 @@ export default {
       localStorage.setItem('darkMode', JSON.stringify(darkMode.value))
     }
 
+    const setHeight = () => {
+      debugger
+      let vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty('--vh', `${vh}px`)
+    }
+
     onMounted(() => {
+      setHeight()
+
+      resize = window.addEventListener('resize', () => {
+        setHeight()
+      })
+
       const localDark = JSON.parse(localStorage.getItem('darkMode'))
       const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
 
@@ -61,6 +76,8 @@ export default {
       }
     })
 
+    onBeforeUnmount(() => window.removeEventListener('resize', resize))
+
     return { githubImage, darkMode, toggleDark }
   },
 }
@@ -72,5 +89,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+}
+
+.screen-height {
+  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  height: calc(var(--vh, 1vh) * 100);
 }
 </style>
