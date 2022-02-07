@@ -1,6 +1,19 @@
 export const getLabels = (data) => data.map((item) => item.key);
 export const getData = (data) => data.map((item) => item.value);
 
+export const levelMap = [
+  "Parent Company",
+  "Group",
+  "Studio/Publisher",
+  "Game/Franchise",
+];
+export const tooltipMap = [
+  "B Market Cap",
+  "B Market Cap",
+  "M Revenue",
+  "M Sales",
+];
+
 const organiseData = (gameArray) => {
   gameArray.sort((a, b) => b.value - a.value);
   return gameArray.map((game) => ({
@@ -803,7 +816,7 @@ export const rawGameData = [
     value: 135.36,
     children: [
       {
-        key: "Play Station Studios",
+        key: null,
         value: 25,
         children: [
           {
@@ -954,7 +967,7 @@ export const rawGameData = [
     value: 55,
     children: [
       {
-        key: "Nintendo",
+        key: null,
         value: 1,
         children: [
           {
@@ -962,31 +975,31 @@ export const rawGameData = [
             value: 1100,
             children: [
               {
-                key: "Pokémon Red / Green / Blue Version",
+                key: "Pokémon Red / Green / Blue",
                 value: 31.38,
                 children: [],
               },
               { key: "Pokémon Sword / Shield", value: 23.9, children: [] },
               {
-                key: "Pokémon Gold / Silver Version",
+                key: "Pokémon Gold / Silver",
                 value: 23.1,
                 children: [],
               },
               {
-                key: "Pokémon Diamond / Pearl Version",
+                key: "Pokémon Diamond / Pearl",
                 value: 17.67,
                 children: [],
               },
               { key: "Pokémon X/Y", value: 16.58, children: [] },
-              { key: "Pokemon Mystery Dungeon", value: 16.5, children: [] },
+              { key: "Pokémon Mystery Dungeon", value: 16.5, children: [] },
               { key: "Pokémon Sun/Moon", value: 16.27, children: [] },
               {
-                key: "Pokémon Ruby / Sapphire Version",
+                key: "Pokémon Ruby / Sapphire",
                 value: 16.22,
                 children: [],
               },
               {
-                key: "Pokémon Black / White Version",
+                key: "Pokémon Black / White",
                 value: 15.64,
                 children: [],
               },
@@ -1011,12 +1024,12 @@ export const rawGameData = [
                 children: [],
               },
               {
-                key: "Pokémon Heart Gold / Soul Silver Version",
+                key: "Pokémon Heart Gold / Soul Silver",
                 value: 12.72,
                 children: [],
               },
               {
-                key: "Pokémon FireRed / LeafGreen Version",
+                key: "Pokémon FireRed / LeafGreen",
                 value: 12,
                 children: [],
               },
@@ -1026,8 +1039,8 @@ export const rawGameData = [
                 children: [],
               },
               { key: "Pokémon Black 2 and White 2", value: 8.52, children: [] },
-              { key: "Pokémon Platinum Version", value: 7.6, children: [] },
-              { key: "Pokémon Emerald Version", value: 7.06, children: [] },
+              { key: "Pokémon Platinum", value: 7.6, children: [] },
+              { key: "Pokémon Emerald", value: 7.06, children: [] },
               { key: "Pokémon Legends: Arceus", value: 6.5, children: [] },
             ],
           },
@@ -1211,29 +1224,32 @@ export const rawGameData = [
 
 export const gameData = organiseData(rawGameData);
 
-export const chartData = {
-  labels: getLabels(gameData),
-  datasets: [
-    {
-      label: "My First Dataset",
-      data: getData(gameData),
-      backgroundColor: [
-        "rgb(255, 99, 132)",
-        "rgb(54, 162, 235)",
-        "rgb(255, 205, 86)",
-        "#4FB477",
-        "#3891A6",
-        "#414073",
-        "#F5CB5C",
-        "#F5853F",
-        "#e05050",
-        "#F564A9",
-        "#5CC8FF",
-        "#009DDC",
-        "#EAB464",
-        "#a398e1",
-      ],
-      hoverOffset: 4,
-    },
-  ],
+export const chartConfig = {
+  type: "doughnut",
+  data: {
+    labels: getLabels(gameData),
+    datasets: [
+      {
+        label: "My First Dataset",
+        data: getData(gameData),
+        backgroundColor: [
+          "rgb(255, 99, 132)",
+          "rgb(54, 162, 235)",
+          "rgb(255, 205, 86)",
+          "#4FB477",
+          "#3891A6",
+          "#414073",
+          "#F5CB5C",
+          "#F5853F",
+          "#e05050",
+          "#F564A9",
+          "#5CC8FF",
+          "#009DDC",
+          "#EAB464",
+          "#a398e1",
+        ],
+        hoverOffset: 4,
+      },
+    ],
+  },
 };

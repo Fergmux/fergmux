@@ -8,26 +8,27 @@
   },
   "dependencies": {
     "chart.js": "^3.7.0",
-    "vue": "^3.2.25"
+    "vue": "^3.2.25",
+    "vue3-simple-typeahead": "^1.0.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",
-    "autoprefixer": "^10.4.2",
-    "postcss": "^8.4.6",
-    "tailwindcss": "^3.0.18",
-    "vite": "^2.7.2",
-
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-prettier": "^6.0.0",
+    "autoprefixer": "^10.4.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-vue": "^7.0.0",
     "lint-staged": "^9.5.0",
-    "prettier": "^2.2.1"
+    "postcss": "^8.4.6",
+    "prettier": "^2.2.1",
+    "sass": "^1.49.7",
+    "tailwindcss": "^3.0.18",
+    "vite": "^2.7.2"
   }
 }
