@@ -1,8 +1,14 @@
 <template>
+  <div
+    @click="toggleDark"
+    class="material-icons md-dark cursor-pointer m-2 text-lg"
+  >
+    {{ darkMode ? "light_mode" : "dark_mode" }}
+  </div>
   <GameChart />
   <form
     action="https://www.paypal.com/donate"
-    style="margin-top: 50px"
+    style="margin: 20px; float: right"
     method="post"
     target="_top"
   >
@@ -25,17 +31,51 @@
   </form>
 </template>
 
-<script setup>
+<script>
+import { provide, ref, onMounted } from "vue";
 import GameChart from "./components/GameChart.vue";
 import "./index.css";
+
+export default {
+  components: {
+    GameChart,
+  },
+  setup() {
+    const darkMode = ref(false);
+
+    provide("dark", darkMode);
+
+    const toggleDark = () => {
+      darkMode.value = !darkMode.value;
+      document.querySelector("html").classList.toggle("dark");
+      localStorage.setItem("darkMode", JSON.stringify(darkMode.value));
+    };
+
+    onMounted(() => {
+      const localDark = JSON.parse(localStorage.getItem("darkMode"));
+      const systemDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      console.log(darkMode.value, localDark);
+      if (localDark != null) {
+        if (darkMode.value !== localDark) {
+          toggleDark();
+        }
+      } else if (systemDark) {
+        toggleDark();
+      }
+    });
+
+    return { darkMode, toggleDark };
+  },
+};
 </script>
 
 <style>
-#app {
+.app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
 }
 </style>

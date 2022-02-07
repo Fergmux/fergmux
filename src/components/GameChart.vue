@@ -44,7 +44,15 @@
 </template>
 
 <script>
-import { computed, ref, reactive, onMounted, onUnmounted } from "vue";
+import {
+  computed,
+  inject,
+  ref,
+  reactive,
+  onMounted,
+  onUnmounted,
+  watch,
+} from "vue";
 import { Chart, registerables } from "chart.js";
 import SimpleTypeahead from "vue3-simple-typeahead";
 import {
@@ -96,6 +104,16 @@ export default {
       searchInput.removeEventListener("focus", focus);
       searchInput.removeEventListener("blur", blur);
       document.removeEventListener("keydown", keydown);
+    });
+
+    const dark = inject("dark", false);
+
+    watch(dark, (dark) => {
+      Chart.defaults.color = dark ? "rgb(248 250 252)" : "#2c3e50";
+      document
+        .getElementById("search-bar_wrapper")
+        .classList.toggle("simple-typeahead--dark");
+      chart.update();
     });
 
     const chartRef = ref(null);
@@ -255,6 +273,7 @@ export default {
   position: relative;
   width: 80vw;
   max-width: 500px;
+  color: #2c3e50;
 
   &-input {
     width: 100%;
@@ -278,6 +297,19 @@ export default {
 
     &-item-active {
       background-color: rgb(0, 0, 0, 0.05);
+    }
+  }
+
+  &--dark {
+    // background-color: rgb(0, 0, 0, 0.1);
+
+    .simple-typeahead-list {
+      color: #f8fafc;
+      background-color: #111;
+
+      &-item-active {
+        background-color: rgb(220, 220, 220, 0.15);
+      }
     }
   }
 }
