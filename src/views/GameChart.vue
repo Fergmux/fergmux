@@ -1,5 +1,5 @@
 <template>
-  <div class="about container mx-auto py-6 flex flex-col items-center">
+  <div class="about mx-auto py-6 flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Game studio market share</h1>
 
     <simple-typeahead

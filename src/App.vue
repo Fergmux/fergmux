@@ -1,10 +1,12 @@
 <template>
-  <div class="h-full relative">
+  <div class="min-h-screen relative">
     <router-link to="/" class="material-icons md-dark cursor-pointer m-2 text-lg float-left"> home </router-link>
     <div @click="toggleDark" class="material-icons md-dark cursor-pointer m-2 text-lg float-right">
       {{ darkMode ? 'light_mode' : 'dark_mode' }}
     </div>
-    <router-view></router-view>
+
+    <router-view class="pt-10"></router-view>
+
     <div class="absolute bottom-0 flex justify-center w-full items-center my-4">
       <a class="mx-3" href="https://github.com/Fergmux">
         <img :src="githubImage" alt="GitHub" />
