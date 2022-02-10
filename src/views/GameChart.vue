@@ -1,5 +1,5 @@
 <template>
-  <div class="about mx-auto py-6 flex flex-col items-center">
+  <div class="mx-auto flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Game studio market share</h1>
 
     <simple-typeahead
@@ -9,8 +9,8 @@
       :items="itemKeyList"
       :minInputLength="1"
       @selectItem="selectSearchItem($event, gameData)"
-      @onFocus="fieldFocus = true"
-      @onBlur="fieldFocus = false"
+      @onFocus="fieldFocused = true"
+      @onBlur="fieldFocused = false"
     />
 
     <div class="flex justify-center items-center mt-5">
@@ -23,9 +23,18 @@
       </span>
 
       <p class="text-sm pb-[0.2rem]">
-        <template v-for="(path, index) in pagePath" :key="`path-level-${index}`">
-          <span @click="drillup(pagePath.length - index - 1)" class="cursor-pointer">{{ path }}</span>
-          <span v-if="pagePath.length > 1 && index < pagePath.length - 1"> > </span>
+        <template
+          v-for="(path, index) in pagePath"
+          :key="`path-level-${index}`"
+        >
+          <span
+            @click="drillup(pagePath.length - index - 1)"
+            class="cursor-pointer"
+            >{{ path }}</span
+          >
+          <span v-if="pagePath.length > 1 && index < pagePath.length - 1">
+            >
+          </span>
         </template>
       </p>
 
@@ -49,10 +58,25 @@
 </template>
 
 <script>
-import { computed, inject, ref, reactive, onMounted, onBeforeUnmount, watch } from 'vue'
+import {
+  computed,
+  inject,
+  ref,
+  reactive,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+} from 'vue'
 import { Chart, registerables } from 'chart.js'
 import SimpleTypeahead from 'vue3-simple-typeahead'
-import { chartConfig, gameData, getData, getLabels, levelMap, tooltipMap } from '@/data/gameData.js'
+import {
+  chartConfig,
+  gameData,
+  getData,
+  getLabels,
+  levelMap,
+  tooltipMap,
+} from '@/data/gameData.js'
 
 Chart.register(...registerables)
 
@@ -100,7 +124,9 @@ export default {
 
     watch(dark, (dark) => {
       Chart.defaults.color = dark ? 'rgb(248 250 252)' : '#2c3e50'
-      document.getElementById('search-bar_wrapper').classList.toggle('simple-typeahead--dark')
+      document
+        .getElementById('search-bar_wrapper')
+        .classList.toggle('simple-typeahead--dark')
       chart.update()
     })
 
@@ -125,7 +151,9 @@ export default {
     const refreshChart = () => {
       currentData = gameData
 
-      state.indexes.forEach((index) => (currentData = currentData[index].children))
+      state.indexes.forEach(
+        (index) => (currentData = currentData[index].children)
+      )
 
       const prefix = state.indexes.length === 3 ? ' ' : ' $'
       const suffix = tooltipMap[state.indexes.length]
@@ -144,7 +172,12 @@ export default {
     let skippedGroup = false
 
     const drilldown = (event) => {
-      const index = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true)[0].index
+      const index = chart.getElementsAtEventForMode(
+        event,
+        'nearest',
+        { intersect: true },
+        true
+      )[0].index
 
       const children = currentData[index].children
 
@@ -160,7 +193,8 @@ export default {
       }
     }
 
-    const isOneChildParent = (children) => children.length === 1 && children[0].children.length
+    const isOneChildParent = (children) =>
+      children.length === 1 && children[0].children.length
 
     const drillup = (levels = 1) => {
       for (let i = 0; i < levels; i++) {
@@ -180,20 +214,23 @@ export default {
     const itemKeyList = computed(() =>
       getItemKeys(gameData)
         .flat()
-        .filter((a) => a),
+        .filter((a) => a)
     )
 
-    const getItemKeys = (data) => data.map((game) => [game.key, ...getItemKeys(game.children).flat()])
+    const getItemKeys = (data) =>
+      data.map((game) => [game.key, ...getItemKeys(game.children).flat()])
 
     const pagePath = computed(() =>
       state.indexes.length
         ? getPagePath(0, gameData[state.indexes[0]]).filter((a) => a)
-        : ['Click a segment to get more detail'],
+        : ['Click a segment to get more detail']
     )
 
     const getPagePath = (level, data) => [
       data.key,
-      ...(level !== state.indexes.length - 1 ? getPagePath(level + 1, data.children[state.indexes[level + 1]]) : []),
+      ...(level !== state.indexes.length - 1
+        ? getPagePath(level + 1, data.children[state.indexes[level + 1]])
+        : []),
     ]
 
     const resetChart = () => {

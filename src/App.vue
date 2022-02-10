@@ -1,47 +1,30 @@
 <template>
-  <div class="screen-height relative">
-    <router-link to="/" class="material-icons md-dark cursor-pointer m-2 text-lg float-left"> home </router-link>
-    <div @click="toggleDark" class="material-icons md-dark cursor-pointer m-2 text-lg float-right">
+  <div class="min-h-screen relative">
+    <router-link
+      to="/"
+      class="material-icons absolute md-dark cursor-pointer m-2 text-lg left-0 z-10"
+    >
+      home
+    </router-link>
+    <div
+      @click="toggleDark"
+      class="material-icons absolute md-dark cursor-pointer m-2 text-lg right-0 z-10"
+    >
       {{ darkMode ? 'light_mode' : 'dark_mode' }}
     </div>
-
-    <router-view class="pt-10"></router-view>
-
-    <div class="absolute bottom-0 flex justify-center w-full items-center my-4">
-      <a class="mx-3" href="https://github.com/Fergmux">
-        <img :src="githubImage" alt="GitHub" />
-      </a>
-
-      <a class="mx-3" href="https://www.linkedin.com/in/fergusmull/">
-        <img src="@/assets/linkedin.svg" alt="LinkedIn" />
-      </a>
-
-      <form class="mx-3" action="https://www.paypal.com/donate" method="post" target="_top">
-        <input type="hidden" name="hosted_button_id" value="XCT76DGPUL6AN" />
-        <button
-          type="submit"
-          name="submit"
-          title="PayPal - The safer, easier way to pay online!"
-          alt="Donate with PayPal button"
-        >
-          <img src="@/assets/paypal.svg" />
-        </button>
-      </form>
+    <div class="pt-10">
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, provide, ref, onMounted, onBeforeUnmount } from 'vue'
+import { provide, ref, onMounted } from 'vue'
 import './index.css'
-import githubBlack from '@/assets/github.svg'
-import githubWhite from '@/assets/github-dark.svg'
 
 export default {
   setup() {
-    let resize
     const darkMode = ref(false)
-    const githubImage = computed(() => (darkMode.value ? githubWhite : githubBlack))
 
     provide('dark', darkMode)
 
@@ -51,21 +34,11 @@ export default {
       localStorage.setItem('darkMode', JSON.stringify(darkMode.value))
     }
 
-    const setHeight = () => {
-      debugger
-      let vh = window.innerHeight * 0.01
-      document.documentElement.style.setProperty('--vh', `${vh}px`)
-    }
-
     onMounted(() => {
-      setHeight()
-
-      resize = window.addEventListener('resize', () => {
-        setHeight()
-      })
-
       const localDark = JSON.parse(localStorage.getItem('darkMode'))
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      const systemDark = window.matchMedia(
+        '(prefers-color-scheme: dark)'
+      ).matches
 
       if (localDark != null) {
         if (darkMode.value !== localDark) {
@@ -76,9 +49,7 @@ export default {
       }
     })
 
-    onBeforeUnmount(() => window.removeEventListener('resize', resize))
-
-    return { githubImage, darkMode, toggleDark }
+    return { darkMode, toggleDark }
   },
 }
 </script>
@@ -89,10 +60,5 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-}
-
-.screen-height {
-  height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-  height: calc(var(--vh, 1vh) * 100);
 }
 </style>

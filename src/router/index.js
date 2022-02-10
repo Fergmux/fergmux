@@ -1,15 +1,37 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/views/Home.vue')
+    component: () => import('@/views/Home.vue'),
   },
   {
     path: '/game-chart',
     name: 'game-chart',
-    component: () => import(/* webpackChunkName: "game-chart" */ '@/views/GameChart.vue')
+    component: () =>
+      import(/* webpackChunkName: "game-chart" */ '@/views/GameChart.vue'),
+  },
+  {
+    path: '/pong',
+    name: 'pong',
+    component: () => import(/* webpackChunkName: "pong" */ '@/views/Pong.vue'),
+  },
+  {
+    path: '/rain',
+    name: 'rain',
+    component: () => import(/* webpackChunkName: "rain" */ '@/views/Rain.vue'),
+  },
+  {
+    path: '/wave',
+    name: 'wave',
+    component: () => import(/* webpackChunkName: "wave" */ '@/views/Wave.vue'),
+  },
+  {
+    path: '/wordle-solver',
+    name: 'wordle',
+    component: () =>
+      import(/* webpackChunkName: "wordle" */ '@/views/Wordle.vue'),
   },
 ]
 

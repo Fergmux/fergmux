@@ -14,7 +14,10 @@ specifiers:
   eslint: ^6.7.2
   eslint-plugin-prettier: ^3.3.1
   eslint-plugin-vue: ^7.0.0
+  indexes-of: ^1.0.1
+  invert-color: ^2.0.0
   lint-staged: ^9.5.0
+  ordinal: ^1.0.3
   postcss: ^8.4.6
   prettier: ^2.2.1
   sass: ^1.49.7
@@ -23,12 +26,17 @@ specifiers:
   vue: ^3.2.25
   vue-router: ^4.0.12
   vue3-simple-typeahead: ^1.0.5
+  word-list: ^3.1.0
 
 dependencies:
   chart.js: 3.7.0
+  indexes-of: 1.0.1
+  invert-color: 2.0.0
+  ordinal: 1.0.3
   vue: 3.2.29
   vue-router: 4.0.12_vue@3.2.29
   vue3-simple-typeahead: 1.0.5_vue@3.2.29
+  word-list: 3.1.0
 
 devDependencies:
   '@vitejs/plugin-vue': 2.1.0_vite@2.7.13+vue@3.2.29
@@ -5473,7 +5481,6 @@ packages:
 
   /indexes-of/1.0.1:
     resolution: {integrity: sha1-8w9xbI4r00bHtn0985FVZqfAVgc=}
-    dev: true
 
   /infer-owner/1.0.4:
     resolution: {integrity: sha512-IClj+Xz94+d7irH5qRyfJonOdfTzuDaifE6ZPWfx0N0+/ATZCbuTPq2prFl526urkQd90WyUKIh1DfBQ2hMz9A==}
@@ -5533,6 +5540,10 @@ packages:
       has: 1.0.3
       side-channel: 1.0.4
     dev: true
+
+  /invert-color/2.0.0:
+    resolution: {integrity: sha512-9s6IATlhOAr0/0MPUpLdMpk81ixIu8IqwPwORssXBauFT/4ff/iyEOcojd0UYuPwkDbJvL1+blIZGhqVIaAm5Q==}
+    dev: false
 
   /ip-regex/2.1.0:
     resolution: {integrity: sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=}
@@ -6931,6 +6942,10 @@ packages:
       strip-ansi: 5.2.0
       wcwidth: 1.0.1
     dev: true
+
+  /ordinal/1.0.3:
+    resolution: {integrity: sha512-cMddMgb2QElm8G7vdaa02jhUNbTSrhsgAGUz1OokD83uJTwSUn+nKoNoKVVaRa08yF6sgfO7Maou1+bgLd9rdQ==}
+    dev: false
 
   /original/1.0.2:
     resolution: {integrity: sha512-hyBVl6iqqUOJ8FqRe+l/gS8H+kKYjrEndd5Pm1MfBtsEKA038HkkdbAl/72EAXGyonD/PFsvmVG+EvcIpliMBg==}
@@ -9630,6 +9645,11 @@ packages:
     dependencies:
       isexe: 2.0.0
     dev: true
+
+  /word-list/3.1.0:
+    resolution: {integrity: sha512-fm5Wqf3ema+SNTJ/WFMSL/mM4iVM+yBRyEI/KjrJTPPLsn72GbNBBK94vORD7nUc9DxE7r3H2MpuiVtiA9FzDg==}
+    engines: {node: '>=8'}
+    dev: false
 
   /word-wrap/1.2.3:
     resolution: {integrity: sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==}

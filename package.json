@@ -8,9 +8,13 @@
   },
   "dependencies": {
     "chart.js": "^3.7.0",
+    "indexes-of": "^1.0.1",
+    "invert-color": "^2.0.0",
+    "ordinal": "^1.0.3",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12",
-    "vue3-simple-typeahead": "^1.0.5"
+    "vue3-simple-typeahead": "^1.0.5",
+    "word-list": "^3.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",
