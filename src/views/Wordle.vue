@@ -2,7 +2,9 @@
   <div class="flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
 
-    <div class="word-grid grid grid-cols-5 gap-1 mb-5">
+    <input type="text" style="height: 0" ref="keyboard" />
+
+    <div class="grid grid-cols-5 gap-1 mb-5">
       <div
         v-for="(_, i) in colorList"
         :key="i"
@@ -56,8 +58,6 @@
         </div>
       </div>
     </div>
-
-    <input type="text" style="display: none" ref="keyboard" />
   </div>
 </template>
 
@@ -288,23 +288,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-input {
-  border: 1px solid black;
-  width: 100px;
-
-  &.square {
-    -webkit-appearance: none;
-    width: 30px;
-    outline: none;
-  }
-}
-
-.word-grid {
-  // width: 300px;
-  &--square {
-    // background-color: #f0f0f0;
-  }
-}
-</style>
