@@ -9,13 +9,13 @@
       ref="keyboard"
     />
 
-    <div class="grid grid-cols-5 gap-1 mb-5">
+    <div class="grid grid-cols-5 gap-1 m-5">
       <div
         v-for="(_, i) in colorList"
         :key="i"
         @click="changeColor(i)"
         :class="{
-          'bg-zinc-800': colorList[i] === 0 && letterList[i],
+          'bg-zinc-700': colorList[i] === 0 && letterList[i],
           'bg-yellow-600': colorList[i] === 1,
           'bg-green-600': colorList[i] === 2,
         }"
@@ -27,28 +27,22 @@
       </div>
     </div>
 
-    <div>
-      <button
-        @click="reset"
-        type="button"
-        class="m-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+    <div class="grid grid-cols-11 gap-1 m-5">
+      <div
+        v-for="letter in letters"
+        :key="letter"
+        class="p-2 rounded bg-gray-500 text-white cursor-pointer"
+        :class="{
+          'col-span-2': ['Reset', 'Enter', 'backspace'].includes(letter),
+          'material-icons-outlined text-base': [
+            'palette',
+            'backspace',
+          ].includes(letter),
+        }"
+        @click="handleKeyPress({ key: letter })"
       >
-        Reset
-      </button>
-      <button
-        @click="showKeyboard"
-        type="button"
-        class="m-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Keyboard
-      </button>
-      <button
-        @click="submitWord"
-        type="button"
-        class="m-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Submit
-      </button>
+        {{ letter }}
+      </div>
     </div>
 
     <div class="flex">
@@ -83,6 +77,11 @@ export default {
   setup() {
     // CONSTANTS //
     const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
+    const letters = ref(
+      'q,w,e,r,t,y,u,i,o,p,palette,a,s,d,f,g,h,j,k,l,backspace,Reset,z,x,c,v,b,n,m,Enter'.split(
+        ','
+      )
+    )
 
     // METHODS //
     const aIndex = (letter) => alphabet.indexOf(letter)
@@ -270,12 +269,16 @@ export default {
         if (letterList.value.length < wordEnd.value) {
           letterList.value.push(event.key.toUpperCase())
         }
-      } else if (event.key === 'Backspace') {
+      } else if (event.key.toLowerCase() === 'backspace') {
         if (letterList.value.length > wordStart.value) {
           letterList.value.pop()
         }
       } else if (event.key === 'Enter') {
         submitWord()
+      } else if (event.key === 'Reset') {
+        reset()
+      } else if (event.key === 'palette') {
+        changeColor(letterList.value.length)
       }
     }
 
@@ -290,6 +293,7 @@ export default {
     }
 
     return {
+      letters,
       keyboard,
       likelyWords,
       informativeWords,
@@ -301,6 +305,7 @@ export default {
       changeColor,
       reset,
       showKeyboard,
+      handleKeyPress,
     }
   },
 }
