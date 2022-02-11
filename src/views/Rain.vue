@@ -181,7 +181,7 @@ export default {
       canvas = document.getElementById('myCanvas')
       gl = initWebGL()
       canvas.width = window.innerWidth
-      canvas.height = window.outerHeight
+      canvas.height = window.innerHeight
       reset()
     })
 
@@ -314,7 +314,7 @@ export default {
     let controlsHidden = true
 
     const showSettings = () => {
-      controls.value.style.display = controlsHidden ? 'none' : 'block'
+      controls.value.style.display = controlsHidden ? 'block' : 'none'
       controlsHidden = !controlsHidden
     }
 
@@ -344,7 +344,7 @@ body {
 #show {
   position: absolute;
   bottom: 5px;
-  right: 5px;
+  right: 25px;
   display: flex;
 
   > button {
@@ -354,7 +354,7 @@ body {
 #controls {
   position: absolute;
   bottom: 40px;
-  right: 50px;
+  right: 20px;
   display: none;
   z-index: 20;
 }
