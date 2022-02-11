@@ -20,13 +20,22 @@
       </div>
     </div>
 
-    <button
-      @click="reset"
-      type="button"
-      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-    >
-      Reset
-    </button>
+    <div>
+      <button
+        @click="reset"
+        type="button"
+        class="m-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Reset
+      </button>
+      <button
+        @click="showKeyboard"
+        type="button"
+        class="m-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Keyboard
+      </button>
+    </div>
 
     <div class="flex">
       <div class="m-4">
@@ -47,6 +56,8 @@
         </div>
       </div>
     </div>
+
+    <input type="text" style="display: none" ref="keyboard" />
   </div>
 </template>
 
@@ -255,7 +266,14 @@ export default {
       }
     })
 
+    const keyboard = ref()
+
+    const showKeyboard = () => {
+      keyboard.value.focus()
+    }
+
     return {
+      keyboard,
       likelyWords,
       informativeWords,
       letterList,
@@ -265,6 +283,7 @@ export default {
       submitWord,
       changeColor,
       reset,
+      showKeyboard,
     }
   },
 }
