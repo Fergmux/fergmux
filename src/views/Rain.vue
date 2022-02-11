@@ -94,14 +94,14 @@
       </div>
     </div>
     <iframe
-      width="1424"
-      height="620"
+      width="20"
+      height="20"
       src="https://www.youtube.com/embed/q76bMs-NwRk?enablejsapi=1"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen
-      style="display: none"
+      style="display: none; position: absolute; top: 0; left: 0; z-index: -1"
       id="rain-video"
     ></iframe>
   </div>
@@ -314,7 +314,7 @@ export default {
     let controlsHidden = true
 
     const showSettings = () => {
-      controls.value.style.right = controlsHidden ? '20px' : '-200px'
+      controls.value.style.display = controlsHidden ? 'none' : 'block'
       controlsHidden = !controlsHidden
     }
 
@@ -354,7 +354,8 @@ body {
 #controls {
   position: absolute;
   bottom: 40px;
-  right: -200px;
+  right: 20px;
+  display: none;
   z-index: 20;
 }
 #back {
