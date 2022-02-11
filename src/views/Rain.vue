@@ -3,8 +3,8 @@
     <div id="back">
       <!-- <a href="/index.html"> &lt; back</a> -->
     </div>
-    <div id="container">
-      <canvas id="myCanvas" width="1000" height="1000"></canvas>
+    <div>
+      <canvas ref="canvasRef" id="myCanvas"></canvas>
       <div id="show">
         <button @click="toggleSound">
           {{ playSounds ? 'Quiet' : 'Sound' }}
@@ -96,7 +96,7 @@
     <iframe
       width="1424"
       height="620"
-      src="https://www.youtube.com/embed/q76bMs-NwRk?autoplay=1&enablejsapi=1"
+      src="https://www.youtube.com/embed/q76bMs-NwRk?enablejsapi=1"
       title="YouTube video player"
       frameborder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -115,7 +115,8 @@ export default {
   setup() {
     let canvas
     let gl
-    let playSounds = ref(true)
+    const playSounds = ref(false)
+    const canvasRef = ref()
 
     const settings = reactive({
       rainbow: false,
@@ -324,6 +325,7 @@ export default {
       toggleSound,
       showSettings,
       reset,
+      canvasRef,
     }
   },
 }
@@ -338,17 +340,6 @@ body {
   color: #aaa;
   font-size: 12px;
   overflow: hidden;
-}
-canvas {
-  height: 100vh;
-  width: 100vw;
-  display: block;
-  position: absolute;
-}
-#container {
-  position: relative;
-  height: 100vh;
-  width: 100vw;
 }
 #show {
   position: absolute;
