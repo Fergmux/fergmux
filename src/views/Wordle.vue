@@ -2,13 +2,6 @@
   <div class="flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
 
-    <input
-      @keydown="handleKeyPress"
-      type="text"
-      style="height: 0"
-      ref="keyboard"
-    />
-
     <div class="grid grid-cols-5 gap-1 m-5">
       <div
         v-for="(_, i) in colorList"
@@ -31,7 +24,7 @@
       <div
         v-for="letter in letters"
         :key="letter"
-        class="p-2 rounded bg-gray-500 text-white cursor-pointer"
+        class="p-2 rounded bg-gray-500 text-white cursor-pointer active:bg-gray-700"
         :class="{
           'col-span-2': ['Reset', 'Enter', 'backspace'].includes(letter),
           'material-icons-outlined text-base': [
@@ -195,10 +188,7 @@ export default {
     const toast = inject('$toast')
 
     const submitWord = () => {
-      if (
-        guess.value.length !== 5 ||
-        !mostLikely.value.map((item) => item[0]).includes(guess.value)
-      ) {
+      if (guess.value.length !== 5 || !words.includes(guess.value)) {
         toast('Invalid guess', {
           styles: { background: dark.value ? '#111' : '#fff' },
         })
