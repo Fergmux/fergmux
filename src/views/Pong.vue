@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col items-center -mt-10 pt-10">
     <h1 class="text-4xl mb-7 underline">Pong</h1>
     <canvas id="mycanvas" class="pong-canvas"></canvas>
   </div>
