@@ -24,7 +24,7 @@
       <div
         v-for="letter in letters"
         :key="letter"
-        class="p-2 rounded bg-gray-500 text-white cursor-pointer active:bg-gray-700"
+        class="p-2 rounded bg-gray-500 text-white cursor-pointer active:bg-gray-700 h-12 flex items-center justify-center"
         :class="{
           'col-span-2': ['Reset', 'Enter', 'backspace'].includes(letter),
           'material-icons-outlined text-base': [
@@ -290,7 +290,6 @@ export default {
       letterList,
       colorList,
       wordEnd,
-      guessCount, // Debugging
       submitWord,
       changeColor,
       reset,
