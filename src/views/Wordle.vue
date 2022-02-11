@@ -25,7 +25,7 @@
       <div
         v-for="letter in letters"
         :key="letter"
-        class="p-2 rounded bg-gray-500 text-white cursor-pointer active:bg-gray-700 h-12 flex items-center justify-center"
+        class="p-2 rounded bg-gray-500 text-white cursor-pointer active:bg-gray-700 h-12 flex items-center justify-center select-none"
         :class="{
           'col-span-2': ['Reset', 'Enter', 'backspace'].includes(letter),
           'material-icons-outlined text-base': [
@@ -190,10 +190,14 @@ export default {
 
     const submitWord = () => {
       if (guess.value.length !== 5 || !words.includes(guess.value)) {
-        toast('Invalid guess', {
+        toast('Invalid word', {
           styles: { background: dark.value ? '#111' : '#fff' },
         })
         return
+      } else {
+        toast('Accepted!', {
+          styles: { background: dark.value ? '#111' : '#fff' },
+        })
       }
       const infoGuess = mostInformative.value
         .map((entry) => entry[0])
