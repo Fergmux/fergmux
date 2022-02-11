@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Pong</h1>
-    <canvas id="mycanvas" width="800" height="500" class="pong-canvas"></canvas>
+    <canvas id="mycanvas" class="pong-canvas"></canvas>
   </div>
 </template>
 
@@ -16,7 +16,7 @@ export default {
     const score = [0, 0] // track game score [player, AI]
     const margin = 50 // margin of paddle to edge of field
     const paddleWidth = 8 // width of the paddle
-    const paddleHeight = 40 // height of the paddle
+    const paddleHeight = 50 // height of the paddle
 
     function initWebGL() {
       var gl = null
@@ -39,17 +39,19 @@ export default {
       // set max speeed of the ball
       var maxspeed = 10
       // set horizontal speed
-      var xspeed = Math.sign(Math.random() - 0.5) * maxspeed
+      var xspeed =
+        (Math.sign(Math.random() - 0.5) * maxspeed * canvas.width) / 800
       // generate random vertical speed
       var yspeed =
-        Math.sign(Math.random() - 0.5) * Math.floor(Math.random() * maxspeed)
+        Math.sign(Math.random() - 0.5) *
+        Math.floor(Math.random() * maxspeed * (canvas.width / 800))
       // set default right paddle position
       var pady = [canvas.height / 2, 0]
 
       // the main ball object
       var ball = {
         x: canvas.width / 2, // set x position to middle of field
-        y: Math.floor(100 + Math.random() * 300), // randomise start position
+        y: Math.floor(250 + Math.random() * 30), // randomise start position
         w: 8, // set width of the ball
         v: maxspeed,
         vx: xspeed,
@@ -78,6 +80,8 @@ export default {
     onMounted(() => {
       canvas = document.getElementById('mycanvas')
       gl = initWebGL()
+      canvas.width = Math.min(window.innerWidth, 800)
+      canvas.height = Math.min(window.innerHeight, 500)
       // listen for mouse click
       canvas.addEventListener(
         'click',
@@ -95,6 +99,13 @@ export default {
       // get the mouse position whenever it moves and update global variable
       canvas.addEventListener(
         'mousemove',
+        function (evt) {
+          mousePos = getMousePos(evt)
+        },
+        false
+      )
+      canvas.addEventListener(
+        'touchmove',
         function (evt) {
           mousePos = getMousePos(evt)
         },
@@ -125,17 +136,17 @@ export default {
       var clear = fontsize * 2
       // clear left score
       gl.clearRect(
-        canvas.width / 4 - clear,
-        canvas.height / 4 - clear,
-        clear * 2,
-        clear * 2
+        canvas.width / 4 - fontsize,
+        canvas.height / 4 - fontsize,
+        clear,
+        clear
       )
       // clear right score area
       gl.clearRect(
-        (canvas.width / 4) * 3 - clear,
-        canvas.height / 4 - clear,
-        clear * 2,
-        clear * 2
+        (canvas.width / 4) * 3 - fontsize,
+        canvas.height / 4 - fontsize,
+        clear,
+        clear
       )
       gl.font = fontsize.toString() + 'px pong'
       gl.fillStyle = 'white'
@@ -317,7 +328,7 @@ export default {
         canvas.height
       )
       // clear where the ball just was
-      gl.clearRect(ball.left(), ball.top(), ball.w, ball.w)
+      gl.clearRect(ball.left() - 2, ball.top() - 2, ball.w + 4, ball.w + 4)
 
       // if the ball passed over the centre line
       if (ball.x > canvas.width / 2 - 10 && ball.x < canvas.width / 2 + 10) {
@@ -365,5 +376,9 @@ export default {
   border: 1px solid #000000;
   background-color: #000000;
   font-family: pong;
+  width: 100vw;
+  height: 100vh;
+  max-width: 800px;
+  max-height: 500px;
 }
 </style>

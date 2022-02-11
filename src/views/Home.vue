@@ -9,7 +9,7 @@
     </div>
 
     <p class="mb-4">Here's some random old stuff I made:</p>
-    <div class="underline text-lg font-semibold">
+    <div class="underline text-lg font-semibold mb-2">
       <router-link class="m-2" to="pong">Pong</router-link>
       <router-link class="m-2" to="rain">Rain</router-link>
       <router-link class="m-2" to="wave">Wave</router-link>

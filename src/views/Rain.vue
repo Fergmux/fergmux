@@ -6,7 +6,9 @@
     <div id="container">
       <canvas id="myCanvas" width="1000" height="1000"></canvas>
       <div id="show">
-        <button @click="toggleSound">Quiet</button>
+        <button @click="toggleSound">
+          {{ playSounds ? 'Quiet' : 'Sound' }}
+        </button>
         <button @click="reset" id="reset">Reset</button>
         <button @click="showSettings" id="showbutton">Show</button>
       </div>
@@ -113,7 +115,7 @@ export default {
   setup() {
     let canvas
     let gl
-    let playSounds = true
+    let playSounds = ref(true)
 
     const settings = reactive({
       rainbow: false,
@@ -139,10 +141,10 @@ export default {
 
     const toggleSound = () => {
       let func = 'pauseVideo'
-      if (playSounds) {
-        playSounds = false
+      if (playSounds.value) {
+        playSounds.value = false
       } else {
-        playSounds = true
+        playSounds.value = true
         func = 'playVideo'
       }
 
@@ -177,6 +179,8 @@ export default {
     onMounted(() => {
       canvas = document.getElementById('myCanvas')
       gl = initWebGL()
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
       reset()
     })
 
@@ -316,6 +320,7 @@ export default {
     return {
       settings,
       controls,
+      playSounds,
       toggleSound,
       showSettings,
       reset,
@@ -349,12 +354,11 @@ canvas {
   position: absolute;
   bottom: 5px;
   right: 5px;
-}
-#reset {
-  float: left;
-  // display: none;
-  position: absolute;
-  right: 50px;
+  display: flex;
+
+  > button {
+    margin-left: 5px;
+  }
 }
 #controls {
   position: absolute;

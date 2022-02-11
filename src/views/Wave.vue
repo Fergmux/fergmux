@@ -13,10 +13,11 @@ export default {
     const wave_height = 150, // Height of wave
       wave_shift = 0.02, // Alter how wave shifs
       ball_count = 75, // Number of balls in the wave
-      ball_size = 20, // How big should each ball be
       base_color = '#000', // Base color for balls
       light_color = '#fff', // Light color for balls
       period_factor = 2 // Period Factor
+
+    const ball_size = window.innerWidth / ball_count // How big should each ball be
 
     let count = 0 // This just keeps track of where we are in the wave formation
 
