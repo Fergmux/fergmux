@@ -2,17 +2,18 @@
   <div class="flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
 
-    <div class="grid grid-cols-5 gap-1 m-5">
+    <div class="grid grid-cols-5 gap-2 m-5">
       <div
         v-for="(_, i) in colorList"
         :key="i"
         @click="changeColor(i)"
         :class="{
+          'border-2': !colorList[i],
           'bg-zinc-700': colorList[i] === 0 && letterList[i],
           'bg-yellow-600': colorList[i] === 1,
           'bg-green-600': colorList[i] === 2,
         }"
-        class="text-center text-4xl leading-relaxed text-gray-100 h-16 w-16 border-2 border-neutral-700 flex items-center justify-center"
+        class="text-center text-4xl leading-relaxed text-gray-100 h-16 w-16 border-neutral-700 flex items-center justify-center"
       >
         <p>
           {{ letterList[i] }}
