@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
 
-    <div class="grid grid-cols-5 gap-1 m-5">
+    <div class="grid grid-cols-5 gap-1 m-5 font-bold">
       <div
         v-for="(_, i) in colorList"
         :key="i"
@@ -21,7 +21,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-11 gap-1 m-5">
+    <div class="grid grid-cols-11 gap-1 m-5 font-semibold">
       <div
         v-for="letter in letters"
         :key="letter"
