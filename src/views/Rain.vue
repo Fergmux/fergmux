@@ -181,7 +181,7 @@ export default {
       canvas = document.getElementById('myCanvas')
       gl = initWebGL()
       canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      canvas.height = window.outerHeight
       reset()
     })
 
@@ -354,7 +354,7 @@ body {
 #controls {
   position: absolute;
   bottom: 40px;
-  right: 20px;
+  right: 50px;
   display: none;
   z-index: 20;
 }
