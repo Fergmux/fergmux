@@ -2,7 +2,12 @@
   <div class="flex flex-col items-center">
     <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
 
-    <input type="text" style="height: 0" ref="keyboard" />
+    <input
+      @keydown="handleKeyPress"
+      type="text"
+      style="height: 0"
+      ref="keyboard"
+    />
 
     <div class="grid grid-cols-5 gap-1 mb-5">
       <div
@@ -36,6 +41,13 @@
         class="m-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
       >
         Keyboard
+      </button>
+      <button
+        @click="submitWord"
+        type="button"
+        class="m-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+      >
+        Submit
       </button>
     </div>
 
@@ -181,7 +193,18 @@ export default {
         .toLowerCase()
     )
 
+    const toast = inject('$toast')
+
     const submitWord = () => {
+      if (
+        guess.value.length !== 5 ||
+        !mostLikely.value.map((item) => item[0]).includes(guess.value)
+      ) {
+        toast('Invalid guess', {
+          styles: { background: dark.value ? '#111' : '#fff' },
+        })
+        return
+      }
       const infoGuess = mostInformative.value
         .map((entry) => entry[0])
         .indexOf(guess.value)
@@ -240,10 +263,9 @@ export default {
       printHelp()
     }
 
-    const toast = inject('$toast')
     const dark = inject('dark')
 
-    document.addEventListener('keydown', (event) => {
+    const handleKeyPress = (event) => {
       if (event.key.match(/^[a-zA-Z]$/)) {
         if (letterList.value.length < wordEnd.value) {
           letterList.value.push(event.key.toUpperCase())
@@ -253,17 +275,12 @@ export default {
           letterList.value.pop()
         }
       } else if (event.key === 'Enter') {
-        if (
-          guess.value.length === 5 &&
-          mostLikely.value.map((item) => item[0]).includes(guess.value)
-        ) {
-          submitWord()
-        } else {
-          toast('Invalid guess', {
-            styles: { background: dark.value ? '#111' : '#fff' },
-          })
-        }
+        submitWord()
       }
+    }
+
+    document.addEventListener('keydown', (event) => {
+      handleKeyPress(event)
     })
 
     const keyboard = ref()
