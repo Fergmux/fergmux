@@ -35,7 +35,7 @@
         }"
         @click="handleKeyPress({ key: letter })"
       >
-        {{ letter }}
+        {{ letter.length > 1 ? letter : letter.toUpperCase() }}
       </div>
     </div>
 
