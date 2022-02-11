@@ -41,19 +41,19 @@
 
     <div class="flex">
       <div class="m-4">
-        <b>Most likely:</b>
-        <div class="grid grid-cols-2 gap-4 mb-5">
+        <b class="text-xl">Most likely:</b>
+        <div class="grid grid-cols-2 gap-4 m-5">
           <div v-for="word in likelyWords" :key="word">
-            {{ word }}
+            {{ word.toUpperCase() }}
           </div>
         </div>
       </div>
 
       <div class="m-4">
-        <b>Most information:</b>
-        <div class="grid grid-cols-2 gap-4 mb-5">
+        <b class="text-xl">Most information:</b>
+        <div class="grid grid-cols-2 gap-4 m-5">
           <div v-for="word in informativeWords" :key="word">
-            {{ word }}
+            {{ word.toUpperCase() }}
           </div>
         </div>
       </div>
