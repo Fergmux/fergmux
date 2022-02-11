@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen relative">
+  <div class="app min-h-screen relative">
     <router-link
       to="/"
       class="material-icons absolute md-dark cursor-pointer m-2 text-lg left-0 z-10"
@@ -57,6 +57,7 @@ export default {
 <style>
 .app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: 'Fira Code', Menlo, Monaco, 'Courier New', monospace; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

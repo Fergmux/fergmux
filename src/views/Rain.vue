@@ -6,6 +6,7 @@
     <div id="container">
       <canvas id="myCanvas" width="1000" height="1000"></canvas>
       <div id="show">
+        <button @click="toggleSound">Quiet</button>
         <button @click="reset" id="reset">Reset</button>
         <button @click="showSettings" id="showbutton">Show</button>
       </div>
@@ -90,6 +91,17 @@
         </form>
       </div>
     </div>
+    <iframe
+      width="1424"
+      height="620"
+      src="https://www.youtube.com/embed/q76bMs-NwRk?autoplay=1&enablejsapi=1"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      style="display: none"
+      id="rain-video"
+    ></iframe>
   </div>
 </template>
 
@@ -101,6 +113,7 @@ export default {
   setup() {
     let canvas
     let gl
+    let playSounds = true
 
     const settings = reactive({
       rainbow: false,
@@ -113,15 +126,32 @@ export default {
       length: 60,
     })
 
-    const reset = (dark) => {
+    const reset = () => {
       settings.rainbow = false
       settings.random = false
-      settings.fg = dark ? '#fff' : '#000'
-      settings.bg = dark ? '#000' : '#fff'
+      settings.fg = dark.value ? '#fff' : '#000'
+      settings.bg = dark.value ? '#171717' : '#fff'
       settings.speed = 6
       settings.density = 8
       settings.width = 4
       settings.length = 60
+    }
+
+    const toggleSound = () => {
+      let func = 'pauseVideo'
+      if (playSounds) {
+        playSounds = false
+      } else {
+        playSounds = true
+        func = 'playVideo'
+      }
+
+      document
+        .getElementById('rain-video')
+        .contentWindow.postMessage(
+          `{"event":"command","func":"${func}","args":""}`,
+          '*'
+        )
     }
 
     window.requestAnimationFrame = (function () {
@@ -147,7 +177,7 @@ export default {
     onMounted(() => {
       canvas = document.getElementById('myCanvas')
       gl = initWebGL()
-      reset(dark.value)
+      reset()
     })
 
     function initWebGL() {
@@ -279,13 +309,14 @@ export default {
     let controlsHidden = true
 
     const showSettings = () => {
-      controls.value.style.right = controlsHidden ? '50px' : '-150px'
+      controls.value.style.right = controlsHidden ? '20px' : '-200px'
       controlsHidden = !controlsHidden
     }
 
     return {
       settings,
       controls,
+      toggleSound,
       showSettings,
       reset,
     }
@@ -328,7 +359,7 @@ canvas {
 #controls {
   position: absolute;
   bottom: 40px;
-  right: -150px;
+  right: -200px;
   z-index: 20;
 }
 #back {

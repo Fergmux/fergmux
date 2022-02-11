@@ -1,6 +1,14 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+import DKToast from 'vue-dk-toast'
 
-const app = createApp(App).use(router).mount("#app");
-
+createApp(App)
+  .use(router)
+  .use(DKToast, {
+    positionX: 'center',
+    positionY: 'top',
+    max: 1,
+    duration: 3000,
+  })
+  .mount('#app')

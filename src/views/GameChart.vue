@@ -88,6 +88,19 @@ export default {
     let keydown
     const fieldFocused = ref(false)
 
+    const dark = inject('dark', false)
+
+    // Chart.defaults.color = dark ? 'rgb(248 250 252)' : '#2c3e50'
+    // FIX THIS ON LOAD
+
+    watch(dark, (dark) => {
+      Chart.defaults.color = dark ? 'rgb(248 250 252)' : '#2c3e50'
+      document
+        .getElementById('search-bar_wrapper')
+        .classList.toggle('simple-typeahead--dark')
+      chart.update()
+    })
+
     onMounted(() => {
       const searchInput = document.getElementById('search-bar')
       keydown = document.addEventListener('keydown', function (event) {
@@ -118,16 +131,6 @@ export default {
       searchInput.removeEventListener('focus', focus)
       searchInput.removeEventListener('blur', blur)
       document.removeEventListener('keydown', keydown)
-    })
-
-    const dark = inject('dark', false)
-
-    watch(dark, (dark) => {
-      Chart.defaults.color = dark ? 'rgb(248 250 252)' : '#2c3e50'
-      document
-        .getElementById('search-bar_wrapper')
-        .classList.toggle('simple-typeahead--dark')
-      chart.update()
     })
 
     const chartRef = ref(null)

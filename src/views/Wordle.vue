@@ -1,22 +1,52 @@
 <template>
-  <div class="mt-10">
-    <input type="text" v-model="inputWord" />
-    <input type="text" v-model="colors" />
-    <button @click="submitWord">Submit</button>
-    <br />
-    The words that it's most likely to be are:
-    <ul>
-      <li v-for="word in likelyWords" :key="word">
-        {{ word }}
-      </li>
-    </ul>
-    <br />
-    The words that will give you the most information are:
-    <ul>
-      <li v-for="word in informativeWords" :key="word">
-        {{ word }}
-      </li>
-    </ul>
+  <div class="flex flex-col items-center">
+    <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
+
+    <div class="word-grid grid grid-cols-5 gap-1 mb-5">
+      <div
+        v-for="(_, i) in colorList"
+        :key="i"
+        @click="changeColor(i)"
+        :class="{
+          'bg-zinc-800': colorList[i] === 0 && letterList[i],
+          'bg-yellow-600': colorList[i] === 1,
+          'bg-green-600': colorList[i] === 2,
+        }"
+        class="text-center text-4xl leading-relaxed text-gray-100 h-16 w-16 border-2 border-neutral-700 flex items-center justify-center"
+      >
+        <p>
+          {{ letterList[i] }}
+        </p>
+      </div>
+    </div>
+
+    <button
+      @click="reset"
+      type="button"
+      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+    >
+      Reset
+    </button>
+
+    <div class="flex">
+      <div class="m-4">
+        <b>Most likely:</b>
+        <div class="grid grid-cols-2 gap-4 mb-5">
+          <div v-for="word in likelyWords" :key="word">
+            {{ word }}
+          </div>
+        </div>
+      </div>
+
+      <div class="m-4">
+        <b>Most information:</b>
+        <div class="grid grid-cols-2 gap-4 mb-5">
+          <div v-for="word in informativeWords" :key="word">
+            {{ word }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -24,12 +54,10 @@
 import indexesOf from 'indexes-of'
 import words from '@/data/words.js'
 import ordinal from 'ordinal'
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, inject } from 'vue'
 
 export default {
   setup() {
-    const wordList = ref(words)
-
     // CONSTANTS //
     const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
 
@@ -39,10 +67,7 @@ export default {
     const unique = (value, index, self) => self.indexOf(value) === index
 
     const getLetterWeights = (letters) => {
-      const letterCount = [
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0,
-      ]
+      const letterCount = Array(26).fill(0)
 
       letters.forEach((letter) => letterCount[aIndex(letter)]++)
 
@@ -54,9 +79,9 @@ export default {
     // LOGIC //
 
     // Letter frequency //
-    const letterWeights = getLetterWeights([...wordList.value.join('')])
+    const letterWeights = getLetterWeights([...words.join('')])
 
-    const wordScores = wordList.value.map((word) => [
+    const wordScores = words.map((word) => [
       word,
       [...word]
         .filter(unique)
@@ -67,20 +92,18 @@ export default {
 
     // Position frequency //
     const orderedLetters = [0, 1, 2, 3, 4].map((index) =>
-      wordList.value.map((word) => word[index])
+      words.map((word) => word[index])
     )
 
     const pLetterWeights = orderedLetters.map((letters) =>
       getLetterWeights(letters)
     )
 
-    const pLetterScores = wordList.value.map((word) => [
+    const pLetterScores = words.map((word) => [
       word,
       [...word]
         .filter(unique)
-        .map(
-          (letter, letterIndex) => pLetterWeights[letterIndex][aIndex(letter)]
-        )
+        .map((letter, index) => pLetterWeights[index][aIndex(letter)])
         .reduce((a, b) => a + b),
     ])
     pLetterScores.sort((a, b) => b[1] - a[1])
@@ -108,6 +131,7 @@ export default {
         ...green.filter((x) => x),
         ...yellow.flat(2),
       ]
+
       mostInformative.value = wordScores.filter(
         (entry) => ![...entry[0]].some((letter) => usedLetters.includes(letter))
       )
@@ -136,12 +160,23 @@ export default {
         ) // Has no yellows in invalid places
     }
 
+    const guessCount = ref(0)
+    const wordStart = computed(() => guessCount.value * 5)
+    const wordEnd = computed(() => guessCount.value * 5 + 5)
+    const guess = computed(() =>
+      letterList.value
+        .slice(wordStart.value, wordEnd.value)
+        .join('')
+        .toLowerCase()
+    )
+
     const submitWord = () => {
-      const guess = inputWord.value
       const infoGuess = mostInformative.value
         .map((entry) => entry[0])
-        .indexOf(guess)
-      const probGuess = mostLikely.value.map((entry) => entry[0]).indexOf(guess)
+        .indexOf(guess.value)
+      const probGuess = mostLikely.value
+        .map((entry) => entry[0])
+        .indexOf(guess.value)
 
       if (infoGuess !== -1) {
         console.log(
@@ -158,35 +193,99 @@ export default {
         )
       }
 
-      const results = colors.value
+      const results = colorList.value.slice(wordStart.value, wordEnd.value)
 
-      grey.push(...indexesOf(results, '-').map((index) => guess[index]))
-      indexesOf(results, 'y').forEach((index) =>
-        yellow[index].push(guess[index])
+      grey.push(...indexesOf(results, 0).map((index) => guess.value[index]))
+      indexesOf(results, 1).forEach((index) =>
+        yellow[index].push(guess.value[index])
       )
-      indexesOf(results, 'g').forEach((index) => (green[index] = guess[index]))
+      indexesOf(results, 2).forEach(
+        (index) => (green[index] = guess.value[index])
+      )
 
+      printHelp()
+
+      guessCount.value++
+    }
+
+    const changeColor = (index) => {
+      if (index >= wordStart.value && index < wordEnd.value) {
+        colorList.value[index] = (colorList.value[index] + 1) % 3
+      }
+    }
+
+    const letterList = ref([])
+    const colorList = ref(Array(30).fill(0))
+
+    const reset = () => {
+      letterList.value = []
+      colorList.value.fill(0)
+      grey.length = 0
+      green.fill(null)
+      yellow.fill([])
+      mostInformative.value = []
+      mostLikely.value = []
+      guessCount.value = 0
       printHelp()
     }
 
-    const inputWord = ref('')
-    const colors = ref('')
+    const toast = inject('$toast')
+    const dark = inject('dark')
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key.match(/^[a-zA-Z]$/)) {
+        if (letterList.value.length < wordEnd.value) {
+          letterList.value.push(event.key.toUpperCase())
+        }
+      } else if (event.key === 'Backspace') {
+        if (letterList.value.length > wordStart.value) {
+          letterList.value.pop()
+        }
+      } else if (event.key === 'Enter') {
+        if (
+          guess.value.length === 5 &&
+          mostLikely.value.map((item) => item[0]).includes(guess.value)
+        ) {
+          submitWord()
+        } else {
+          toast('Invalid guess', {
+            styles: { background: dark.value ? '#111' : '#fff' },
+          })
+        }
+      }
+    })
 
     return {
-      inputWord,
-      colors,
-      wordList,
       likelyWords,
       informativeWords,
+      letterList,
+      colorList,
+      wordEnd,
+      guessCount, // Debugging
       submitWord,
+      changeColor,
+      reset,
     }
   },
 }
 </script>
 
-<style>
+<style lang="scss">
 input {
   border: 1px solid black;
   width: 100px;
+
+  &.square {
+    -webkit-appearance: none;
+    width: 30px;
+    outline: none;
+  }
+}
+
+.word-grid {
+  // width: 300px;
+  &--square {
+    // background-color: #f0f0f0;
+  }
 }
 </style>

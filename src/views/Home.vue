@@ -1,5 +1,5 @@
 <template>
-  <div class="m-auto flex flex-col items-center pt-10">
+  <div class="flex flex-col items-center pt-10">
     <h1 class="text-4xl mb-7 underline">Fergmux</h1>
     <p class="mb-7">Hi, my name's Fergus - welcome to my website.</p>
     <p class="mb-4">Here's some cool new stuff I made:</p>

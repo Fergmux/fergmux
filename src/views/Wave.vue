@@ -20,18 +20,19 @@ export default {
 
     let count = 0 // This just keeps track of where we are in the wave formation
 
+    const dark = inject('dark', false)
+
     let wave
 
     onMounted(() => {
       wave = document.getElementById('canvas')
-
       for (var i = 0; i < ball_count; i++) {
         var ball = document.createElement('div')
         ball.id = 'ball' + i
         ball.className = 'ball'
         ball.style.width = ball_size + 'px'
         ball.style.height = ball_size + 'px'
-        ball.style.backgroundColor = base_color
+        ball.style.backgroundColor = dark.value ? light_color : base_color
         ball.style.left = i * ball_size + 'px'
         ball.style.top = wave_height / 2 - ball_size / 2 + 'px'
 
@@ -40,8 +41,6 @@ export default {
 
       move()
     })
-
-    const dark = inject('dark', false)
 
     watch(dark, (dark) => {
       for (var i = 0; i < ball_count; i++) {
