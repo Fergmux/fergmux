@@ -21,7 +21,7 @@
             <div
               class="logo drop-shadow-md"
               :style="{
-                backgroundImage: `url(src/assets/technologies/${tech.logo})`,
+                backgroundImage: `url(${tech.logo})`,
               }"
             />
             <span class="mx-3">{{ tech.name }}</span>
