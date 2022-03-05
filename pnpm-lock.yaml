@@ -14,6 +14,7 @@ specifiers:
   eslint: ^6.7.2
   eslint-plugin-prettier: ^3.3.1
   eslint-plugin-vue: ^7.0.0
+  hex-rgb: ^5.0.0
   indexes-of: ^1.0.1
   invert-color: ^2.0.0
   lint-staged: ^9.5.0
@@ -31,6 +32,7 @@ specifiers:
 
 dependencies:
   chart.js: 3.7.0
+  hex-rgb: 5.0.0
   indexes-of: 1.0.1
   invert-color: 2.0.0
   ordinal: 1.0.3
@@ -5211,6 +5213,11 @@ packages:
   /hex-color-regex/1.1.0:
     resolution: {integrity: sha512-l9sfDFsuqtOqKDsQdqrMRk0U85RZc0RtOR9yPI7mRVOa4FsR/BVnZ0shmQRM96Ji99kYZP/7hn1cedc1+ApsTQ==}
     dev: true
+
+  /hex-rgb/5.0.0:
+    resolution: {integrity: sha512-NQO+lgVUCtHxZ792FodgW0zflK+ozS9X9dwGp9XvvmPlH7pyxd588cn24TD3rmPm/N0AIRXF10Otah8yKqGw4w==}
+    engines: {node: '>=12'}
+    dev: false
 
   /highlight.js/10.7.3:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}

@@ -15,12 +15,23 @@
       <router-link class="m-2" to="wave">Wave</router-link>
     </div>
 
+    <p class="mb-4">Here's some random old stuff I made:</p>
+    <div class="underline text-lg font-semibold mb-2">
+      <router-link class="m-2" to="about">About me</router-link>
+      <router-link class="m-2" to="career">My career</router-link>
+      <router-link class="m-2" to="technology">Things I know</router-link>
+    </div>
+
     <div class="absolute bottom-0 flex justify-center w-full items-center my-4">
-      <a class="mx-3" href="https://github.com/Fergmux">
+      <a class="mx-3" href="https://github.com/Fergmux" target="_blank">
         <img :src="githubImage" alt="GitHub" />
       </a>
 
-      <a class="mx-3" href="https://www.linkedin.com/in/fergusmull/">
+      <a
+        class="mx-3"
+        href="https://www.linkedin.com/in/fergusmull/"
+        target="_blank"
+      >
         <img src="@/assets/icons/linkedin.svg" alt="LinkedIn" />
       </a>
 
@@ -28,7 +39,7 @@
         class="mx-3 -mb-1"
         action="https://www.paypal.com/donate"
         method="post"
-        target="_top"
+        target="_blank"
       >
         <input type="hidden" name="hosted_button_id" value="XCT76DGPUL6AN" />
         <button

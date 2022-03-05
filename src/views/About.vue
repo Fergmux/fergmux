@@ -1,0 +1,1 @@
+<template>Fuck me</template>

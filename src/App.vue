@@ -56,8 +56,8 @@ export default {
 
 <style>
 .app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  /* font-family: 'Fira Code', Menlo, Monaco, 'Courier New', monospace; */
+  /* font-family: Avenir, Helvetica, Arial, sans-serif; */
+  font-family: 'Inter', Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

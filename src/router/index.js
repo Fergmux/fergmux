@@ -33,6 +33,30 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "wordle" */ '@/views/Wordle.vue'),
   },
+  {
+    path: '/about',
+    name: 'about',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '@/views/About.vue'),
+  },
+  // {
+  //   path: '/experience',
+  //   name: 'experience',
+  //   component: () =>
+  //     import(/* webpackChunkName: "experience" */ '@/views/Experience.vue'),
+  // },
+  {
+    path: '/career',
+    name: 'career',
+    component: () =>
+      import(/* webpackChunkName: "career" */ '@/views/Career.vue'),
+  },
+  {
+    path: '/technology',
+    name: 'technology',
+    component: () =>
+      import(/* webpackChunkName: "technology" */ '@/views/Technology.vue'),
+  },
 ]
 
 export default createRouter({
