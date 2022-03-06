@@ -65,7 +65,8 @@
 import indexesOf from 'indexes-of'
 import words from '@/data/words.js'
 import ordinal from 'ordinal'
-import { computed, ref, onMounted, inject } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+import { useToast } from '@/composables/toast.js'
 
 export default {
   setup() {
@@ -186,18 +187,14 @@ export default {
         .toLowerCase()
     )
 
-    const toast = inject('$toast')
+    const { toast } = useToast()
 
     const submitWord = () => {
       if (guess.value.length !== 5 || !words.includes(guess.value)) {
-        toast('Invalid word', {
-          styles: { background: dark.value ? '#111' : '#fff' },
-        })
+        toast('Invalid word')
         return
       } else {
-        toast('Accepted!', {
-          styles: { background: dark.value ? '#111' : '#fff' },
-        })
+        toast('Accepted!')
       }
       const infoGuess = mostInformative.value
         .map((entry) => entry[0])
@@ -256,8 +253,6 @@ export default {
       guessCount.value = 0
       printHelp()
     }
-
-    const dark = inject('dark')
 
     const handleKeyPress = (event) => {
       if (event.key.match(/^[a-zA-Z]$/)) {

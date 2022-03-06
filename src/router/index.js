@@ -7,33 +7,6 @@ const routes = [
     component: () => import('@/views/Home.vue'),
   },
   {
-    path: '/game-chart',
-    name: 'game-chart',
-    component: () =>
-      import(/* webpackChunkName: "game-chart" */ '@/views/GameChart.vue'),
-  },
-  {
-    path: '/pong',
-    name: 'pong',
-    component: () => import(/* webpackChunkName: "pong" */ '@/views/Pong.vue'),
-  },
-  {
-    path: '/rain',
-    name: 'rain',
-    component: () => import(/* webpackChunkName: "rain" */ '@/views/Rain.vue'),
-  },
-  {
-    path: '/wave',
-    name: 'wave',
-    component: () => import(/* webpackChunkName: "wave" */ '@/views/Wave.vue'),
-  },
-  {
-    path: '/wordle-solver',
-    name: 'wordle',
-    component: () =>
-      import(/* webpackChunkName: "wordle" */ '@/views/Wordle.vue'),
-  },
-  {
     path: '/about/:submit?',
     name: 'about',
     component: () =>
@@ -46,10 +19,37 @@ const routes = [
       import(/* webpackChunkName: "career" */ '@/views/Career.vue'),
   },
   {
-    path: '/technology',
+    path: '/projects/technology',
     name: 'technology',
     component: () =>
       import(/* webpackChunkName: "technology" */ '@/views/Technology.vue'),
+  },
+  {
+    path: '/projects/game-chart',
+    name: 'game-chart',
+    component: () =>
+      import(/* webpackChunkName: "game-chart" */ '@/views/GameChart.vue'),
+  },
+  {
+    path: '/projects/pong',
+    name: 'pong',
+    component: () => import(/* webpackChunkName: "pong" */ '@/views/Pong.vue'),
+  },
+  {
+    path: '/projects/rain',
+    name: 'rain',
+    component: () => import(/* webpackChunkName: "rain" */ '@/views/Rain.vue'),
+  },
+  {
+    path: '/projects/wave',
+    name: 'wave',
+    component: () => import(/* webpackChunkName: "wave" */ '@/views/Wave.vue'),
+  },
+  {
+    path: '/projects/wordle-solver',
+    name: 'wordle',
+    component: () =>
+      import(/* webpackChunkName: "wordle" */ '@/views/Wordle.vue'),
   },
 ]
 
