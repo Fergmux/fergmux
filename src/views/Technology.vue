@@ -1,36 +1,45 @@
 <template>
   <div class="bg-img bg-img-cover overflow-x-hidden">
-    <section
-      v-for="section in sections"
-      :key="section.key"
-      class="max-w-screen-xl m-auto"
-    >
-      <div class="w-full h-60 flex flex-col items-center justify-center">
-        <h1 class="text-5xl mb-4 font-semibold">{{ section.title }}</h1>
-        <p>{{ section.subtitle }}</p>
+    <div class="py-20">
+      <div class="text-center mb-20 mt-10">
+        <h1 class="text-6xl mb-7 underline font-semibold">Technologies</h1>
+        <p class="mb-7">
+          A list of technologies and tools that I use, or have used.
+        </p>
       </div>
-      <div class="grid grid-flow-row col-auto tech-grid">
-        <a
-          v-for="tech in tech[section.key]"
-          :key="tech.id"
-          :href="tech.link"
-          target="_blank"
-        >
-          <div
-            :style="{ backgroundColor: lighten(tech.color) }"
-            class="h-36 cursor-pointer flex items-center justify-between text-3xl font-bold text-mint-200 p-5 hover:scale-110 transition-transform hover:z-10 hover:drop-shadow-md"
+
+      <section
+        v-for="section in sections"
+        :key="section.key"
+        class="max-w-screen-xl m-auto"
+      >
+        <div class="w-full h-60 flex flex-col items-center justify-center">
+          <h1 class="text-5xl mb-4 font-semibold">{{ section.title }}</h1>
+          <p>{{ section.subtitle }}</p>
+        </div>
+        <div class="grid grid-flow-row col-auto tech-grid">
+          <a
+            v-for="tech in tech[section.key]"
+            :key="tech.id"
+            :href="tech.link"
+            target="_blank"
           >
             <div
-              class="logo img-contain drop-shadow-md"
-              :style="{
-                backgroundImage: `url(${tech.logo})`,
-              }"
-            />
-            <span class="mx-3">{{ tech.name }}</span>
-          </div>
-        </a>
-      </div>
-    </section>
+              :style="{ backgroundColor: lighten(tech.color) }"
+              class="h-36 cursor-pointer flex items-center justify-between text-3xl font-bold text-mint-200 p-5 hover:scale-110 transition-transform hover:z-10 hover:drop-shadow-md"
+            >
+              <div
+                class="logo img-contain drop-shadow-md"
+                :style="{
+                  backgroundImage: `url(${tech.logo})`,
+                }"
+              />
+              <span class="mx-3">{{ tech.name }}</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 

@@ -199,7 +199,7 @@ const technologies = {
       name: 'Prettier',
       id: 'prettier',
       logo: prettier,
-      color: '#1a2b34',
+      color: '#2a3b44',
       link: 'https://prettier.io/',
     },
     {
@@ -334,7 +334,7 @@ const technologies = {
       name: 'AWS',
       id: 'aws',
       logo: aws,
-      color: '#232f3e',
+      color: '#333f4e',
       link: 'https://aws.amazon.com/',
     },
     {
