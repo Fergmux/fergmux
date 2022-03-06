@@ -1,75 +1,81 @@
 <template>
   <div class="app min-h-screen relative">
-    <div class="fixed flex justify-between z-20 w-full">
+    <div class="fixed flex justify-between z-10 w-full">
       <router-link
         to="/"
-        class="material-icons md-dark cursor-pointer m-2 text-xl"
+        class="material-icons cursor-pointer m-2 mx-3 text-2xl"
       >
         home
       </router-link>
       <div
-        @click="showMenu = !showMenu"
-        class="material-icons md-dark cursor-pointer m-2 text-2xl"
+        @click="showMenu = true"
+        class="material-icons cursor-pointer m-2 mx-3 text-3xl"
       >
         menu
       </div>
     </div>
 
-    <div>
-      <router-view></router-view>
-    </div>
+    <router-view></router-view>
 
     <Transition name="slide-right">
       <div
         v-if="showMenu"
-        class="h-full bg-zinc-100 dark:bg-neutral-900 w-80 menu absolute top-0 right-0 border-l border-stone-200 dark:border-stone-800 shadow-out pt-12"
+        class="h-full bg-mint-200 w-80 menu fixed top-0 right-0 border-l border-mint-300 shadow-out z-20"
       >
+        <div class="w-full flex justify-end items-center">
+          <div
+            @click="showMenu = false"
+            class="material-icons md-dark cursor-pointer m-2 text-3xl"
+          >
+            close
+          </div>
+        </div>
         <router-link
           v-for="item in menuItems"
           :key="item.route"
           :to="{ name: item.route }"
           @click="showMenu = false"
         >
-          <div
-            class="h-14 bg-zinc-200 dark:bg-neutral-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 cursor-pointer border-t border-b border-stone-200 dark:border-stone-800 flex items-center p-5"
-          >
+          <div class="menu-item p-5">
             {{ item.name }}
           </div>
         </router-link>
-        <div
-          @click="showProjects = !showProjects"
-          class="h-14 bg-zinc-200 dark:bg-neutral-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 cursor-pointer border-t border-b border-stone-200 dark:border-stone-800 flex justify-between items-center p-5"
-        >
-          Projects
-          <span
-            class="material-icons-outlined transition-transform duration-500"
-            :class="{ 'rotate-180': showProjects }"
+
+        <router-link :to="{ name: 'projects' }" @click="showMenu = false">
+          <div
+            @mouseover="showProjects[0] = true"
+            @mouseleave="hideProjects(0)"
+            class="menu-item p-5"
           >
-            arrow_drop_down
-          </span>
-        </div>
+            Projects
+            <span
+              class="material-icons-outlined transition-transform duration-500"
+              :class="{ 'rotate-180': showProjects.some(Boolean) }"
+            >
+              arrow_drop_down
+            </span>
+          </div>
+        </router-link>
+
         <Transition name="grow">
-          <div v-if="showProjects" class="projects">
+          <div
+            v-if="showProjects.some(Boolean)"
+            class="projects"
+            @mouseover="showProjects[1] = true"
+            @mouseleave="hideProjects(1)"
+          >
             <router-link
               v-for="project in projects"
               :key="project.route"
               :to="{ name: project.route }"
               @click="showMenu = false"
             >
-              <div
-                class="h-14 pl-8 bg-zinc-200 dark:bg-neutral-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 cursor-pointer border-t border-b border-stone-200 dark:border-stone-800 flex items-center p-5"
-              >
+              <div class="menu-item p-5 pl-8">
                 {{ project.name }}
               </div>
             </router-link>
           </div>
         </Transition>
-        <div
-          @click="toggleDark"
-          class="material-icons md-dark cursor-pointer m-2 mb-3 text-md z-30 absolute top-1"
-        >
-          {{ darkMode ? 'light_mode' : 'dark_mode' }}
-        </div>
       </div>
     </Transition>
   </div>
@@ -77,42 +83,33 @@
 
 <script>
 import './index.css'
-import { provide, ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { menuConfig, projectConfig } from '@/data/menuConfig'
 
 export default {
   setup() {
-    const darkMode = ref(false)
-    provide('dark', darkMode)
-
     const showMenu = ref(false)
-    const showProjects = ref(false)
-
-    const menuItems = ref(menuConfig)
+    const showProjects = ref([false, false])
     const projects = ref(projectConfig)
 
-    const toggleDark = () => {
-      darkMode.value = !darkMode.value
-      document.querySelector('html').classList.toggle('dark')
-      localStorage.setItem('darkMode', JSON.stringify(darkMode.value))
+    const menuItems = ref(
+      menuConfig.filter((item) => item.route !== 'projects')
+    )
+
+    const hideProjects = (num) => {
+      window.setTimeout(() => {
+        console.log(showProjects.value)
+        showProjects.value[num] = false
+      }, 10)
     }
 
-    onMounted(() => {
-      const localDark = JSON.parse(localStorage.getItem('darkMode'))
-      const systemDark = window.matchMedia(
-        '(prefers-color-scheme: dark)'
-      ).matches
-
-      if (localDark != null) {
-        if (darkMode.value !== localDark) {
-          toggleDark()
-        }
-      } else if (systemDark) {
-        toggleDark()
-      }
-    })
-
-    return { darkMode, showMenu, menuItems, showProjects, projects, toggleDark }
+    return {
+      showMenu,
+      menuItems,
+      showProjects,
+      projects,
+      hideProjects,
+    }
   },
 }
 </script>
@@ -152,5 +149,9 @@ export default {
 
 .rotate {
   transition: spin 0.5s ease 1;
+}
+
+.menu-item {
+  @apply h-14 bg-mint-300 hover:bg-mint-600 cursor-pointer border-t border-b border-mint-300 flex items-center justify-between;
 }
 </style>

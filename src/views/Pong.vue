@@ -1,7 +1,9 @@
 <template>
-  <div class="flex flex-col items-center pt-20">
-    <h1 class="text-4xl mb-7 underline">Pong</h1>
-    <canvas id="mycanvas" class="pong-canvas"></canvas>
+  <div class="bg-img bg-img-cover min-h-screen">
+    <div class="flex flex-col items-center pt-20">
+      <h1 class="text-5xl mb-7 underline font-semibold">Pong</h1>
+      <canvas id="mycanvas" class="pong-canvas"></canvas>
+    </div>
   </div>
 </template>
 
@@ -380,5 +382,9 @@ export default {
   height: 100vh;
   max-width: 800px;
   max-height: 500px;
+}
+
+.bg-img {
+  background-image: url('@/assets/images/backgrounds/circuit.svg');
 }
 </style>

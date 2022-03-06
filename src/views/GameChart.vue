@@ -1,72 +1,71 @@
 <template>
-  <div class="mx-auto flex flex-col items-center pt-20">
-    <h1 class="text-4xl mb-7 underline">Game studio market share</h1>
+  <div class="bg-img bg-img-cover">
+    <div class="mx-auto flex flex-col items-center py-20">
+      <h1 class="text-5xl mb-7 underline font-semibold">
+        Game studio market share
+      </h1>
 
-    <simple-typeahead
-      ref="searchBar"
-      id="search-bar"
-      placeholder="Search for a studio or game"
-      :items="itemKeyList"
-      :minInputLength="1"
-      @selectItem="selectSearchItem($event, gameData)"
-      @onFocus="fieldFocused = true"
-      @onBlur="fieldFocused = false"
-    />
+      <simple-typeahead
+        ref="searchBar"
+        id="search-bar"
+        placeholder="Search for a studio or game"
+        :items="itemKeyList"
+        :minInputLength="1"
+        @selectItem="selectSearchItem($event, gameData)"
+        @onFocus="fieldFocused = true"
+        @onBlur="fieldFocused = false"
+      />
 
-    <div class="flex justify-center items-center mt-5">
-      <span
-        v-if="state.indexes.length"
-        @click="drillup(1)"
-        class="material-icons-outlined md-dark cursor-pointer mr-2 text-base"
-      >
-        backspace
-      </span>
-
-      <p class="text-sm pb-[0.2rem]">
-        <template
-          v-for="(path, index) in pagePath"
-          :key="`path-level-${index}`"
+      <div class="flex justify-center items-center mt-5">
+        <span
+          v-if="state.indexes.length"
+          @click="drillup(1)"
+          class="material-icons-outlined cursor-pointer mr-2 text-base"
         >
-          <span
-            @click="drillup(pagePath.length - index - 1)"
-            class="cursor-pointer"
-            >{{ path }}</span
+          backspace
+        </span>
+
+        <p class="text-sm pb-[0.2rem]">
+          <template
+            v-for="(path, index) in pagePath"
+            :key="`path-level-${index}`"
           >
-          <span v-if="pagePath.length > 1 && index < pagePath.length - 1">
+            <span
+              @click="drillup(pagePath.length - index - 1)"
+              class="cursor-pointer"
+              >{{ path }}</span
             >
-          </span>
-        </template>
-      </p>
+            <span v-if="pagePath.length > 1 && index < pagePath.length - 1">
+              >
+            </span>
+          </template>
+        </p>
 
-      <span
-        v-if="state.indexes.length > 1"
-        @click="resetChart"
-        class="material-icons md-dark cursor-pointer ml-2 text-base"
-      >
-        clear
-      </span>
-    </div>
+        <span
+          v-if="state.indexes.length > 1"
+          @click="resetChart"
+          class="material-icons cursor-pointer ml-2 text-base"
+        >
+          clear
+        </span>
+      </div>
 
-    <p class="text-lg mt-1 font-semibold">{{ level }}</p>
+      <p class="text-lg mt-1 font-semibold">{{ level }}</p>
 
-    <div class="flex justify-center mt-5">
-      <div class="relative chart-container max-w-screen-sm" style="width: 80vw">
-        <canvas ref="chartRef"></canvas>
+      <div class="flex justify-center mt-5">
+        <div
+          class="relative chart-container max-w-screen-sm"
+          style="width: 80vw"
+        >
+          <canvas ref="chartRef"></canvas>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  computed,
-  inject,
-  ref,
-  reactive,
-  onMounted,
-  onBeforeUnmount,
-  watch,
-} from 'vue'
+import { computed, ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { Chart, registerables } from 'chart.js'
 import SimpleTypeahead from 'vue3-simple-typeahead'
 import {
@@ -87,19 +86,6 @@ export default {
   setup() {
     let searchInput
     const fieldFocused = ref(false)
-
-    const dark = inject('dark', false)
-
-    // Chart.defaults.color = dark ? 'rgb(248 250 252)' : '#2c3e50'
-    // FIX THIS ON LOAD
-
-    watch(dark, (dark) => {
-      Chart.defaults.color = dark ? 'rgb(248 250 252)' : '#2c3e50'
-      document
-        .getElementById('search-bar_wrapper')
-        .classList.toggle('simple-typeahead--dark')
-      chart.update()
-    })
 
     const keydownListener = function (event) {
       if (!fieldFocused.value) {
@@ -124,6 +110,7 @@ export default {
     }
 
     onMounted(() => {
+      Chart.defaults.color = 'rgb(248 250 252)'
       searchInput = document.getElementById('search-bar')
       document.addEventListener('keydown', keydownListener)
     })
@@ -319,18 +306,9 @@ export default {
       background-color: rgb(0, 0, 0, 0.05);
     }
   }
+}
 
-  &--dark {
-    // background-color: rgb(0, 0, 0, 0.1);
-
-    .simple-typeahead-list {
-      color: #f8fafc;
-      background-color: #222;
-
-      &-item-active {
-        background-color: rgb(220, 220, 220, 0.15);
-      }
-    }
-  }
+.bg-img {
+  background-image: url('@/assets/images/backgrounds/shiny.svg');
 }
 </style>

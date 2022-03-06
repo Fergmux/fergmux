@@ -1,30 +1,25 @@
 <template>
   <div class="pt-10 text-center">
-    <h1 class="text-4xl mb-7 underline mx-auto">Wave</h1>
+    <h1 class="text-5xl mb-7 underline mx-auto font-semibold">Wave</h1>
     <div id="canvas" width="500" height="500"></div>
     <canvas id="c"></canvas>
   </div>
 </template>
 
 <script>
-import { onMounted, watch, inject } from 'vue'
+import { onMounted } from 'vue'
 
 export default {
   setup() {
     const windowWidth = window.innerWidth
     const wave_height = 150, // Height of wave
       wave_shift = 0.02, // Alter how wave shifs
-      ball_count = 75, // Number of balls in the wave
-      base_color = '#000', // Base color for balls
-      light_color = '#fff' // Light color for balls
+      ball_count = 75 // Number of balls in the wave
 
     const period_factor = windowWidth < 1200 ? (windowWidth < 500 ? 6 : 4) : 2 // Period Factor
     const ball_size = windowWidth / ball_count // How big should each ball be
 
     let count = 0 // This just keeps track of where we are in the wave formation
-
-    const dark = inject('dark', false)
-
     let wave
 
     onMounted(() => {
@@ -35,7 +30,7 @@ export default {
         ball.className = 'ball'
         ball.style.width = ball_size + 'px'
         ball.style.height = ball_size + 'px'
-        ball.style.backgroundColor = dark.value ? light_color : base_color
+        ball.style.backgroundColor = '#fff'
         ball.style.left = i * ball_size + 'px'
         ball.style.top = wave_height / 2 - ball_size / 2 + 'px'
 
@@ -43,13 +38,6 @@ export default {
       }
 
       move()
-    })
-
-    watch(dark, (dark) => {
-      for (var i = 0; i < ball_count; i++) {
-        var ball = document.getElementById('ball' + i)
-        ball.style.backgroundColor = dark ? light_color : base_color
-      }
     })
 
     function move() {

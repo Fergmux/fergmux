@@ -9,6 +9,7 @@ createApp(App)
     positionX: 'center',
     positionY: 'top',
     max: 1,
-    duration: 3000,
+    duration: 30000,
+    class: 'text-mint-500',
   })
   .mount('#app')

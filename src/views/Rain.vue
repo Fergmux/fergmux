@@ -105,8 +105,7 @@
 </template>
 
 <script>
-import { onMounted, reactive, ref, inject, watch } from 'vue'
-import invert from 'invert-color'
+import { onMounted, reactive, ref } from 'vue'
 
 export default {
   setup() {
@@ -118,8 +117,8 @@ export default {
     const settings = reactive({
       rainbow: false,
       random: false,
-      fg: '#000',
-      bg: '#fff',
+      bg: '#000',
+      fg: '#fff',
       speed: 6,
       density: 8,
       width: 4,
@@ -129,8 +128,8 @@ export default {
     const reset = () => {
       settings.rainbow = false
       settings.random = false
-      settings.fg = dark.value ? '#fff' : '#000'
-      settings.bg = dark.value ? '#171717' : '#fff'
+      settings.fg = '#fff'
+      settings.bg = '#000'
       settings.speed = 6
       settings.density = 8
       settings.width = 4
@@ -166,13 +165,6 @@ export default {
         }
       )
     })()
-
-    const dark = inject('dark', false)
-
-    watch(dark, () => {
-      settings.fg = invert(settings.fg)
-      settings.bg = invert(settings.bg)
-    })
 
     onMounted(() => {
       canvas = document.getElementById('myCanvas')

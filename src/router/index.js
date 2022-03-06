@@ -19,6 +19,12 @@ const routes = [
       import(/* webpackChunkName: "career" */ '@/views/Career.vue'),
   },
   {
+    path: '/projects',
+    name: 'projects',
+    component: () =>
+      import(/* webpackChunkName: "projects" */ '@/views/Projects.vue'),
+  },
+  {
     path: '/projects/technology',
     name: 'technology',
     component: () =>
@@ -56,4 +62,7 @@ const routes = [
 export default createRouter({
   history: createWebHashHistory(),
   routes,
+  scrollBehavior() {
+    return { top: 0 }
+  },
 })

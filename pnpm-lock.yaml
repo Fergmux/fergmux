@@ -16,7 +16,6 @@ specifiers:
   eslint-plugin-vue: ^7.0.0
   hex-rgb: ^5.0.0
   indexes-of: ^1.0.1
-  invert-color: ^2.0.0
   lint-staged: ^9.5.0
   ordinal: ^1.0.3
   postcss: ^8.4.6
@@ -34,7 +33,6 @@ dependencies:
   chart.js: 3.7.0
   hex-rgb: 5.0.0
   indexes-of: 1.0.1
-  invert-color: 2.0.0
   ordinal: 1.0.3
   vue: 3.2.29
   vue-dk-toast: 3.0.1
@@ -5549,10 +5547,6 @@ packages:
       has: 1.0.3
       side-channel: 1.0.4
     dev: true
-
-  /invert-color/2.0.0:
-    resolution: {integrity: sha512-9s6IATlhOAr0/0MPUpLdMpk81ixIu8IqwPwORssXBauFT/4ff/iyEOcojd0UYuPwkDbJvL1+blIZGhqVIaAm5Q==}
-    dev: false
 
   /ip-regex/2.1.0:
     resolution: {integrity: sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=}

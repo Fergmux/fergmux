@@ -1,59 +1,61 @@
 <template>
-  <div class="flex flex-col items-center pt-20">
-    <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
+  <div class="bg-img bg-img-cover min-h-screen">
+    <div class="flex flex-col items-center pt-20">
+      <h1 class="text-5xl mb-7 underline font-semibold">Wordle solver</h1>
 
-    <div class="grid grid-cols-5 gap-1 m-5 font-bold">
-      <div
-        v-for="(_, i) in colorList"
-        :key="i"
-        @click="changeColor(i)"
-        :class="{
-          'border-2': !colorList[i],
-          'bg-zinc-700': colorList[i] === 0 && letterList[i],
-          'bg-yellow-600': colorList[i] === 1,
-          'bg-green-600': colorList[i] === 2,
-        }"
-        class="text-center text-4xl leading-relaxed text-gray-100 h-16 w-16 border-neutral-700 flex items-center justify-center"
-      >
-        <p>
-          {{ letterList[i] }}
-        </p>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-11 gap-1 m-5 font-semibold">
-      <div
-        v-for="letter in letters"
-        :key="letter"
-        class="p-2 rounded bg-gray-500 text-white cursor-pointer active:bg-gray-700 h-12 flex items-center justify-center select-none"
-        :class="{
-          'col-span-2': ['Reset', 'Enter', 'backspace'].includes(letter),
-          'material-icons-outlined text-base': [
-            'palette',
-            'backspace',
-          ].includes(letter),
-        }"
-        @click="handleKeyPress({ key: letter })"
-      >
-        {{ letter.length > 1 ? letter : letter.toUpperCase() }}
-      </div>
-    </div>
-
-    <div class="flex">
-      <div class="m-4">
-        <b class="text-xl">Most likely:</b>
-        <div class="grid grid-cols-2 gap-4 m-5">
-          <div v-for="word in likelyWords" :key="word">
-            {{ word.toUpperCase() }}
-          </div>
+      <div class="grid grid-cols-5 gap-1 m-5 font-bold">
+        <div
+          v-for="(_, i) in colorList"
+          :key="i"
+          @click="changeColor(i)"
+          :class="{
+            'border-2': !colorList[i],
+            'bg-zinc-700': colorList[i] === 0 && letterList[i],
+            'bg-yellow-600': colorList[i] === 1,
+            'bg-green-600': colorList[i] === 2,
+          }"
+          class="text-center text-4xl leading-relaxed text-gray-100 h-16 w-16 border-mint-100 bg-mint-300 flex items-center justify-center"
+        >
+          <p>
+            {{ letterList[i] }}
+          </p>
         </div>
       </div>
 
-      <div class="m-4">
-        <b class="text-xl">Most information:</b>
-        <div class="grid grid-cols-2 gap-4 m-5">
-          <div v-for="word in informativeWords" :key="word">
-            {{ word.toUpperCase() }}
+      <div class="grid grid-cols-11 gap-1 m-5 font-semibold">
+        <div
+          v-for="letter in letters"
+          :key="letter"
+          class="p-2 rounded bg-gray-500 text-white cursor-pointer active:bg-gray-700 h-12 flex items-center justify-center select-none"
+          :class="{
+            'col-span-2': ['Reset', 'Enter', 'backspace'].includes(letter),
+            'material-icons-outlined text-base': [
+              'palette',
+              'backspace',
+            ].includes(letter),
+          }"
+          @click="handleKeyPress({ key: letter })"
+        >
+          {{ letter.length > 1 ? letter : letter.toUpperCase() }}
+        </div>
+      </div>
+
+      <div class="flex">
+        <div class="m-4">
+          <b class="text-xl">Most likely:</b>
+          <div class="grid grid-cols-2 gap-4 m-5">
+            <div v-for="word in likelyWords" :key="word">
+              {{ word.toUpperCase() }}
+            </div>
+          </div>
+        </div>
+
+        <div class="m-4">
+          <b class="text-xl">Most information:</b>
+          <div class="grid grid-cols-2 gap-4 m-5">
+            <div v-for="word in informativeWords" :key="word">
+              {{ word.toUpperCase() }}
+            </div>
           </div>
         </div>
       </div>
@@ -65,8 +67,7 @@
 import indexesOf from 'indexes-of'
 import words from '@/data/words.js'
 import ordinal from 'ordinal'
-import { computed, ref, onMounted } from 'vue'
-import { useToast } from '@/composables/toast.js'
+import { computed, ref, onMounted, inject } from 'vue'
 
 export default {
   setup() {
@@ -187,7 +188,7 @@ export default {
         .toLowerCase()
     )
 
-    const { toast } = useToast()
+    const toast = inject('$toast')
 
     const submitWord = () => {
       if (guess.value.length !== 5 || !words.includes(guess.value)) {
@@ -299,3 +300,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.bg-img {
+  background-image: url('@/assets/images/backgrounds/sprinkle.svg');
+}
+</style>
