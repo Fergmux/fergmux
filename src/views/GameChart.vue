@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto flex flex-col items-center">
+  <div class="mx-auto flex flex-col items-center pt-20">
     <h1 class="text-4xl mb-7 underline">Game studio market share</h1>
 
     <simple-typeahead
@@ -85,7 +85,7 @@ export default {
     SimpleTypeahead,
   },
   setup() {
-    let keydown
+    let searchInput
     const fieldFocused = ref(false)
 
     const dark = inject('dark', false)
@@ -101,36 +101,35 @@ export default {
       chart.update()
     })
 
+    const keydownListener = function (event) {
+      if (!fieldFocused.value) {
+        if (event.key === 'Backspace') {
+          drillup()
+        }
+        if (event.key === 'h') {
+          resetChart()
+        }
+        if (event.key === 'l') {
+          event.preventDefault()
+          searchInput.focus()
+        }
+      }
+      if (event.key === 'Escape') {
+        if (searchBar.value?.input) {
+          searchBar.value.input = ''
+        } else {
+          searchInput.blur()
+        }
+      }
+    }
+
     onMounted(() => {
-      const searchInput = document.getElementById('search-bar')
-      keydown = document.addEventListener('keydown', function (event) {
-        if (!fieldFocused.value) {
-          if (event.key === 'Backspace') {
-            drillup()
-          }
-          if (event.key === 'h') {
-            resetChart()
-          }
-          if (event.key === 'l') {
-            event.preventDefault()
-            searchInput.focus()
-          }
-        }
-        if (event.key === 'Escape') {
-          if (searchBar.value?.input) {
-            searchBar.value.input = ''
-          } else {
-            searchInput.blur()
-          }
-        }
-      })
+      searchInput = document.getElementById('search-bar')
+      document.addEventListener('keydown', keydownListener)
     })
 
     onBeforeUnmount(() => {
-      const searchInput = document.getElementById('search-bar')
-      searchInput.removeEventListener('focus', focus)
-      searchInput.removeEventListener('blur', blur)
-      document.removeEventListener('keydown', keydown)
+      document.removeEventListener('keydown', keydownListener)
     })
 
     const chartRef = ref(null)

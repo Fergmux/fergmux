@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pt-10 text-center">
     <h1 class="text-4xl mb-7 underline mx-auto">Wave</h1>
     <div id="canvas" width="500" height="500"></div>
     <canvas id="c"></canvas>

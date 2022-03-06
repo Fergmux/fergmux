@@ -1,21 +1,21 @@
 <template>
-  <div class="flex flex-col items-center pt-10">
+  <div class="flex flex-col items-center pt-20">
     <h1 class="text-4xl mb-7 underline">Fergmux</h1>
     <p class="mb-7">Hi, my name's Fergus - welcome to my website.</p>
-    <p class="mb-4">Here's some cool new stuff I made:</p>
+    <p class="mt-4">Here's some cool new stuff I made:</p>
     <div class="underline text-lg mb-7 font-semibold">
       <router-link class="m-2" to="game-chart">Game Chart</router-link>
       <router-link class="m-2" to="wordle-solver">Wordle Solver</router-link>
     </div>
 
-    <p class="mb-4">Here's some random old stuff I made:</p>
+    <p class="mt-4">Here's some random old stuff I made:</p>
     <div class="underline text-lg font-semibold mb-2">
       <router-link class="m-2" to="pong">Pong</router-link>
       <router-link class="m-2" to="rain">Rain</router-link>
       <router-link class="m-2" to="wave">Wave</router-link>
     </div>
 
-    <p class="mb-4">Here's some random old stuff I made:</p>
+    <p class="mt-4">Here's some random old stuff I made:</p>
     <div class="underline text-lg font-semibold mb-2">
       <router-link class="m-2" to="about">About me</router-link>
       <router-link class="m-2" to="career">My career</router-link>

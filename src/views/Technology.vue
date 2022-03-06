@@ -1,9 +1,7 @@
 <template>
-  <div class="-mt-10">
+  <div class="max-w-screen-xl m-auto">
     <section v-for="section in sections" :key="section.key">
-      <div
-        class="w-full h-60 flex flex-col items-center justify-center bg-neutral-100 dark:bg-neutral-800"
-      >
+      <div class="w-full h-60 flex flex-col items-center justify-center">
         <h1 class="text-5xl mb-4">{{ section.title }}</h1>
         <p>{{ section.subtitle }}</p>
       </div>
@@ -16,7 +14,7 @@
         >
           <div
             :style="{ backgroundColor: lighten(tech.color) }"
-            class="inline-block h-36 cursor-pointer flex items-center justify-between text-3xl font-bold text-slate-900 p-5 hover:scale-110 transition-transform hover:z-10 hover:drop-shadow-md"
+            class="inline-block h-36 cursor-pointer flex items-center justify-between text-3xl font-bold text-slate-800 dark:text-slate-200 p-5 hover:scale-110 transition-transform hover:z-10 hover:drop-shadow-md"
           >
             <div
               class="logo drop-shadow-md"

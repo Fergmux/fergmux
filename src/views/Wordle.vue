@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col items-center pt-20">
     <h1 class="text-4xl mb-7 underline">Wordle solver</h1>
 
     <div class="grid grid-cols-5 gap-1 m-5 font-bold">

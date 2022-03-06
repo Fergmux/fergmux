@@ -1,8 +1,5 @@
 <template>
-  <div class="-mt-10">
-    <div id="back">
-      <!-- <a href="/index.html"> &lt; back</a> -->
-    </div>
+  <div>
     <div>
       <canvas ref="canvasRef" id="myCanvas"></canvas>
       <div id="show">

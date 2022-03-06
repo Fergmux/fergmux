@@ -380,8 +380,8 @@ const technologies = {
       link: 'https://www.heroku.com/',
     },
     {
-      name: 'Prismic.io',
-      id: 'prismic.io',
+      name: 'Prismic',
+      id: 'prismic',
       logo: prismic,
       color: '#5163ba',
       link: 'https://prismic.io/',
@@ -413,7 +413,7 @@ const technologies = {
       name: 'GitHub',
       id: 'github',
       logo: github,
-      color: '#161b22',
+      color: '#262b32',
       link: 'https://github.com/',
     },
     {

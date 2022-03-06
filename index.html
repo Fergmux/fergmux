@@ -22,9 +22,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet" />
     <title>Fergmux</title>
+    <script type="module" src="/src/main.js"></script>
   </head>
   <body class="text-[#2c3e50] dark:bg-neutral-900 dark:text-slate-50 min-h-full">
     <div id="app" class="dark:text-white min-h-full"></div>
-    <script type="module" src="/src/main.js"></script>
+    <form hidden name="contact" netlify data-netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+    </form>
   </body>
 </html>

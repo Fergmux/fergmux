@@ -34,17 +34,11 @@ const routes = [
       import(/* webpackChunkName: "wordle" */ '@/views/Wordle.vue'),
   },
   {
-    path: '/about',
+    path: '/about/:submit?',
     name: 'about',
     component: () =>
       import(/* webpackChunkName: "about" */ '@/views/About.vue'),
   },
-  // {
-  //   path: '/experience',
-  //   name: 'experience',
-  //   component: () =>
-  //     import(/* webpackChunkName: "experience" */ '@/views/Experience.vue'),
-  // },
   {
     path: '/career',
     name: 'career',

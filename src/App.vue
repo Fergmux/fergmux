@@ -1,18 +1,20 @@
 <template>
   <div class="app min-h-screen relative">
-    <router-link
-      to="/"
-      class="material-icons absolute md-dark cursor-pointer m-2 text-lg left-0 z-10"
-    >
-      home
-    </router-link>
-    <div
-      @click="toggleDark"
-      class="material-icons absolute md-dark cursor-pointer m-2 text-lg right-0 z-10"
-    >
-      {{ darkMode ? 'light_mode' : 'dark_mode' }}
+    <div class="fixed flex justify-between z-20 w-full">
+      <router-link
+        to="/"
+        class="material-icons md-dark cursor-pointer m-2 text-lg"
+      >
+        home
+      </router-link>
+      <div
+        @click="toggleDark"
+        class="material-icons md-dark cursor-pointer m-2 text-lg"
+      >
+        {{ darkMode ? 'light_mode' : 'dark_mode' }}
+      </div>
     </div>
-    <div class="pt-10">
+    <div>
       <router-view></router-view>
     </div>
   </div>
@@ -59,6 +61,5 @@ export default {
   font-family: 'Inter', Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
 }
 </style>
