@@ -1,7 +1,7 @@
 <template>
   <div class="bg-img bg-img-cover">
     <div
-      class="px-10 py-20 md:px-14 lg:px-20 lg:pt-24 relative max-w-screen-xl min-h-screen m-auto"
+      class="px-10 pt-20 md:px-14 lg:px-20 lg:py-20 lg:pt-24 relative max-w-screen-xl min-h-screen m-auto"
     >
       <div class="md md:w-3/4 lg:w-2/4">
         <h1 class="text-6xl mb-14 underline font-semibold">About Me</h1>
