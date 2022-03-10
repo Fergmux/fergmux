@@ -4,8 +4,10 @@
       class="px-10 pt-20 md:px-14 lg:px-20 lg:py-20 lg:pt-24 relative max-w-screen-xl min-h-screen m-auto"
     >
       <div class="md md:w-3/4 lg:w-2/4">
-        <h1 class="text-6xl mb-14 underline font-semibold">About Me</h1>
-        <p class="mb-8">
+        <h1 class="text-6xl mb-14 text-mint-900 font-semibold drop-shadow-3xl">
+          About Me
+        </h1>
+        <p class="mb-8 drop-shadow-3xl">
           Hi, my name's Fergus Mullineux, I'm a programmer/developer/general
           nerd, I mostly write frontend code but specialise in Vue. I briefly
           studied engineering at Oxford Univeristy before deciding to become a
@@ -17,7 +19,7 @@
           detail
           <router-link to="career" class="link">here</router-link>.
         </p>
-        <p class="mb-6">
+        <p class="mb-6 drop-shadow-3xl">
           If you want to get in touch with me you can message me on
           <a
             href="https://www.linkedin.com/in/fergusmull/"
@@ -27,7 +29,9 @@
           >, or send a message with the form below.
         </p>
 
-        <h2 class="text-4xl mt-20 mb-10 underline">Contact Form</h2>
+        <h2 class="text-3xl mt-20 mb-7 font-semibold drop-shadow-3xl">
+          Contact Form
+        </h2>
         <form
           name="contact"
           id="contact"
@@ -38,7 +42,7 @@
           <input type="hidden" name="form-name" value="contact" />
           <input type="hidden" name="bot-field" />
           <p>
-            <label class="block">Your name</label>
+            <label class="block drop-shadow-3xl">Your name</label>
             <input
               v-model="formFields.name"
               type="text"
@@ -47,7 +51,7 @@
             />
           </p>
           <p>
-            <label class="block">Your email</label>
+            <label class="block drop-shadow-3xl">Your email</label>
             <input
               v-model="formFields.email"
               type="email"
@@ -56,7 +60,7 @@
             />
           </p>
           <p>
-            <label class="block">Your message</label>
+            <label class="block drop-shadow-3xl">Your message</label>
             <textarea
               v-model="formFields.message"
               name="message"
@@ -70,7 +74,7 @@
       </div>
       <img
         src="/src/assets/images/me.png"
-        class="max-w-md w-full lg:w-auto lg:max-w-full lg:h-4/5 lg:fixed right-10 bottom-0 m-auto drop-shadow-2xl"
+        class="max-w-md w-full lg:w-auto lg:max-w-full lg:h-4/5 lg:fixed right-10 bottom-0 m-auto drop-shadow-3xl"
       />
     </div>
   </div>

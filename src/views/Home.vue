@@ -4,8 +4,10 @@
       class="max-w-screen-xl flex flex-col items-center justify-center m-auto"
     >
       <div class="text-center">
-        <h1 class="text-8xl mb-7 underline font-bold">Fergmux</h1>
-        <p class="mb-7 text-lg">
+        <h1 class="text-8xl mb-7 font-bold text-mint-900 drop-shadow-3xl">
+          Fergmux
+        </h1>
+        <p class="mb-7 text-lg drop-shadow-3xl">
           Hi, my name's Fergus - welcome to my website.
         </p>
       </div>
@@ -16,8 +18,10 @@
           class="py-5 px-10 menu-section"
         >
           <router-link class="m-2" :to="{ name: item.route }">
-            <h2 class="text-5xl underline font-semibold">{{ item.name }}</h2>
-            <p class="py-8 text-lg">{{ item.text }}</p>
+            <h2 class="text-5xl font-semibold drop-shadow-3xl">
+              {{ item.name }}
+            </h2>
+            <p class="py-5 text-lg drop-shadow-3xl">{{ item.text }}</p>
           </router-link>
         </section>
       </main>

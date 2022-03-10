@@ -2,8 +2,10 @@
   <div class="bg-img bg-img-cover overflow-x-hidden">
     <div class="py-20">
       <div class="text-center mb-20 mt-10">
-        <h1 class="text-6xl mb-7 underline font-semibold">Technologies</h1>
-        <p class="mb-7">
+        <h1 class="text-6xl mb-4 font-semibold drop-shadow-3xl text-mint-900">
+          Technologies
+        </h1>
+        <p class="mb-7 drop-shadow-3xl">
           A list of technologies and tools that I use, or have used.
         </p>
       </div>
@@ -14,8 +16,10 @@
         class="max-w-screen-xl m-auto"
       >
         <div class="w-full h-60 flex flex-col items-center justify-center">
-          <h1 class="text-5xl mb-4 font-semibold">{{ section.title }}</h1>
-          <p>{{ section.subtitle }}</p>
+          <h1 class="text-5xl mb-4 font-semibold drop-shadow-3xl">
+            {{ section.title }}
+          </h1>
+          <p class="drop-shadow-3xl">{{ section.subtitle }}</p>
         </div>
         <div class="grid grid-flow-row col-auto tech-grid">
           <a

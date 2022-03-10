@@ -20,7 +20,7 @@
     <Transition name="slide-right">
       <div
         v-if="showMenu"
-        class="h-full bg-mint-200 w-80 menu fixed top-0 right-0 border-l border-mint-300 shadow-out z-20"
+        class="h-full bg-mint-200 w-80 menu fixed top-0 right-0 border-l border-mint-300 drop-shadow-3xl z-20"
       >
         <div class="w-full flex justify-end items-center">
           <div
@@ -152,6 +152,6 @@ export default {
 }
 
 .menu-item {
-  @apply h-14 bg-mint-300 hover:bg-mint-600 cursor-pointer border-t border-b border-mint-300 flex items-center justify-between;
+  @apply h-14 bg-mint-300 hover:bg-mint-800 cursor-pointer border-t border-b border-mint-300 flex items-center justify-between;
 }
 </style>
