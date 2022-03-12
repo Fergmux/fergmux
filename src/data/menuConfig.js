@@ -27,6 +27,11 @@ export const menuConfig = [
 
 export const projectConfig = [
   {
+    name: 'Chess',
+    route: 'chess',
+    text: 'An online chess game made in Pixi.',
+  },
+  {
     name: 'Wordle Solver',
     route: 'wordle',
     text: 'An app that calculates likely answers to wordle games.',

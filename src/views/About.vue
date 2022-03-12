@@ -4,9 +4,7 @@
       class="px-10 pt-20 md:px-14 lg:px-20 lg:py-20 lg:pt-24 relative max-w-screen-xl min-h-screen m-auto"
     >
       <div class="md md:w-3/4 lg:w-2/4">
-        <h1 class="text-6xl mb-14 text-mint-900 font-semibold drop-shadow-3xl">
-          About Me
-        </h1>
+        <h1 class="mb-14 header-main">About Me</h1>
         <p class="mb-8 drop-shadow-3xl">
           Hi, my name's Fergus Mullineux, I'm a programmer/developer/general
           nerd, I mostly write frontend code but specialise in Vue. I briefly
@@ -81,11 +79,12 @@
 </template>
 
 <script>
-import { onMounted, ref, inject } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useToast } from '@/composables/toast'
 
 export default {
   setup() {
-    const toast = inject('$toast')
+    const { toast } = useToast()
 
     const formFields = ref({
       name: '',

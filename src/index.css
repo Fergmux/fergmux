@@ -14,7 +14,11 @@
 }
 
 .bg-img-cover {
-  @apply bg-cover bg-center bg-no-repeat h-full bg-fixed;
+  @apply bg-cover bg-center bg-no-repeat h-full min-h-screen bg-fixed;
+}
+
+.header-main {
+  @apply text-6xl text-mint-900 font-semibold drop-shadow-3xl;
 }
 
 .img-contain {
@@ -26,7 +30,7 @@
 }
 
 .button-light {
-  @apply bg-mint-800 hover:bg-mint-700 text-mint-300 font-bold px-4 rounded py-2;
+  @apply bg-mint-800 hover:bg-mint-700 text-mint-300 font-bold px-4 rounded py-2 drop-shadow-3xl;
 }
 
 @media (min-width: 768px) {

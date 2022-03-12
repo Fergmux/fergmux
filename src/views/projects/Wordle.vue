@@ -67,7 +67,8 @@
 import indexesOf from 'indexes-of'
 import words from '@/data/words.js'
 import ordinal from 'ordinal'
-import { computed, ref, onMounted, inject } from 'vue'
+import { computed, ref, onMounted } from 'vue'
+import { useToast } from '@/composables/toast'
 
 export default {
   setup() {
@@ -188,7 +189,7 @@ export default {
         .toLowerCase()
     )
 
-    const toast = inject('$toast')
+    const { toast } = useToast()
 
     const submitWord = () => {
       if (guess.value.length !== 5 || !words.includes(guess.value)) {

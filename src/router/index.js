@@ -34,28 +34,39 @@ const routes = [
     path: '/projects/game-chart',
     name: 'game-chart',
     component: () =>
-      import(/* webpackChunkName: "game-chart" */ '@/views/GameChart.vue'),
+      import(
+        /* webpackChunkName: "game-chart" */ '@/views/projects/GameChart.vue'
+      ),
   },
   {
     path: '/projects/pong',
     name: 'pong',
-    component: () => import(/* webpackChunkName: "pong" */ '@/views/Pong.vue'),
+    component: () =>
+      import(/* webpackChunkName: "pong" */ '@/views/projects/Pong.vue'),
   },
   {
     path: '/projects/rain',
     name: 'rain',
-    component: () => import(/* webpackChunkName: "rain" */ '@/views/Rain.vue'),
+    component: () =>
+      import(/* webpackChunkName: "rain" */ '@/views/projects/Rain.vue'),
   },
   {
     path: '/projects/wave',
     name: 'wave',
-    component: () => import(/* webpackChunkName: "wave" */ '@/views/Wave.vue'),
+    component: () =>
+      import(/* webpackChunkName: "wave" */ '@/views/projects/Wave.vue'),
   },
   {
     path: '/projects/wordle-solver',
     name: 'wordle',
     component: () =>
-      import(/* webpackChunkName: "wordle" */ '@/views/Wordle.vue'),
+      import(/* webpackChunkName: "wordle" */ '@/views/projects/Wordle.vue'),
+  },
+  {
+    path: '/projects/chess/:id?',
+    name: 'chess',
+    component: () =>
+      import(/* webpackChunkName: "chess" */ '@/views/projects/Chess.vue'),
   },
 ]
 

@@ -2,9 +2,7 @@
   <div class="bg-img bg-img-cover overflow-x-hidden">
     <div class="py-20">
       <div class="text-center mb-20 mt-10">
-        <h1 class="text-6xl mb-4 font-semibold drop-shadow-3xl text-mint-900">
-          Technologies
-        </h1>
+        <h1 class="mb-4 header-main">Technologies</h1>
         <p class="mb-7 drop-shadow-3xl">
           A list of technologies and tools that I use, or have used.
         </p>

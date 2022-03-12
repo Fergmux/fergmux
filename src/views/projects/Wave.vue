@@ -1,8 +1,10 @@
 <template>
-  <div class="pt-10 text-center">
-    <h1 class="text-5xl mb-7 underline mx-auto font-semibold">Wave</h1>
-    <div id="canvas" width="500" height="500"></div>
-    <canvas id="c"></canvas>
+  <div class="py-20 bg-img bg-img-cover">
+    <div class="text-center">
+      <h1 class="text-5xl mb-20 underline mx-auto font-semibold">Wave</h1>
+      <div id="canvas" width="500" height="500"></div>
+      <canvas id="c"></canvas>
+    </div>
   </div>
 </template>
 
@@ -80,5 +82,10 @@ export default {
   float: left;
   border-radius: 50%;
   position: absolute;
+}
+</style>
+<style scoped>
+.bg-img {
+  background-image: url('@/assets/images/backgrounds/wave.svg');
 }
 </style>

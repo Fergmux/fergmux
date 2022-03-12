@@ -1,8 +1,6 @@
 <template>
   <div class="pt-20 bg-img bg-img-cover min-h-screen text-center">
-    <h1 class="text-6xl mb-7 text-mint-900 font-semibold drop-shadow-3xl">
-      Career
-    </h1>
+    <h1 class="mb-7 header-main">Career</h1>
 
     <div class="w-full flex items-center justify-around">
       <div class="w-4/5 text-right relative">
