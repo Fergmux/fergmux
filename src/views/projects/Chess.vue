@@ -219,7 +219,7 @@ onMounted(() => {
   playerId.value = window.localStorage.getItem('playerId')
 
   if (!playerId.value) {
-    playerId.value = Date.now()
+    playerId.value = Date.now().toString()
     window.localStorage.setItem('playerId', playerId.value)
   }
 
