@@ -17,7 +17,7 @@
 
     <router-view></router-view>
 
-    <Menubar v-model="showMenu" @login="showLogin = true"></Menubar>
+    <Menubar v-model="showMenu" ></Menubar>
   </div>
 </template>
 
