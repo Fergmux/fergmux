@@ -1,15 +1,15 @@
 <template>
-  <div class="p-10 pt-16 md:p-20 bg-img bg-img-cover w-full">
+  <div class="w-full p-10 pt-16 md:p-20 bg-img bg-img-cover">
     <div class="max-w-screen-lg m-auto">
       <h1 class="mb-16 header-main">Chess</h1>
-      <div v-if="!gameToken" class="md:flex justify-between max-w-screen-md">
+      <div v-if="!gameToken" class="justify-between max-w-screen-md md:flex">
         <div class="drop-shadow-3xl">
-          <h1 class="text-2xl font-semibold mb-5">Start a new game</h1>
+          <h1 class="mb-5 text-2xl font-semibold">Start a new game</h1>
           <p class="mb-2 text-lg">I want to play as:</p>
           <div>
-            <div class="form-check my-2">
+            <div class="my-2 form-check">
               <input
-                class="form-check-input appearance-none rounded-full h-4 w-4 border-4 border-mint-500 bg-white checked:border-mint-800 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                class="mt-1 mr-2 radio"
                 type="radio"
                 name="color"
                 id="color-white"
@@ -18,15 +18,15 @@
                 v-model="playerColor"
               />
               <label
-                class="form-check-label inline-block font-semibold"
+                class="inline-block font-semibold form-check-label"
                 for="color-white"
               >
                 White
               </label>
             </div>
-            <div class="form-check my-2">
+            <div class="my-2 form-check">
               <input
-                class="form-check-input appearance-none rounded-full h-4 w-4 border-4 border-mint-500 bg-white checked:border-mint-800 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                class="mt-1 mr-2 radio"
                 type="radio"
                 name="color"
                 id="color-black"
@@ -34,27 +34,27 @@
                 v-model="playerColor"
               />
               <label
-                class="form-check-label inline-block font-semibold"
+                class="inline-block font-semibold form-check-label"
                 for="color-black"
               >
                 Black
               </label>
             </div>
           </div>
-          <button @click="createGame" class="block button-light mt-5">
+          <button @click="createGame" class="block mt-5 button-light">
             Create game
           </button>
         </div>
         <div>
-          <h1 class="mt-10 md:mt-0 text-2xl font-semibold mb-5 drop-shadow-3xl">
+          <h1 class="mt-10 mb-5 text-2xl font-semibold md:mt-0 drop-shadow-3xl">
             Join a game
           </h1>
           <input
             v-model="gameToken"
             placeholder="Game ID"
-            class="text-field block"
+            class="block text-field"
           />
-          <button @click="joinGame" class="block button-light mt-5">
+          <button @click="joinGame" class="block mt-5 button-light">
             Join game
           </button>
         </div>
@@ -63,7 +63,7 @@
         <p class="mb-5 drop-shadow-3xl">
           Game ID: <span class="font-bold">{{ gameToken }}</span>
         </p>
-        <button @click="newGame" class="button-light mr-5">New game</button>
+        <button @click="newGame" class="mr-5 button-light">New game</button>
         <button @click="copyLink" class="button-light">Copy link</button>
         <p class="mt-10 mb-5">
           <template v-if="playerColor">
