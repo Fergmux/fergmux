@@ -1,15 +1,15 @@
 <template>
-  <div class="app min-h-screen relative">
-    <div class="fixed flex justify-between z-10 w-full">
+  <div class="relative min-h-screen app">
+    <div class="fixed z-10 flex justify-between w-full">
       <router-link
         to="/"
-        class="material-icons cursor-pointer m-2 mx-3 text-2xl"
+        class="m-2 mx-3 text-2xl cursor-pointer material-icons"
       >
         home
       </router-link>
       <div
+        class="m-2 mx-3 text-3xl cursor-pointer material-icons"
         @click="showMenu = true"
-        class="material-icons cursor-pointer m-2 mx-3 text-3xl"
       >
         menu
       </div>
@@ -20,12 +20,12 @@
     <Transition name="slide-right">
       <div
         v-if="showMenu"
-        class="h-full bg-mint-200 w-80 menu fixed top-0 right-0 border-l border-mint-300 drop-shadow-3xl z-20"
+        class="fixed top-0 right-0 z-20 h-full border-l bg-mint-200 w-80 menu border-mint-300 drop-shadow-3xl"
       >
-        <div class="w-full flex justify-end items-center">
+        <div class="flex items-center justify-end w-full">
           <div
+            class="m-2 text-3xl cursor-pointer material-icons md-dark"
             @click="showMenu = false"
-            class="material-icons md-dark cursor-pointer m-2 text-3xl"
           >
             close
           </div>
@@ -36,20 +36,20 @@
           :to="{ name: item.route }"
           @click="showMenu = false"
         >
-          <div class="menu-item p-5">
+          <div class="p-5 menu-item">
             {{ item.name }}
           </div>
         </router-link>
 
         <router-link :to="{ name: 'projects' }" @click="showMenu = false">
           <div
+            class="p-5 menu-item"
             @mouseover="showProjects[0] = true"
             @mouseleave="hideProjects(0)"
-            class="menu-item p-5"
           >
             Projects
             <span
-              class="material-icons-outlined transition-transform duration-500"
+              class="transition-transform duration-500 material-icons-outlined"
               :class="{ 'rotate-180': showProjects.some(Boolean) }"
             >
               arrow_drop_down
@@ -70,7 +70,7 @@
               :to="{ name: project.route }"
               @click="showMenu = false"
             >
-              <div class="menu-item p-5 pl-8">
+              <div class="p-5 pl-8 menu-item">
                 {{ project.name }}
               </div>
             </router-link>
@@ -81,36 +81,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import './index.css'
 import { ref } from 'vue'
 import { menuConfig, projectConfig } from '@/data/menuConfig'
 
-export default {
-  setup() {
-    const showMenu = ref(false)
-    const showProjects = ref([false, false])
-    const projects = ref(projectConfig)
+const showMenu = ref(false)
+const showProjects = ref([false, false])
+const projects = ref(projectConfig)
 
-    const menuItems = ref(
-      menuConfig.filter((item) => item.route !== 'projects')
-    )
+const menuItems = ref(menuConfig.filter((item) => item.route !== 'projects'))
 
-    const hideProjects = (num) => {
-      window.setTimeout(() => {
-        console.log(showProjects.value)
-        showProjects.value[num] = false
-      }, 10)
-    }
-
-    return {
-      showMenu,
-      menuItems,
-      showProjects,
-      projects,
-      hideProjects,
-    }
-  },
+const hideProjects = (num: number) => {
+  window.setTimeout(() => {
+    console.log(showProjects.value)
+    showProjects.value[num] = false
+  }, 10)
 }
 </script>
 

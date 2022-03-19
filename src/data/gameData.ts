@@ -1,5 +1,13 @@
-export const getLabels = (data) => data.map((item) => item.key)
-export const getData = (data) => data.map((item) => item.value)
+import {ChartConfiguration} from 'chart.js'
+
+export interface GameData {
+  key: string | null;
+  value: number;
+  children: GameData[];
+}
+
+export const getLabels = (data: GameData[]) => data.map((item) => item.key)
+export const getData = (data: GameData[]) => data.map((item) => item.value)
 
 export const levelMap = [
   'Parent Company',
@@ -14,15 +22,15 @@ export const tooltipMap = [
   'M Sales',
 ]
 
-const organiseData = (gameArray) => {
+const organiseData = (gameArray: GameData[]): GameData[] => {
   gameArray.sort((a, b) => b.value - a.value)
   return gameArray.map((game) => ({
     ...game,
-    children: organiseData(game.children),
+    children: game.children && organiseData(game.children),
   }))
 }
 
-export const rawGameData = [
+export const rawGameData: GameData[] = [
   {
     key: 'Microsoft',
     value: 2221,
@@ -1224,7 +1232,7 @@ export const rawGameData = [
 
 export const gameData = organiseData(rawGameData)
 
-export const chartConfig = {
+export const chartConfig: ChartConfiguration = {
   type: 'doughnut',
   data: {
     labels: getLabels(gameData),

@@ -1,0 +1,7 @@
+lockfileVersion: 5.3
+
+specifiers:
+  faunadb: ^4.5.2
+
+dependencies:
+  faunadb: link:../../../../../.nvm/versions/node/v16.13.1/pnpm-global/5/node_modules/faunadb

@@ -9,13 +9,13 @@
           <div>
             <div class="my-2 form-check">
               <input
+                id="color-white"
+                v-model="playerColor"
                 class="mt-1 mr-2 radio"
                 type="radio"
                 name="color"
-                id="color-white"
                 value="white"
                 checked
-                v-model="playerColor"
               />
               <label
                 class="inline-block font-semibold form-check-label"
@@ -26,12 +26,12 @@
             </div>
             <div class="my-2 form-check">
               <input
+                id="color-black"
+                v-model="playerColor"
                 class="mt-1 mr-2 radio"
                 type="radio"
                 name="color"
-                id="color-black"
                 value="black"
-                v-model="playerColor"
               />
               <label
                 class="inline-block font-semibold form-check-label"
@@ -41,7 +41,7 @@
               </label>
             </div>
           </div>
-          <button @click="createGame" class="block mt-5 button-light">
+          <button class="block mt-5 button-light" @click="createGame">
             Create game
           </button>
         </div>
@@ -54,7 +54,7 @@
             placeholder="Game ID"
             class="block text-field"
           />
-          <button @click="joinGame" class="block mt-5 button-light">
+          <button class="block mt-5 button-light" @click="joinGame">
             Join game
           </button>
         </div>
@@ -63,8 +63,8 @@
         <p class="mb-5 drop-shadow-3xl">
           Game ID: <span class="font-bold">{{ gameToken }}</span>
         </p>
-        <button @click="newGame" class="mr-5 button-light">New game</button>
-        <button @click="copyLink" class="button-light">Copy link</button>
+        <button class="mr-5 button-light" @click="newGame">New game</button>
+        <button class="button-light" @click="copyLink">Copy link</button>
         <p class="mt-10 mb-5">
           <template v-if="playerColor">
             It is {{ playerTurn ? 'your' : 'their' }} turn.
@@ -74,17 +74,17 @@
           </template>
         </p>
       </div>
-      <div class="drop-shadow-3xl" ref="board"></div>
+      <div ref="board" class="drop-shadow-3xl"></div>
     </div>
   </div>
 </template>
 
-<script setup>
-import { computed, ref, onMounted } from 'vue'
+<script lang="ts" setup>
+import { computed, ref, onMounted, Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { _62To10, _10To62 } from 'simple-base-converter'
-import { Application, Graphics, Sprite } from 'pixi.js'
-import { Chess } from 'chess.js'
+import { Application, Graphics, Sprite, InteractionEvent } from 'pixi.js'
+import { Chess, ChessInstance, Move, PieceType, Square } from 'chess.js'
 import { useToast } from '@/composables/toast'
 import { client, q } from '@/lib/fauna'
 import api from '@/lib/api'
@@ -109,14 +109,14 @@ const colorMap = { w: 'white', b: 'black' }
 
 const { toast } = useToast()
 
-let chess
-let moves
-let stream
-let app
+let chess: ChessInstance | null
+let moves: Move[]
+let stream: Subscription<SubscriptionEventHandlers> | null
+let app: Application
 
-const gameId = ref(null)
-const colorTurn = ref(null)
-const playerColor = ref('white')
+const gameId: Ref<string | null> = ref(null)
+const colorTurn: Ref<string | null> = ref(null)
+const playerColor: Ref<string | null> = ref('white')
 const playerTurn = computed(() => colorTurn.value === playerColor.value)
 const gameToken = computed(() => gameId.value && _10To62(gameId.value))
 
@@ -127,24 +127,30 @@ const copyLink = () => {
   toast('Link copied to clipboard')
 }
 
+const board: Ref<HTMLElement | null> = ref(null)
+
 const newGame = () => {
-  board.value.removeChild(app.view)
-  stream.close()
+  if (board.value && stream) {
+    board.value.removeChild(app.view)
+    stream.close()
 
-  gameId.value = null
-  chess = null
-  moves = null
-  stream = null
+    gameId.value = null
+    chess = null
+    moves = []
+    stream = null
 
-  router.push({ name: 'chess' })
+    router.push({ name: 'chess' })
+  }
 }
 
 const createGame = async () => {
-  const response = await api.post('/.netlify/functions/create-game', {
-    [playerColor.value]: playerId.value,
-  })
+  if (playerColor.value) {
+    const response = await api.post('/.netlify/functions/create-game', {
+      [playerColor.value]: playerId.value,
+    })
 
-  gameId.value = response.gameId
+    gameId.value = response.gameId
+  }
 
   startStream()
 
@@ -186,37 +192,50 @@ const joinGame = async () => {
 const sendMove = async () => {
   await api.post('/.netlify/functions/send-move', {
     id: gameId.value,
-    game: { fen: chess.fen(), moves },
+    game: { fen: chess?.fen(), moves },
   })
 }
 
-const startStream = (fen, moves) => {
+interface gameDBObject {
+  fen: string
+  moves: Move[]
+  white: string
+  black: string
+}
+
+const startStream = (fen?: string, moves?: Move[]) => {
   initGame(fen, moves)
 
-  stream = client.stream
-    .document(q.Ref(q.Collection('games'), gameId.value))
-    .on('version', (version) => {
-      applyMove(version.document.data.moves)
-    })
-    .start()
+  if (gameId.value) {
+    stream = client.stream
+      .document(q.Ref(q.Collection('games'), gameId.value))
+      .on('version', (version) => {
+        const document = version?.document as FaunaDocument
+        const data = document.data as gameDBObject
+        applyMove(data.moves)
+      })
+      .start()
+  }
 
   drawBoard()
 }
 
-const applyMove = (newMoves) => {
+const applyMove = (newMoves: Move[]) => {
   newMoves.slice(moves.length).forEach((move) => {
-    chess.move(move)
-    moves.push(move)
-    drawBoard()
+    if (chess) {
+      chess.move(move)
+      moves.push(move)
+      drawBoard()
+    }
   })
 }
 
 const route = useRoute()
 const router = useRouter()
-const playerId = ref(null)
+const playerId: Ref<string | null> = ref(null)
 
 onMounted(() => {
-  playerId.value = window.localStorage.getItem('playerId')
+  playerId.value = window.localStorage.getItem('playerId') as string
 
   if (!playerId.value) {
     playerId.value = Date.now().toString()
@@ -224,7 +243,7 @@ onMounted(() => {
   }
 
   if (route.params.id) {
-    gameId.value = _62To10(route.params.id)
+    gameId.value = _62To10(route.params.id as string)
     joinGame()
   }
 })
@@ -233,7 +252,7 @@ onMounted(() => {
 const boardSize = Math.min(window.innerWidth / 2, 300)
 const tileSize = boardSize / 8
 
-const initGame = (fen, _moves) => {
+const initGame = (fen?: string, _moves?: Move[]) => {
   app = new Application({
     antialias: true,
     resolution: window.devicePixelRatio || 1,
@@ -241,7 +260,9 @@ const initGame = (fen, _moves) => {
     height: boardSize,
   })
 
-  board.value.appendChild(app.view)
+  if (board.value) {
+    board.value.appendChild(app.view)
+  }
 
   chess = new Chess(fen)
   moves = _moves || []
@@ -249,13 +270,20 @@ const initGame = (fen, _moves) => {
   drawBoard()
 }
 
-const board = ref(null)
 const colors = {
-  tile: { black: '0x3B4B66', white: '0x7Bb8c5', selected: '0x886644' },
-  piece: { black: '0x000000' },
+  tile: { black: 0x3b4b66, white: 0x7bb8c5, selected: 0x886644 },
+  piece: { black: 0x000000 },
+}
+
+type PieceColor = 'b' | 'w'
+
+interface Piece {
+  type: PieceType
+  color: PieceColor
 }
 
 const drawBoard = () => {
+  if (!chess) return
   colorTurn.value = colorMap[chess.turn()]
   if (chess.in_check()) {
     toast('Check!')
@@ -275,7 +303,7 @@ const drawBoard = () => {
   }
 
   chess.board().forEach((row, rowIndex) => {
-    row.forEach((piece, columnIndex) => {
+    row.forEach((piece: Piece | null, columnIndex) => {
       drawTile(columnIndex, rowIndex)
 
       if (piece) {
@@ -285,10 +313,17 @@ const drawBoard = () => {
   })
 }
 
-const drawTile = (x, y) => {
+// OVerride default Graphics type because it is missing some DisplayObject properties
+interface _Graphics extends Graphics {
+  interactive: boolean
+  on: (event: string, callback: (e: InteractionEvent) => void) => void
+}
+
+const drawTile = (x: number, y: number) => {
   const tile = new Graphics()
 
   let color = (x + y) % 2 ? colors.tile.black : colors.tile.white
+
   if (x === selectedTile.x && y === selectedTile.y) {
     color = colors.tile.selected
   }
@@ -299,14 +334,13 @@ const drawTile = (x, y) => {
 
   tile.x = x * tileSize
   tile.y = y * tileSize
-
-  tile.on('pointertap', tileClick)
-  tile.interactive = true
+  ;(tile as _Graphics).on('pointertap', tileClick)
+  ;(tile as _Graphics).interactive = true
 
   app.stage.addChild(tile)
 }
 
-const drawPiece = (piece, x, y) => {
+const drawPiece = (piece: Piece, x: number, y: number) => {
   const sprite = Sprite.from(pieceMap[piece.type])
 
   sprite.anchor.set(0.5)
@@ -323,17 +357,23 @@ const drawPiece = (piece, x, y) => {
   app.stage.addChild(sprite)
 }
 
-let selectedTile = { x: null, y: null, name: null }
+interface Tile {
+  x: number | null
+  y: number | null
+  name: Square | null
+}
 
-const tileClick = (e) => {
-  if (!playerTurn.value || chess.game_over()) return
+let selectedTile: Tile = { x: null, y: null, name: null }
+
+const tileClick = (e: InteractionEvent) => {
+  if (!playerTurn.value || chess?.game_over()) return
 
   const x = Math.floor(e.data.global.x / tileSize)
   const y = Math.floor(e.data.global.y / tileSize)
-  const clickedTile = 'abcdefgh'[x] + (8 - y)
+  const clickedTile: Square = ('abcdefgh'[x] + (8 - y)) as Square
 
   if (selectedTile.name) {
-    const move = chess.move({ from: selectedTile.name, to: clickedTile })
+    const move = chess?.move({ from: selectedTile.name, to: clickedTile })
     if (move) {
       moves.push(move)
       sendMove()
@@ -343,8 +383,10 @@ const tileClick = (e) => {
     }
   } else {
     if (
-      chess.get(clickedTile).color ===
-      Object.keys(colorMap).find((key) => colorMap[key] === playerColor.value)
+      chess?.get(clickedTile)?.color ===
+      Object.keys(colorMap).find(
+        (key: string) => colorMap[key as PieceColor] === playerColor.value
+      )
     ) {
       selectedTile = { x, y, name: clickedTile }
     }

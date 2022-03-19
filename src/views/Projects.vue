@@ -1,7 +1,7 @@
 <template>
-  <div class="pt-20 bg-img bg-img-cover min-h-screen">
+  <div class="min-h-screen pt-20 bg-img bg-img-cover">
     <div
-      class="max-w-screen-xl flex flex-col items-center justify-center m-auto"
+      class="flex flex-col items-center justify-center max-w-screen-xl m-auto"
     >
       <div class="text-center">
         <h1 class="mb-7 header-main">Projects</h1>
@@ -9,14 +9,14 @@
           Some micro-apps I've made while messing around.
         </p>
       </div>
-      <main class="grid p-20 grid-cols-2">
+      <main class="grid grid-cols-2 p-20">
         <section
           v-for="project in projects"
           :key="project.route"
-          class="py-5 px-10 menu-section"
+          class="px-10 py-5 menu-section"
         >
           <router-link class="m-2" :to="{ name: project.route }">
-            <h2 class="text-4xl font-semibold drop-shadow-3xl underline">
+            <h2 class="text-4xl font-semibold underline drop-shadow-3xl">
               {{ project.name }}
             </h2>
             <p class="py-5 text-lg drop-shadow-3xl">{{ project.text }}</p>
@@ -27,17 +27,11 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { ref } from 'vue'
 import { projectConfig } from '@/data/menuConfig'
 
-export default {
-  setup() {
-    const projects = ref(projectConfig)
-
-    return { projects }
-  },
-}
+const projects = ref(projectConfig)
 </script>
 <style lang="scss" scoped>
 .bg-img {

@@ -56,7 +56,27 @@ import zoom from '@/assets/images/technologies/zoom.png'
 import microsoft_office from '@/assets/images/technologies/microsoft_office.svg'
 import skype from '@/assets/images/technologies/skype.svg'
 
-const techSections = [
+export interface Technology {
+  name: string
+  id: string
+  logo: string
+  color: string
+  link: string
+}
+
+export interface Section {
+  title: string
+  subtitle: string
+  key: 'strong' | 'mid' | 'other'
+}
+
+export interface Technologies {
+  strong: Technology[]
+  mid: Technology[]
+  other: Technology[]
+}
+
+const techSections: Section[] = [
   {
     title: "Stuff I'm good at",
     subtitle: 'Technologies I use regularly and am proficient in',

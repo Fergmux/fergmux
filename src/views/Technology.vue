@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-img bg-img-cover overflow-x-hidden">
+  <div class="overflow-x-hidden bg-img bg-img-cover">
     <div class="py-20">
-      <div class="text-center mb-20 mt-10">
+      <div class="mt-10 mb-20 text-center">
         <h1 class="mb-4 header-main">Technologies</h1>
         <p class="mb-7 drop-shadow-3xl">
           A list of technologies and tools that I use, or have used.
@@ -13,22 +13,22 @@
         :key="section.key"
         class="max-w-screen-xl m-auto"
       >
-        <div class="w-full h-60 flex flex-col items-center justify-center">
-          <h1 class="text-5xl mb-4 font-semibold drop-shadow-3xl">
+        <div class="flex flex-col items-center justify-center w-full h-60">
+          <h1 class="mb-4 text-5xl font-semibold drop-shadow-3xl">
             {{ section.title }}
           </h1>
           <p class="drop-shadow-3xl">{{ section.subtitle }}</p>
         </div>
         <div class="grid grid-flow-row col-auto tech-grid">
           <a
-            v-for="tech in tech[section.key]"
+            v-for="tech in techs[section.key]"
             :key="tech.id"
             :href="tech.link"
             target="_blank"
           >
             <div
               :style="{ backgroundColor: lighten(tech.color) }"
-              class="h-36 cursor-pointer flex items-center justify-between text-3xl font-bold text-mint-200 p-5 hover:scale-110 transition-transform hover:z-10 hover:drop-shadow-md"
+              class="flex items-center justify-between p-5 text-3xl font-bold transition-transform cursor-pointer h-36 text-mint-200 hover:scale-110 hover:z-10 hover:drop-shadow-md"
             >
               <div
                 class="logo img-contain drop-shadow-md"
@@ -45,26 +45,25 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
-import { techSections, technologies } from '@/data/technologies.js'
+<script lang="ts" setup>
+import { ref, Ref } from 'vue'
+import {
+  techSections,
+  technologies,
+  Technologies,
+  Section,
+} from '@/data/technologies'
 import hexRgb from 'hex-rgb'
 
-export default {
-  setup() {
-    const sections = ref(techSections)
-    const tech = ref(technologies)
+const sections: Ref<Section[]> = ref(techSections)
+const techs: Ref<Technologies> = ref(technologies)
 
-    const lighten = (hex) => {
-      const rgbColor = hexRgb(hex, { format: 'array', alpha: 1 })
+const lighten = (hex: string) => {
+  const rgbColor = hexRgb(hex, { format: 'array', alpha: 1 })
 
-      return `rgba(${rgbColor
-        .map((c, index) => (index < 3 ? Math.round(c * 1.3) : c))
-        .join(', ')})`
-    }
-
-    return { tech, sections, lighten }
-  },
+  return `rgba(${rgbColor
+    .map((c, index) => (index < 3 ? Math.round(c * 1.3) : c))
+    .join(', ')})`
 }
 </script>
 

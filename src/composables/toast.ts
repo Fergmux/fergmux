@@ -4,8 +4,12 @@ import { defineComponent, createApp } from 'vue'
 const div = document.createElement('div')
 document.body.appendChild(div)
 
+interface ToastOptions {
+  time?: number
+}
+
 export function useToast() {
-  const toast = (message, options = {}) => {
+  const toast = (message: string, options: ToastOptions = {}) => {
     const time = options?.time ?? 3000
 
     const buttonView = defineComponent({
@@ -23,17 +27,19 @@ export function useToast() {
 
     const toast = document.getElementById('toast')
 
-    setTimeout(() => {
-      toast.classList.add('show')
-    }, 10)
+    if (toast) {
+      setTimeout(() => {
+        toast.classList.add('show')
+      }, 10)
 
-    setTimeout(() => {
-      toast.classList.remove('show')
-    }, time)
+      setTimeout(() => {
+        toast.classList.remove('show')
+      }, time)
 
-    setTimeout(() => {
-      app.unmount()
-    }, time + 500)
+      setTimeout(() => {
+        app.unmount()
+      }, time + 500)
+    }
   }
 
   return { toast }
