@@ -31,11 +31,6 @@ export const projectConfig = [
     route: 'battle-map',
     text: 'An online DnD battle map tool.',
   },
-  // {
-  //   name: 'Majority Rules',
-  //   route: 'majority-rules',
-  //   text: 'An online game where you have to guess the most common answers.',
-  // },
   {
     name: 'Chess',
     route: 'chess',

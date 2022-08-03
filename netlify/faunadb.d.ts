@@ -73,4 +73,5 @@ export type FaunaDocument<T = object> = {
   ref: Ref
   ts: number
   data: T
+  secret?: string
 }

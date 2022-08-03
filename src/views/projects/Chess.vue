@@ -84,7 +84,7 @@ import { computed, ref, onMounted, Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { _62To10, _10To62 } from 'simple-base-converter'
 import { Application, Graphics, Sprite, InteractionEvent } from 'pixi.js'
-import { Chess, ChessInstance, Move, PieceType, Square } from 'chess.js'
+import { ChessInstance, Move, PieceType, Square } from 'chess.js'
 import { useToast } from '@/composables/toast'
 import { client, q } from '@/lib/fauna'
 import api from '@/lib/api'
@@ -145,7 +145,7 @@ const newGame = () => {
 
 const createGame = async () => {
   if (playerColor.value) {
-    const response = await api.post('/.netlify/functions/create-game', {
+    const response = await api.post('/.netlify/functions/create-chess-game', {
       [playerColor.value]: playerId.value,
     })
 
@@ -161,7 +161,10 @@ const createGame = async () => {
 }
 
 const joinGame = async () => {
-  const response = await api.post('/.netlify/functions/join-game', gameId.value)
+  const response = await api.post(
+    '/.netlify/functions/join-chess-game',
+    gameId.value
+  )
 
   const { fen, moves, black, white } = response
 
@@ -252,7 +255,7 @@ onMounted(() => {
 const boardSize = Math.min(window.innerWidth / 2, 300)
 const tileSize = boardSize / 8
 
-const initGame = (fen?: string, _moves?: Move[]) => {
+const initGame = async (fen?: string, _moves?: Move[]) => {
   app = new Application({
     antialias: true,
     resolution: window.devicePixelRatio || 1,
@@ -264,6 +267,7 @@ const initGame = (fen?: string, _moves?: Move[]) => {
     board.value.appendChild(app.view)
   }
 
+  const { Chess } = await import('chess.js')
   chess = new Chess(fen)
   moves = _moves || []
 

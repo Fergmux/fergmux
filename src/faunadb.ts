@@ -78,5 +78,6 @@ declare global {
     ref: Ref
     ts: number
     data: T
+    secret?: string
   }
 }

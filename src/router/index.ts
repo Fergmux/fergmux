@@ -68,6 +68,22 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "chess" */ '@/views/projects/Chess.vue'),
   },
+  // {
+  //   path: '/projects/majority-rules',
+  //   name: 'majority-rules',
+  //   component: () =>
+  //     import(
+  //       /* webpackChunkName: "majorityRules" */ '@/views/projects/MajorityRules.vue'
+  //     ),
+  // },
+  {
+    path: '/projects/battle-map',
+    name: 'battle-map',
+    component: () =>
+      import(
+        /* webpackChunkName: "battleMap" */ '@/views/projects/BattleMap.vue'
+      ),
+  },
 ]
 
 export default createRouter({
