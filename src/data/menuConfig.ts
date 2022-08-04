@@ -27,6 +27,11 @@ export const menuConfig = [
 
 export const projectConfig = [
   {
+    name: 'Battle Map',
+    route: 'battle-map',
+    text: 'An online DnD battle map tool.',
+  },
+  {
     name: 'Chess',
     route: 'chess',
     text: 'An online chess game made in Pixi.',
