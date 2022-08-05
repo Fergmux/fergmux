@@ -1,16 +1,33 @@
 <template>
   <div>
     <div ref="container" class="absolute top-0 left-0" />
-    <div class="absolute top-0 left-0 z-10">
+    <div class="absolute top-0 left-0 z-10 flex items-center">
       <input
-        id="myRange"
-        v-model.number="gridSize"
+        v-model.number="zoomLevel"
         type="range"
-        min="10"
-        max="100"
-        class="slider"
+        min="0.1"
+        max="5"
+        step="0.1"
+        class="m-2 ml-12"
         @change="drawStage"
       />
+      <input
+        v-model.number="gridSize"
+        type="range"
+        min="30"
+        max="100"
+        class="m-2 ml-12"
+        @change="drawStage"
+      />
+      <input
+        v-model.number="gridSize"
+        type="number"
+        min="30"
+        max="100"
+        class="p-px m-2 text-center text-black rounded-sm"
+        @change="drawStage"
+      />
+      <input type="file" name="img" accept="image/*" @change="setMap" />
     </div>
   </div>
 </template>
@@ -18,20 +35,24 @@
 <script lang="ts" setup>
 import { onMounted, ref, Ref } from 'vue'
 import { Graphics, Application, Sprite, Loader } from 'pixi.js'
-import map from '@/assets/images/dnd/map.png'
+import defaultMap from '@/assets/images/dnd/map.png'
 import dorwin from '@/assets/images/dnd/dorwin.png'
 import { GameState, Token, Position } from '@/interfaces/GameState'
+import { sleep } from '@/lib/utils'
 
 const container: Ref<HTMLElement | null> = ref(null)
 
+let map = defaultMap
 let app: Application
 
 let windowHeight = 0
 let windowWidth = 0
 
-let gridSize = ref(50)
-
+let gridSize = ref(60)
+let zoomLevel = ref(1)
 let gameState: GameState
+
+const loader = new Loader()
 
 onMounted(() => {
   windowHeight = window.innerHeight
@@ -47,14 +68,17 @@ onMounted(() => {
   gameState = { tokens: [] }
 
   container.value?.appendChild(app.view)
+  loadToken()
+  loadAssets()
+})
 
-  const loader = new Loader()
+const loadAssets = () => {
+  loader.reset()
   loader.add('map', map)
   loader.add('dorwin', dorwin)
-  loader.onComplete.add(loadToken)
   loader.onComplete.add(drawStage)
   loader.load()
-})
+}
 
 const loadToken = () => {
   gameState.tokens.push({
@@ -65,55 +89,68 @@ const loadToken = () => {
   })
 }
 
-const drawStage = () => {
+const setMap = (event: InputEvent) => {
+  const target = event.target as HTMLInputElement
+  const files = target.files
+
+  if (files && files.length) {
+    map = URL.createObjectURL(files[0] as Blob)
+    loadAssets()
+  }
+}
+
+const drawStage = async () => {
   clearStage()
-  drawMap()
+  await drawMap()
   drawGrid()
   drawTokens()
 }
 
 const clearStage = () => {
-  let blank = new Graphics()
-  blank.beginFill(0xffffff)
-  blank.drawRect(0, 0, windowWidth, windowHeight)
-  app.stage.addChild(blank)
+  app.stage.removeChildren()
+  app.stage.scale.x = zoomLevel.value
+  app.stage.scale.y = zoomLevel.value // TODO: Fix
 }
 
-const drawMap = () => {
+const drawMap = async () => {
   const bg = Sprite.from(map)
   const { height, width } = bg
 
-  let scaleFactor = windowWidth / width
+  if (height === 1 || width === 1) {
+    await sleep(50)
+    await drawMap()
+  } else {
+    let scaleFactor = windowWidth / width
+    if (height * scaleFactor > windowHeight) {
+      scaleFactor = windowHeight / height
+    }
 
-  if (height * scaleFactor > windowHeight) {
-    scaleFactor = windowHeight / height
+    bg.height = height * scaleFactor
+    bg.width = width * scaleFactor
+
+    app.stage.addChild(bg)
   }
-
-  bg.height = height * scaleFactor
-  bg.width = width * scaleFactor
-
-  app.stage.addChild(bg)
 }
 
 const drawGrid = () => {
-  const line = new Graphics()
-  line.lineStyle(2, 0x444, 0.5)
+  const grid = new Graphics()
+  grid.lineStyle(2, 0x222, 0.5)
 
   let x = 0
   while (x < windowWidth) {
     x += gridSize.value
-    line.moveTo(x, 0)
-    line.lineTo(x, windowHeight)
+    grid.moveTo(x, 0)
+    grid.lineTo(x, windowHeight)
   }
 
   let y = 0
   while (y < windowHeight) {
     y += gridSize.value
-    line.moveTo(0, y)
-    line.lineTo(windowWidth, y)
+    grid.moveTo(0, y)
+    grid.lineTo(windowWidth, y)
   }
 
-  app.stage.addChild(line)
+  app.stage.addChild(grid)
 }
 
 const drawTokens = () => {
@@ -134,22 +171,22 @@ const drawToken = (token: Token) => {
   sprite.interactive = true
   const tokenScale = sprite.scale.x
 
-  const mask = new Graphics()
+  const makeCircleGraphic = (graphic: Graphics) => {
+    graphic.drawCircle(0, 0, gridSize.value / 2 - 4)
+    graphic.scale.x = 1 / tokenScale
+    graphic.scale.y = 1 / tokenScale
+    sprite.addChild(graphic)
+  }
+
+  const [mask, border] = [new Graphics(), new Graphics()]
   mask.beginFill(0x000000)
-  mask.drawCircle(0, 0, gridSize.value / 2 - 4)
-  mask.scale.x = 1 / tokenScale
-  mask.scale.y = 1 / tokenScale
   sprite.mask = mask
-  sprite.addChild(mask)
+  makeCircleGraphic(mask)
 
-  const border = new Graphics()
   border.lineStyle(4, token.color)
-  border.drawCircle(0, 0, gridSize.value / 2 - 4)
-  border.scale.x = 1 / tokenScale
-  border.scale.y = 1 / tokenScale
-  sprite.addChild(border)
+  makeCircleGraphic(border)
 
-  const setMousePosScale = ({ x, y }, scale?) => {
+  const setMousePosScale = ({ x, y }: Position, scale?: number) => {
     sprite.x = x
     sprite.y = y
     if (scale) {
@@ -173,10 +210,16 @@ const drawToken = (token: Token) => {
     dragging = false
 
     const index = posValToIndex(e.data.global)
-    gameState.tokens.find((_token: Token) => token === _token).position = index
+    const currentToken = gameState.tokens.find(
+      (currentToken: Token) => token === currentToken
+    )
 
-    const pos = posIndexToVal(index)
-    setMousePosScale(pos, 1)
+    if (currentToken) {
+      currentToken.position = index
+
+      const pos = posIndexToVal(index)
+      setMousePosScale(pos, 1)
+    }
   })
 
   app.stage.addChild(sprite)
