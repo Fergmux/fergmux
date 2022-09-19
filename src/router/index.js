@@ -63,6 +63,12 @@ const routes = [
       import(/* webpackChunkName: "wordle" */ '@/views/projects/Wordle.vue'),
   },
   {
+    path: '/projects/siege',
+    name: 'siege',
+    component: () =>
+      import(/* webpackChunkName: "siege" */ '@/views/projects/Siege.vue'),
+  },
+  {
     path: '/projects/chess/:id?',
     name: 'chess',
     component: () =>

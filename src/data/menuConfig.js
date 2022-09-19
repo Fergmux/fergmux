@@ -56,6 +56,11 @@ export const projectConfig = [
     route: 'wave',
     text: 'A satisfying simulation of the pendulum wave effect.',
   },
+  {
+    name: 'Siege',
+    route: 'siege',
+    text: 'A Ranbow Six Siege rank calculator.',
+  },
 ]
 
 export const careerSections = [
