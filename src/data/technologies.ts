@@ -55,8 +55,30 @@ import zeplin from '@/assets/images/technologies/zeplin.png'
 import zoom from '@/assets/images/technologies/zoom.png'
 import microsoft_office from '@/assets/images/technologies/microsoft_office.svg'
 import skype from '@/assets/images/technologies/skype.svg'
+import pixi from '@/assets/images/technologies/pixi.png'
+import fauna from '@/assets/images/technologies/fauna.svg'
 
-const techSections = [
+export interface Technology {
+  name: string
+  id: string
+  logo: string
+  color: string
+  link: string
+}
+
+export interface Section {
+  title: string
+  subtitle: string
+  key: 'strong' | 'mid' | 'other'
+}
+
+export interface Technologies {
+  strong: Technology[]
+  mid: Technology[]
+  other: Technology[]
+}
+
+const techSections: Section[] = [
   {
     title: "Stuff I'm good at",
     subtitle: 'Technologies I use regularly and am proficient in',
@@ -108,7 +130,7 @@ const technologies = {
       name: 'Git',
       id: 'git',
       logo: git,
-      color: '#f14e32',
+      color: '#ff5e42',
       link: 'https://www.npmjs.com/',
     },
     {
@@ -255,7 +277,7 @@ const technologies = {
       name: 'Heap',
       id: 'heap',
       logo: heap,
-      color: '#ed485f',
+      color: '#fd586f',
       link: 'https://heap.io/',
     },
   ],
@@ -285,7 +307,7 @@ const technologies = {
       name: 'HotJar',
       id: 'hotjar',
       logo: hotjar,
-      color: '#ff3c00',
+      color: '#ff5c20',
       link: 'https://www.hotjar.com/',
     },
     {
@@ -331,6 +353,13 @@ const technologies = {
       link: 'https://www.iso.org/standard/74528.html',
     },
     {
+      name: 'PixiJS',
+      id: 'pixi',
+      logo: pixi,
+      color: '#ff3e83',
+      link: 'https://pixijs.com/',
+    },
+    {
       name: 'AWS',
       id: 'aws',
       logo: aws,
@@ -352,10 +381,17 @@ const technologies = {
       link: 'https://jupyter.org/',
     },
     {
+      name: 'Fauna',
+      id: 'fauna',
+      logo: fauna,
+      color: '#3F00A5',
+      link: 'https://fauna.com/',
+    },
+    {
       name: 'Ionic',
       id: 'ionic',
       logo: ionic,
-      color: '#3880ff',
+      color: '#4890ff',
       link: 'https://ionicframework.com/',
     },
     {
@@ -390,7 +426,7 @@ const technologies = {
       name: 'Twilio',
       id: 'twilio',
       logo: twilio,
-      color: '#d61f1f',
+      color: '#e62f2f',
       link: 'https://www.twilio.com/',
     },
     {

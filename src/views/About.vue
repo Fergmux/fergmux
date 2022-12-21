@@ -1,7 +1,7 @@
 <template>
   <div class="bg-img bg-img-cover">
     <div
-      class="px-10 pt-20 md:px-14 lg:px-20 lg:py-20 lg:pt-24 relative max-w-screen-xl min-h-screen m-auto"
+      class="relative max-w-screen-xl min-h-screen px-10 pt-20 m-auto md:px-14 lg:px-20 lg:py-20 lg:pt-24"
     >
       <div class="md md:w-3/4 lg:w-2/4">
         <h1 class="mb-14 header-main">About Me</h1>
@@ -27,12 +27,12 @@
           >, or send a message with the form below.
         </p>
 
-        <h2 class="text-3xl mt-20 mb-7 font-semibold drop-shadow-3xl">
+        <h2 class="mt-20 text-3xl font-semibold mb-7 drop-shadow-3xl">
           Contact Form
         </h2>
         <form
-          name="contact"
           id="contact"
+          name="contact"
           netlify
           data-netlify-honeypot="bot-field"
           class="mb-10"
@@ -45,7 +45,7 @@
               v-model="formFields.name"
               type="text"
               name="name"
-              class="text-field h-8"
+              class="h-8 text-field"
             />
           </p>
           <p>
@@ -54,7 +54,7 @@
               v-model="formFields.email"
               type="email"
               name="email"
-              class="text-field h-8"
+              class="h-8 text-field"
             />
           </p>
           <p>
@@ -66,63 +66,59 @@
             />
           </p>
           <p>
-            <button type="submit" class="button-light mt-4">Send</button>
+            <button type="submit" class="mt-4 button-light">Send</button>
           </p>
         </form>
       </div>
       <img
         src="/src/assets/images/me.png"
-        class="max-w-md w-full lg:w-auto lg:max-w-full lg:h-4/5 lg:fixed right-10 bottom-0 m-auto drop-shadow-3xl"
+        class="bottom-0 w-full max-w-md m-auto lg:w-auto lg:max-w-full lg:h-4/5 lg:fixed right-10 drop-shadow-3xl"
       />
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { useToast } from '@/composables/toast'
 
-export default {
-  setup() {
-    const { toast } = useToast()
+const { toast } = useToast()
 
-    const formFields = ref({
-      name: '',
-      email: '',
-      message: '',
+const formFields = ref({
+  name: '',
+  email: '',
+  message: '',
+})
+
+onMounted(() => {
+  document.querySelector('form')?.addEventListener('submit', handleSubmit)
+})
+
+const handleSubmit = async (e: SubmitEvent) => {
+  e.preventDefault()
+  const myForm = document.getElementById('contact') as HTMLFormElement
+  const formData = new FormData(myForm)
+
+  try {
+    await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(
+        Array.from(formData.entries()).map((x) => x.map((y) => y as string))
+      ).toString(),
     })
+  } catch (e) {
+    toast('Sorry something went wrong when submitting your message')
+    return
+  }
 
-    onMounted(() => {
-      document.querySelector('form').addEventListener('submit', handleSubmit)
-    })
+  toast('Thanks for your message!')
 
-    const handleSubmit = async (e) => {
-      e.preventDefault()
-      const myForm = document.getElementById('contact')
-      const formData = new FormData(myForm)
-
-      try {
-        await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString(),
-        })
-      } catch (e) {
-        toast('Sorry something went wrong when submitting your message')
-        return
-      }
-
-      toast('Thanks for your message!')
-
-      formFields.value = {
-        name: '',
-        email: '',
-        message: '',
-      }
-    }
-
-    return { formFields }
-  },
+  formFields.value = {
+    name: '',
+    email: '',
+    message: '',
+  }
 }
 </script>
 

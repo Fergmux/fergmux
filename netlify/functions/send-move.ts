@@ -1,12 +1,14 @@
 import { client, q } from '../lib/fauna'
+import { Handler } from '@netlify/functions'
+import { FaunaDocument } from '../faunadb'
 
-module.exports.handler = async function (event) {
+const handler: Handler = async function (event) {
   const data = JSON.parse(event.body)
   const { id, game } = data
   const ref = q.Ref(q.Collection('games'), id)
 
   try {
-    const document = await client.query(
+    const document: FaunaDocument = await client.query(
       q.Update(ref, {
         data: {
           ...game,
@@ -25,3 +27,5 @@ module.exports.handler = async function (event) {
     }
   }
 }
+
+export { handler }

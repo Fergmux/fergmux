@@ -1,13 +1,13 @@
 <template>
-  <div class="pt-20 bg-img bg-img-cover min-h-screen text-center">
+  <div class="min-h-screen pt-20 text-center bg-img bg-img-cover">
     <h1 class="mb-7 header-main">Career</h1>
 
-    <div class="w-full flex items-center justify-around">
-      <div class="w-4/5 text-right relative">
+    <div class="flex items-center justify-around w-full">
+      <div class="relative w-4/5 text-right">
         <div
           v-for="(section, index) in sections"
           :key="section.year"
-          class="top-0 bottom-0 left-0 right-0 m-auto absolute flex justify-end items-center w-4/5"
+          class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-end w-4/5 m-auto"
           :class="{
             'section--show': index === sectionIndex,
             'z-20': index === sectionIndex,
@@ -17,17 +17,17 @@
         >
           <div>
             <a
-              :href="index === sectionIndex ? section.link : null"
+              :href="index === sectionIndex ? section.link : undefined"
               target="_blank"
             >
               <h3
-                class="text-4xl font-bold mb-2 drop-shadow-3xl"
+                class="mb-2 text-4xl font-bold drop-shadow-3xl"
                 :class="{ 'cursor-pointer': index === sectionIndex }"
               >
                 {{ section.title }}
               </h3>
             </a>
-            <h4 class="text-2xl font-bold mb-4 text-mint-800 drop-shadow-3xl">
+            <h4 class="mb-4 text-2xl font-bold text-mint-800 drop-shadow-3xl">
               {{ section.subtitle }}
             </h4>
             <p class="drop-shadow-3xl">{{ section.text }}</p>
@@ -35,36 +35,36 @@
         </div>
       </div>
 
-      <ul class="mr-20 p-4 years">
+      <ul class="p-4 mr-20 years">
         <li
-          @click="sectionIndex = sectionIndex > 0 ? sectionIndex - 1 : 0"
-          class="material-icons text-5xl drop-shadow-3xl"
+          class="text-5xl material-icons drop-shadow-3xl"
           :class="{
             'text-slate-500': !(sectionIndex > 0),
             'cursor-pointer': sectionIndex > 0,
           }"
+          @click="sectionIndex = sectionIndex > 0 ? sectionIndex - 1 : 0"
         >
           expand_less
         </li>
         <li
           v-for="(section, index) in sections"
           :key="section.year"
-          class="m-4 cursor-pointer year text-2xl drop-shadow-3xl"
+          class="m-4 text-2xl cursor-pointer year drop-shadow-3xl"
           :class="{ 'year--active': index === sectionIndex }"
           @click="sectionIndex = index"
         >
           {{ section.year }}
         </li>
         <li
-          @click="
-            sectionIndex =
-              sectionIndex < maxSec ? sectionIndex + 1 : sectionIndex
-          "
           :class="{
             'text-slate-500': !(sectionIndex < maxSec),
             'cursor-pointer': sectionIndex < maxSec,
           }"
-          class="material-icons rotate-180 text-5xl drop-shadow-3xl"
+          class="text-5xl rotate-180 material-icons drop-shadow-3xl"
+          @click="
+            sectionIndex =
+              sectionIndex < maxSec ? sectionIndex + 1 : sectionIndex
+          "
         >
           expand_less
         </li>
@@ -73,7 +73,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { careerSections } from '@/data/menuConfig'
 

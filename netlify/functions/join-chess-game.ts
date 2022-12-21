@@ -1,11 +1,13 @@
 import { client, q } from '../lib/fauna'
+import { Handler } from '@netlify/functions'
+import { FaunaDocument } from '../faunadb'
 
-module.exports.handler = async function (event) {
+const handler: Handler = async function (event) {
   const gameId = JSON.parse(event.body)
   const gameRef = q.Ref(q.Collection('games'), gameId)
 
   try {
-    const document = await client.query(q.Get(gameRef))
+    const document: FaunaDocument = await client.query(q.Get(gameRef))
 
     return {
       statusCode: 200,
@@ -18,3 +20,5 @@ module.exports.handler = async function (event) {
     }
   }
 }
+
+export { handler }

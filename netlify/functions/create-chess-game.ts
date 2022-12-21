@@ -1,14 +1,16 @@
 import { client, q } from '../lib/fauna'
 import { Chess } from 'chess.js'
 import add from 'date-fns/add'
+import { Handler } from '@netlify/functions'
+import { FaunaDocument } from '../faunadb'
 
-module.exports.handler = async function (event) {
+const handler: Handler = async function (event) {
   const game = new Chess()
 
   try {
     const data = JSON.parse(event.body)
 
-    const document = await client.query(
+    const document: FaunaDocument = await client.query(
       q.Create(q.Collection('games'), {
         data: { fen: game.fen(), moves: [], ...data },
         ttl: q.Time(add(new Date(Date.now()), { hours: 1 }).toISOString()),
@@ -28,3 +30,5 @@ module.exports.handler = async function (event) {
     }
   }
 }
+
+export { handler }
