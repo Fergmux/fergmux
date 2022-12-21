@@ -17,6 +17,8 @@
 
     <router-view></router-view>
 
+    <button @click="handleClick">CLICK</button>
+
     <Menubar v-model="showMenu" ></Menubar>
   </div>
 </template>
@@ -25,8 +27,15 @@
 import './index.css'
 import { ref } from 'vue'
 import Menubar from '@/components/Menubar.vue'
+import api from '@/lib/api'
 
 const showMenu = ref(false)
+
+const handleClick = async () => {
+  const response = await api.post('/.netlify/functions/save-film', {
+      name: 'fuck',
+    })
+}
 </script>
 
 <style lang="scss">

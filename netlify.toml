@@ -4,3 +4,4 @@
 
 [dev]
   framework = "vite"
+  targetPort = 3000
