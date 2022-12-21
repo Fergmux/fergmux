@@ -27,6 +27,7 @@ import { ref } from 'vue'
 import Menubar from '@/components/Menubar.vue'
 
 const showMenu = ref(false)
+
 </script>
 
 <style lang="scss">
