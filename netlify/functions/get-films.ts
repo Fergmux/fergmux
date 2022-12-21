@@ -14,7 +14,9 @@ const handler: Handler = async function (event) {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(filmList)
+      body: JSON.stringify({
+        films: filmList
+      })
     }
   } catch (error) {
     return {

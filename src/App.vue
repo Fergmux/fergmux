@@ -18,6 +18,7 @@
     <router-view></router-view>
 
     <button @click="handleClick">CLICK</button>
+    <button @click="handleClick2">CLICK2</button>
 
     <Menubar v-model="showMenu" ></Menubar>
   </div>
@@ -33,6 +34,11 @@ const showMenu = ref(false)
 
 const handleClick = async () => {
   const response = await api.post('/.netlify/functions/save-film', {
+      name: 'fuck',
+    })
+}
+const handleClick2 = async () => {
+  const response = await api.post('/.netlify/functions/get-films', {
       name: 'fuck',
     })
 }
