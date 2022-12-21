@@ -10,7 +10,6 @@ const handler: Handler = async function (event) {
 
     const films = response.data.map(item => item.data.name)
     const filmList = films.join('\n')
-    
 
     return {
       statusCode: 200,
