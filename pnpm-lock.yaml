@@ -26,12 +26,14 @@ specifiers:
   faunadb: ^4.5.2
   hex-rgb: ^5.0.0
   indexes-of: ^1.0.1
+  js-sha256: ^0.9.0
   lint-staged: ^9.5.0
   ordinal: ^1.0.3
   pinia: ^2.0.28
   pixi.js: ^6.2.2
   postcss: ^8.4.6
-  prettier: ^2.2.1
+  prettier: ^2.5.1
+  prettier-plugin-tailwindcss: ^0.2.1
   sass: ^1.49.7
   simple-base-converter: ^1.0.10
   tailwindcss: ^3.0.18
@@ -52,6 +54,7 @@ dependencies:
   faunadb: 4.5.2
   hex-rgb: 5.0.0
   indexes-of: 1.0.1
+  js-sha256: 0.9.0
   ordinal: 1.0.3
   pinia: 2.0.28_spioo55zoupz7cspyx2zvbrj3i
   pixi.js: 6.2.2
@@ -84,6 +87,7 @@ devDependencies:
   lint-staged: 9.5.0
   postcss: 8.4.6
   prettier: 2.5.1
+  prettier-plugin-tailwindcss: 0.2.1_prettier@2.5.1
   sass: 1.49.7
   tailwindcss: 3.0.18_qm7bagfnbv4vjkuayu3hle4sne
   vite: 2.7.13_sass@1.49.7
@@ -3092,11 +3096,6 @@ packages:
     resolution: {integrity: sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==}
     engines: {node: '>=8'}
 
-  /ansi-regex/6.0.1:
-    resolution: {integrity: sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==}
-    engines: {node: '>=12'}
-    dev: true
-
   /ansi-styles/2.2.1:
     resolution: {integrity: sha1-tDLdM1i2NM914eRmQ2gkBTPB3b4=}
     engines: {node: '>=0.10.0'}
@@ -5825,6 +5824,10 @@ packages:
     engines: {node: '>=0.6.0'}
     dev: true
 
+  /js-sha256/0.9.0:
+    resolution: {integrity: sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==}
+    dev: false
+
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
     dev: true
@@ -7183,6 +7186,15 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
+  /prettier-plugin-tailwindcss/0.2.1_prettier@2.5.1:
+    resolution: {integrity: sha512-aIO8IguumORyRsmT+E7JfJ3A9FEoyhqZR7Au7TBOege3VZkgMvHJMkufeYp4zjnDK2iq4ktkvGMNOQR9T8lisQ==}
+    engines: {node: '>=12.17.0'}
+    peerDependencies:
+      prettier: '>=2.2.0'
+    dependencies:
+      prettier: 2.5.1
+    dev: true
+
   /prettier/2.5.1:
     resolution: {integrity: sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==}
     engines: {node: '>=10.13.0'}
@@ -7909,13 +7921,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       ansi-regex: 5.0.1
-
-  /strip-ansi/7.0.1:
-    resolution: {integrity: sha512-cXNxvT8dFNRVfhVME3JAe98mkXDYN2O1l7jmcwMnOslDeESg1rF/OZMtK0nRAhiari1unG5cD4jG3rapUAkLbw==}
-    engines: {node: '>=12'}
-    dependencies:
-      ansi-regex: 6.0.1
-    dev: true
 
   /strip-eof/1.0.0:
     resolution: {integrity: sha512-7FCwGGmx8mD5xQd3RPUvnSpUXHM3BWuzjtpD4TXsfcZ9EL4azvVVUscFYwD9nx8Kh+uCBC00XBtAykoMHwTh8Q==}

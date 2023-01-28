@@ -61,6 +61,11 @@ export const projectConfig = [
     route: 'siege',
     text: 'A Ranbow Six Siege rank calculator.',
   },
+  {
+    name: 'Life Tracker',
+    route: 'life-tracker',
+    text: 'A tracker for life goals and habits.',
+  },
 ]
 
 export const careerSections = [

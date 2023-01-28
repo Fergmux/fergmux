@@ -4,7 +4,8 @@
   "scripts": {
     "serve": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "netlify": "netlify dev"
   },
   "dependencies": {
     "@netlify/functions": "^1.0.0",
@@ -15,6 +16,7 @@
     "faunadb": "^4.5.2",
     "hex-rgb": "^5.0.0",
     "indexes-of": "^1.0.1",
+    "js-sha256": "^0.9.0",
     "ordinal": "^1.0.3",
     "pinia": "^2.0.28",
     "pixi.js": "^6.2.2",
@@ -46,7 +48,8 @@
     "eslint-plugin-vue": "^8.0.1",
     "lint-staged": "^9.5.0",
     "postcss": "^8.4.6",
-    "prettier": "^2.2.1",
+    "prettier": "^2.5.1",
+    "prettier-plugin-tailwindcss": "^0.2.1",
     "sass": "^1.49.7",
     "tailwindcss": "^3.0.18",
     "vite": "^2.7.2"
