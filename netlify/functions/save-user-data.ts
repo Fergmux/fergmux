@@ -5,8 +5,6 @@ import { FaunaDocument } from '../faunadb'
 const handler: Handler = async function (event) {
   const data = JSON.parse(event.body)
 
-  console.log(data)
-
   try {
     const document: FaunaDocument = await client.query(
       q.Update(

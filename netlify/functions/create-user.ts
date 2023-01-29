@@ -75,8 +75,8 @@ export { handler }
 // ---- Round 2 ----
 // DONE Reorder task
 // DONE enter key login/add task
-// Calendar to view specific week
-// all tasks npm install --save canvas-confetti
+// DONE Calendar to view specific week
+// DONE all tasks npm install --save canvas-confetti
 // Ad hoc items // Any unfinished ad hoc roll over to next day
 // Loading screen
 // Edit old dates

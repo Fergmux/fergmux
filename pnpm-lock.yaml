@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@babel/core': ^7.0.0
   '@netlify/functions': ^1.0.0
+  '@types/canvas-confetti': ^1.6.0
   '@types/chess.js': ^0.11.2
   '@types/node': ^17.0.21
   '@typescript-eslint/eslint-plugin': ^5.15.0
@@ -18,6 +19,7 @@ specifiers:
   '@vue/eslint-config-typescript': ^10.0.0
   '@vuepic/vue-datepicker': ^3.6.5
   autoprefixer: ^10.4.2
+  canvas-confetti: ^1.6.0
   chart.js: ^3.7.0
   chess.js: ^0.12.1
   date-fns: ^2.28.0
@@ -51,6 +53,7 @@ dependencies:
   '@netlify/functions': 1.3.0
   '@types/chess.js': 0.11.2
   '@vuepic/vue-datepicker': 3.6.5_vue@3.2.29
+  canvas-confetti: 1.6.0
   chart.js: 3.7.0
   chess.js: 0.12.1
   date-fns: 2.28.0
@@ -72,6 +75,7 @@ dependencies:
 
 devDependencies:
   '@babel/core': 7.17.0
+  '@types/canvas-confetti': 1.6.0
   '@types/node': 17.0.45
   '@typescript-eslint/eslint-plugin': 5.47.0_3uvilx5ipg5qewfer2stvdjmwa
   '@typescript-eslint/parser': 5.47.0_yfqovispp7u7jaktymfaqwl2py
@@ -1928,6 +1932,10 @@ packages:
       '@types/node': 17.0.45
     dev: true
 
+  /@types/canvas-confetti/1.6.0:
+    resolution: {integrity: sha512-Yq6rIccwcco0TLD5SMUrIM7Fk7Fe/C0jmNRxJJCLtAF6gebDkPuUjK5EHedxecm69Pi/aA+It39Ux4OHmFhjRw==}
+    dev: true
+
   /@types/chess.js/0.11.2:
     resolution: {integrity: sha512-ZgT0f5Dm1x+kjA/RhCQpBM2NoUGkdk9JFdwncW7/GdqzHCOkLsOTq4k/EKRiRTCFLXR4fTKk8j7KNOmzzHQVgg==}
     dev: false
@@ -3481,6 +3489,10 @@ packages:
   /caniuse-lite/1.0.30001441:
     resolution: {integrity: sha512-OyxRR4Vof59I3yGWXws6i908EtGbMzVUi3ganaZQHmydk1iwDhRnvaPG2WaR0KcqrDFKrxVZHULT396LEPhXfg==}
     dev: true
+
+  /canvas-confetti/1.6.0:
+    resolution: {integrity: sha512-ej+w/m8Jzpv9Z7W7uJZer14Ke8P2ogsjg4ZMGIuq4iqUOqY2Jq8BNW42iGmNfRwREaaEfFIczLuZZiEVSYNHAA==}
+    dev: false
 
   /case-sensitive-paths-webpack-plugin/2.4.0:
     resolution: {integrity: sha512-roIFONhcxog0JSSWbvVAh3OocukmSgpqOH6YpMkCvav/ySIV3JKg4Dc8vYtQjYi/UxpNE36r/9v+VqTQqgkYmw==}

@@ -70,7 +70,7 @@
             {{ editMode ? 'check' : 'edit' }}
           </div>
           <div
-            class="flex h-28 w-28 items-center justify-center rounded-xl bg-slate-700 drop-shadow-xl"
+            class="flex h-28 w-28 items-center justify-center rounded-xl bg-gradient-to-br from-green-400 to-green-600 drop-shadow-xl"
           >
             {{ totalScore }}
           </div>
@@ -180,6 +180,7 @@ import isSameWeek from 'date-fns/isSameWeek'
 import isThisWeek from 'date-fns/isThisWeek'
 import isToday from 'date-fns/isToday'
 import Datepicker from '@vuepic/vue-datepicker'
+import confetti from 'canvas-confetti'
 import { userState, saveTasks } from '@/store/lifeTrackerStore'
 import Login from '@/components/Login.vue'
 import type { Task, Timeframe } from '@/types/UserData'
@@ -222,10 +223,10 @@ const toggleTimeframe = () => {
 }
 
 // Current date
-const dateIndex: Ref<number> = ref(0)
 const datesLength = computed(
   () => userState.userData?.[currentTimeframe.value].dates.length || 0
 )
+const dateIndex: Ref<number> = ref(datesLength.value - 1 || 0)
 const allowedDates = computed(() => {
   const dates = userState.userData?.[currentTimeframe.value].dates
   return dates ? dates.map((date) => new Date(date)) : []
@@ -332,8 +333,10 @@ const toggleDone = (id: number) => {
   const task = currentTasks.value.find((task) => task.id === id)
   if (canCompleteTasks.value && task) {
     task.done = !task.done
-    if (!task.id) {
-      task.id = Date.now()
+    if (currentTasks.value.every((task) => task.done)) {
+      bigConfetti()
+    } else if (task.done) {
+      smallConfetti()
     }
     saveTasks()
   }
@@ -362,5 +365,36 @@ const removeTask = (id: number) => {
     currentTasks.value.findIndex((task) => task.id === id),
     1
   )
+}
+
+const smallConfetti = () => {
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.7 },
+  })
+}
+
+const bigConfetti = () => {
+  var end = Date.now() + 3 * 1000
+
+  ;(function frame() {
+    confetti({
+      particleCount: 3,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0, y: 0.7 },
+    })
+    confetti({
+      particleCount: 3,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1, y: 0.7 },
+    })
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame)
+    }
+  })()
 }
 </script>
