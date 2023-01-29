@@ -34,8 +34,19 @@
             arrow_back
           </span>
           <span v-else class="mr-2 w-8" />
-          <span class="signika text-2xl font-semibold text-slate-700">
-            {{ selectedDateFormatted }}
+          <span class="signika relative text-2xl font-semibold text-slate-700">
+            <Datepicker
+              :model-value="selectedDateCal"
+              auto-apply
+              :enable-time-picker="false"
+              :allowed-dates="allowedDates"
+              @update:model-value="dateChanged"
+            >
+              <template #trigger>
+                {{ selectedDateFormatted }}
+              </template>
+            </Datepicker>
+            <!-- class="absolute top-0 opacity-0" -->
           </span>
           <span
             v-if="dateIndex < datesLength - 1"
@@ -167,11 +178,12 @@ import isYesterday from 'date-fns/isYesterday'
 import isTomorrow from 'date-fns/isTomorrow'
 import isSameWeek from 'date-fns/isSameWeek'
 import isThisWeek from 'date-fns/isThisWeek'
-
 import isToday from 'date-fns/isToday'
+import Datepicker from '@vuepic/vue-datepicker'
 import { userState, saveTasks } from '@/store/lifeTrackerStore'
 import Login from '@/components/Login.vue'
 import type { Task, Timeframe } from '@/types/UserData'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 // const tasks: Ref<UserData> = ref({
 //   username: 'fuck',
@@ -214,6 +226,10 @@ const dateIndex: Ref<number> = ref(0)
 const datesLength = computed(
   () => userState.userData?.[currentTimeframe.value].dates.length || 0
 )
+const allowedDates = computed(() => {
+  const dates = userState.userData?.[currentTimeframe.value].dates
+  return dates ? dates.map((date) => new Date(date)) : []
+})
 
 watch(
   () => datesLength.value,
@@ -231,9 +247,19 @@ const changeDate = (direction: number) => {
   }
 }
 
+const dateChanged = (newDate: Date) => {
+  const newDateIndex = userState.userData?.[
+    currentTimeframe.value
+  ].dates.findIndex((date) => isSameDay(date, newDate))
+  if (newDateIndex !== undefined && newDateIndex !== -1) {
+    dateIndex.value = newDateIndex
+  }
+}
+
 const selectedDate = computed<number | undefined>(
   () => userState.userData?.[currentTimeframe.value].dates[dateIndex.value]
 )
+const selectedDateCal = computed<Date>(() => new Date(selectedDate.value || 0))
 
 const todaySelected = computed(
   () => selectedDate.value && isToday(selectedDate.value)
