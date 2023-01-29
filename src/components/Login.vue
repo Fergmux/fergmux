@@ -2,11 +2,21 @@
   <div class="flex flex-col items-start">
     <label class="my-2">
       Username:
-      <input v-model="username" class="rounded bg-slate-700" type="text" />
+      <input
+        v-model="username"
+        class="rounded bg-slate-700"
+        type="text"
+        @keyup.enter="viewUser"
+      />
     </label>
     <label class="my-2">
       Password:
-      <input v-model="password" class="rounded bg-slate-700" type="password" />
+      <input
+        v-model="password"
+        class="rounded bg-slate-700"
+        type="password"
+        @keyup.enter="login()"
+      />
     </label>
 
     <div class="my-5">

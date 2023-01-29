@@ -146,6 +146,7 @@
               type="text"
               placeholder="Add new goal"
               class="bg-transparent outline-none"
+              @keyup.enter="addTask"
             />
           </div>
           <div class="material-icons cursor-pointer text-3xl" @click="addTask">

@@ -73,8 +73,8 @@ export { handler }
 // DONE Improve design (move score)
 
 // ---- Round 2 ----
-// Reorder taskoh
-// Add enter key login/add task
+// DONE Reorder task
+// DONE enter key login/add task
 // Calendar to view specific week
 // all tasks npm install --save canvas-confetti
 // Ad hoc items // Any unfinished ad hoc roll over to next day
