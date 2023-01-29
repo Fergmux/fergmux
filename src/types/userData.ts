@@ -14,6 +14,7 @@ interface Task {
   description: string
   done: boolean
   score: number
+  id: number
 }
 
 interface UserState {

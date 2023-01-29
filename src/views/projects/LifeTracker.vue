@@ -59,64 +59,73 @@
             {{ editMode ? 'check' : 'edit' }}
           </div>
           <div
-            class="flex h-28 w-28 items-center justify-center rounded-xl bg-slate-700"
+            class="flex h-28 w-28 items-center justify-center rounded-xl bg-slate-700 drop-shadow-xl"
           >
             {{ totalScore }}
           </div>
         </div>
         <!-- Task list-->
-        <div
-          v-for="(task, index) in currentTasks"
-          :key="index"
-          class="mb-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b p-2 drop-shadow-md transition-colors"
-          :class="{
-            'from-slate-600 to-slate-700': !task.done,
-            'from-slate-100 to-slate-200 text-slate-800': task.done,
-            'cursor-pointer': canCompleteTasks,
-          }"
-          @click="toggleDone(index)"
+        <draggable
+          v-if="userState.userData && selectedDate"
+          v-model="userState.userData[currentTimeframe].tasks[selectedDate]"
+          :disabled="!canCompleteTasks"
+          item-key="id"
+          @end="saveTasks"
         >
-          <!-- task name -->
-          <div class="flex">
-            <div class="w-6 text-center text-slate-500">
-              <select
+          <template #item="{ element: task }">
+            <div
+              :key="task.id"
+              class="mb-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b p-2 drop-shadow-md transition-colors"
+              :class="{
+                'from-slate-600 to-slate-700': !task.done,
+                'from-slate-100 to-slate-200 text-slate-800': task.done,
+                'cursor-pointer': canCompleteTasks,
+              }"
+              @click="toggleDone(task.id)"
+            >
+              <!-- task name -->
+              <div class="flex">
+                <div class="w-6 text-center text-slate-500">
+                  <select
+                    v-if="editMode"
+                    v-model.number="task.score"
+                    class="w-full cursor-pointer appearance-none rounded bg-transparent text-center"
+                  >
+                    <option :value="1">1</option>
+                    <option :value="2">2</option>
+                    <option :value="3">3</option>
+                    <option :value="4">4</option>
+                    <option :value="5">5</option>
+                  </select>
+                  <span v-else>{{ task.score }}</span>
+                </div>
+                <input
+                  v-if="editMode"
+                  v-model="task.description"
+                  class="bg-transparent"
+                />
+                <span v-else>
+                  {{ task.description }}
+                </span>
+              </div>
+              <div
                 v-if="editMode"
-                v-model.number="task.score"
-                class="w-full cursor-pointer appearance-none rounded bg-transparent text-center"
+                class="material-icons cursor-pointer"
+                @click="removeTask(task.id)"
               >
-                <option :value="1">1</option>
-                <option :value="2">2</option>
-                <option :value="3">3</option>
-                <option :value="4">4</option>
-                <option :value="5">5</option>
-              </select>
-              <span v-else>{{ task.score }}</span>
+                delete
+              </div>
+              <div
+                v-else
+                class="h-6 w-6 rounded-full border-2 bg-gradient-to-br transition-colors"
+                :class="{
+                  'border-slate-700 from-red-400 to-red-600': !task.done,
+                  'border-slate-200 from-green-400 to-green-600': task.done,
+                }"
+              />
             </div>
-            <input
-              v-if="editMode"
-              v-model="task.description"
-              class="bg-transparent"
-            />
-            <span v-else>
-              {{ task.description }}
-            </span>
-          </div>
-          <div
-            v-if="editMode"
-            class="material-icons cursor-pointer"
-            @click="removeTask(index)"
-          >
-            delete
-          </div>
-          <div
-            v-else
-            class="h-6 w-6 rounded-full border-2 bg-gradient-to-br transition-colors"
-            :class="{
-              'border-slate-700 from-red-400 to-red-600': !task.done,
-              'border-slate-200 from-green-400 to-green-600': task.done,
-            }"
-          />
-        </div>
+          </template>
+        </draggable>
         <div
           v-if="canEditTasks"
           class="mt-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b from-slate-100 to-slate-200 py-px px-2 text-slate-800 drop-shadow-md transition-all"
@@ -150,7 +159,8 @@
 
 <script setup lang="ts">
 import { ref, Ref, computed, watch } from 'vue'
-import { format } from 'date-fns'
+import draggable from 'vuedraggable'
+import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
 import isYesterday from 'date-fns/isYesterday'
 import isTomorrow from 'date-fns/isTomorrow'
@@ -291,11 +301,15 @@ const canCompleteTasks = computed(() => {
   )
 })
 
-const toggleDone = (index: number) => {
-  if (canCompleteTasks.value) {
-    currentTasks.value[index].done = !currentTasks.value[index].done
+const toggleDone = (id: number) => {
+  const task = currentTasks.value.find((task) => task.id === id)
+  if (canCompleteTasks.value && task) {
+    task.done = !task.done
+    if (!task.id) {
+      task.id = Date.now()
+    }
+    saveTasks()
   }
-  saveTasks()
 }
 
 // Adding new tasks
@@ -308,6 +322,7 @@ const addTask = () => {
       description: newTask.value,
       done: false,
       score: newScore.value,
+      id: Date.now(),
     })
     newTask.value = undefined
     newScore.value = 1
@@ -315,7 +330,10 @@ const addTask = () => {
   }
 }
 
-const removeTask = (index: number) => {
-  currentTasks.value.splice(index, 1)
+const removeTask = (id: number) => {
+  currentTasks.value.splice(
+    currentTasks.value.findIndex((task) => task.id === id),
+    1
+  )
 }
 </script>

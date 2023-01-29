@@ -26,6 +26,7 @@
     "vue-dk-toast": "^3.0.1",
     "vue-router": "^4.0.12",
     "vue3-simple-typeahead": "^1.0.5",
+    "vuedraggable": "^4.1.0",
     "word-list": "^3.1.0"
   },
   "devDependencies": {

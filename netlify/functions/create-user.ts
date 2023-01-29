@@ -73,7 +73,7 @@ export { handler }
 // DONE Improve design (move score)
 
 // ---- Round 2 ----
-// Reorder task
+// Reorder taskoh
 // Add enter key login/add task
 // Calendar to view specific week
 // all tasks npm install --save canvas-confetti
