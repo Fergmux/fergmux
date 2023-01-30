@@ -1,20 +1,27 @@
 <template>
   <Login v-if="userState.showLogin" class="p-10" />
-  <div v-else class="bg-img bg-img-cover w-full p-10 pt-16 md:p-20">
+  <div
+    v-else
+    class="min-h-screen w-full p-10 pt-16 md:p-20"
+    :style="bgColorStyle"
+  >
     <div class="flex flex-col items-center pt-10">
-      <h1 class="mb-7 text-5xl font-semibold underline">Life Tracker</h1>
+      <h1 class="signika mb-7 text-5xl font-bold underline drop-shadow-xl">
+        Life Tracker
+      </h1>
       <!-- <div class="my-5 text-2xl capitalize">{{ currentTimeframe }} Score</div> -->
-      <div class="mt-10 rounded-2xl bg-slate-100 p-5">
+      <div class="mt-10 rounded-2xl bg-slate-100 p-5 drop-shadow-2xl">
         <div
-          class="mb-5 flex w-80 rounded-full border border-solid border-slate-300 bg-slate-700 drop-shadow-md"
+          class="mb-5 flex w-80 rounded-full border border-solid border-slate-300 drop-shadow-md"
+          :style="darkColorStyle"
         >
-          <!-- toggle slider -->
+          <!-- Timeframe toggle -->
           <div
             v-for="timeframe in timeframes"
             :key="timeframe"
             class="w-1/2 cursor-pointer rounded-full p-2 text-center font-semibold capitalize"
             :class="{
-              'bg-gradient-to-b from-slate-100 to-slate-200 text-slate-800':
+              'bg-gradient-to-b from-slate-100 to-slate-200 text-slate-700':
                 currentTimeframe === timeframe,
             }"
             @click="toggleTimeframe"
@@ -24,7 +31,7 @@
         </div>
         <!-- Date -->
         <div
-          class="flex w-full items-center justify-between text-center text-xl text-slate-800"
+          class="flex w-full items-center justify-between text-center text-xl text-slate-700"
         >
           <span
             v-if="dateIndex > 0"
@@ -34,7 +41,7 @@
             arrow_back
           </span>
           <span v-else class="mr-2 w-8" />
-          <span class="signika relative text-2xl font-semibold text-slate-700">
+          <span class="signika relative text-2xl font-semibold text-slate-600">
             <Datepicker
               :model-value="selectedDateCal"
               auto-apply
@@ -70,7 +77,8 @@
             {{ editMode ? 'check' : 'edit' }}
           </div>
           <div
-            class="flex h-28 w-28 items-center justify-center rounded-xl bg-gradient-to-br from-green-400 to-green-600 drop-shadow-xl"
+            class="flex h-28 w-28 items-center justify-center rounded-xl drop-shadow-xl"
+            :style="bgColorStyle"
           >
             {{ totalScore }}
           </div>
@@ -88,15 +96,21 @@
               :key="task.id"
               class="mb-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b p-2 drop-shadow-md transition-colors"
               :class="{
-                'from-slate-600 to-slate-700': !task.done,
-                'from-slate-100 to-slate-200 text-slate-800': task.done,
+                'from-slate-100 to-slate-200 text-slate-700': task.done,
                 'cursor-pointer': canCompleteTasks,
               }"
+              :style="!task.done ? darkColorStyle : ''"
               @click="toggleDone(task.id)"
             >
               <!-- task name -->
               <div class="flex">
-                <div class="w-6 text-center text-slate-500">
+                <div
+                  class="w-6 text-center"
+                  :class="{
+                    'text-slate-500': task.done,
+                    'text-slate-300': !task.done,
+                  }"
+                >
                   <select
                     v-if="editMode"
                     v-model.number="task.score"
@@ -128,10 +142,10 @@
               </div>
               <div
                 v-else
-                class="h-6 w-6 rounded-full border-2 bg-gradient-to-br transition-colors"
+                class="h-5 w-5 rounded-full bg-gradient-to-br transition-colors"
                 :class="{
-                  'border-slate-700 from-red-400 to-red-600': !task.done,
-                  'border-slate-200 from-green-400 to-green-600': task.done,
+                  ' from-red-400 to-red-600': !task.done,
+                  ' from-green-400 to-green-600': task.done,
                 }"
               />
             </div>
@@ -139,7 +153,7 @@
         </draggable>
         <div
           v-if="canEditTasks"
-          class="mt-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b from-slate-100 to-slate-200 py-px px-2 text-slate-800 drop-shadow-md transition-all"
+          class="mt-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b from-slate-100 to-slate-200 py-px px-2 text-slate-700 drop-shadow-md transition-all"
         >
           <div>
             <select
@@ -170,6 +184,7 @@
 </template>
 
 <script setup lang="ts">
+import '@vuepic/vue-datepicker/dist/main.css'
 import { ref, Ref, computed, watch } from 'vue'
 import draggable from 'vuedraggable'
 import format from 'date-fns/format'
@@ -184,7 +199,8 @@ import confetti from 'canvas-confetti'
 import { userState, saveTasks } from '@/store/lifeTrackerStore'
 import Login from '@/components/Login.vue'
 import type { Task, Timeframe } from '@/types/UserData'
-import '@vuepic/vue-datepicker/dist/main.css'
+import { gradients } from '@/data/gradients'
+import { shade } from '@/lib/utils'
 
 // const tasks: Ref<UserData> = ref({
 //   username: 'fuck',
@@ -297,6 +313,13 @@ const currentTasks = computed<Task[]>(
     []
 )
 
+// const maxScore = computed(() =>
+//   currentTasks.value.reduce(
+//     (total: number, task: Task) => task.score + total,
+//     0
+//   )
+// )
+
 const totalScore = computed(() =>
   currentTasks.value?.reduce(
     (total: number, task: Task) => (task.done ? total + task.score : total),
@@ -397,4 +420,19 @@ const bigConfetti = () => {
     }
   })()
 }
+
+const gradient = computed(
+  () => gradients[Math.floor(Math.random() * gradients.length)]
+)
+
+const darkColorStyle = computed(() => ({
+  'background-image': `linear-gradient(0deg, ${shade(
+    gradient.value[0],
+    0.8
+  )} 0%, ${shade(gradient.value[1], 0.8)} 100%)`,
+}))
+
+const bgColorStyle = computed(() => ({
+  'background-image': `linear-gradient(135deg, ${gradient.value[0]} 0%, ${gradient.value[1]} 100%)`,
+}))
 </script>
