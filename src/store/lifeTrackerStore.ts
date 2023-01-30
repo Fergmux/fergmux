@@ -6,6 +6,7 @@ const userState: UserState = reactive({
   userData: undefined,
   userAuthorised: false,
   showLogin: true,
+  showLoading: false,
 })
 
 const setUserData = (userData: UserData): void => {

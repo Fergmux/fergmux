@@ -1,183 +1,190 @@
 <template>
-  <Login v-if="userState.showLogin" class="p-10" />
-  <div
-    v-else
-    class="min-h-screen w-full p-10 pt-16 md:p-20"
-    :style="bgColorStyle"
-  >
+  <div class="min-h-screen w-full p-10 md:p-16" :style="bgColorStyle">
     <div class="flex flex-col items-center pt-10">
-      <h1 class="signika mb-7 text-5xl font-bold underline drop-shadow-xl">
+      <h1 class="signika mb-5 text-5xl font-bold underline drop-shadow-xl">
         Life Tracker
       </h1>
       <!-- <div class="my-5 text-2xl capitalize">{{ currentTimeframe }} Score</div> -->
-      <div class="mt-10 rounded-2xl bg-slate-100 p-5 drop-shadow-2xl">
-        <div
-          class="mb-5 flex w-80 rounded-full border border-solid border-slate-300 drop-shadow-md"
-          :style="darkColorStyle"
-        >
-          <!-- Timeframe toggle -->
+      <div
+        v-if="!userState.showLoading"
+        class="mt-10 rounded-2xl bg-slate-100 p-5 drop-shadow-2xl"
+      >
+        <Login v-if="userState.showLogin" class="w-72" />
+        <template v-else>
           <div
-            v-for="timeframe in timeframes"
-            :key="timeframe"
-            class="w-1/2 cursor-pointer rounded-full p-2 text-center font-semibold capitalize"
-            :class="{
-              'bg-gradient-to-b from-slate-100 to-slate-200 text-slate-700':
-                currentTimeframe === timeframe,
-            }"
-            @click="toggleTimeframe"
+            class="mb-5 flex w-80 rounded-full border border-solid border-slate-300 drop-shadow-md"
+            :style="darkColorStyle"
           >
-            {{ timeframe }}
-          </div>
-        </div>
-        <!-- Date -->
-        <div
-          class="flex w-full items-center justify-between text-center text-xl text-slate-700"
-        >
-          <span
-            v-if="dateIndex > 0"
-            class="material-icons mr-2 w-8 cursor-pointer"
-            @click="changeDate(-1)"
-          >
-            arrow_back
-          </span>
-          <span v-else class="mr-2 w-8" />
-          <span class="signika relative text-2xl font-semibold text-slate-600">
-            <Datepicker
-              :model-value="selectedDateCal"
-              auto-apply
-              :enable-time-picker="false"
-              :allowed-dates="allowedDates"
-              @update:model-value="dateChanged"
+            <!-- Timeframe toggle -->
+            <div
+              v-for="timeframe in timeframes"
+              :key="timeframe"
+              class="w-1/2 cursor-pointer rounded-full p-2 text-center font-semibold capitalize"
+              :class="{
+                'bg-gradient-to-b from-slate-100 to-slate-200 text-slate-700':
+                  currentTimeframe === timeframe,
+              }"
+              @click="toggleTimeframe"
             >
-              <template #trigger>
-                {{ selectedDateFormatted }}
-              </template>
-            </Datepicker>
-            <!-- class="absolute top-0 opacity-0" -->
-          </span>
-          <span
-            v-if="dateIndex < datesLength - 1"
-            class="material-icons ml-2 w-8 cursor-pointer"
-            @click="changeDate(1)"
+              {{ timeframe }}
+            </div>
+          </div>
+          <!-- Date -->
+          <div
+            class="flex w-full items-center justify-between text-center text-xl text-slate-700"
           >
-            arrow_forward
-          </span>
-          <span v-else class="ml-2 w-8" />
-        </div>
-        <!-- Score -->
-        <div
-          class="signika relative mb-6 mt-4 flex justify-center text-[56pt] font-semibold"
-        >
+            <span
+              v-if="dateIndex > 0"
+              class="material-icons mr-2 w-8 cursor-pointer"
+              @click="changeDate(-1)"
+            >
+              arrow_back
+            </span>
+            <span v-else class="mr-2 w-8" />
+            <span
+              class="signika relative text-2xl font-semibold text-slate-600"
+            >
+              <Datepicker
+                :model-value="selectedDateCal"
+                auto-apply
+                :enable-time-picker="false"
+                :allowed-dates="allowedDates"
+                @update:model-value="dateChanged"
+              >
+                <template #trigger>
+                  {{ selectedDateFormatted }}
+                </template>
+              </Datepicker>
+              <!-- class="absolute top-0 opacity-0" -->
+            </span>
+            <span
+              v-if="dateIndex < datesLength - 1"
+              class="material-icons ml-2 w-8 cursor-pointer"
+              @click="changeDate(1)"
+            >
+              arrow_forward
+            </span>
+            <span v-else class="ml-2 w-8" />
+          </div>
+          <!-- Score -->
+          <div
+            class="signika relative mb-6 mt-4 flex justify-center text-[56pt] font-semibold"
+          >
+            <div
+              v-if="canEditTasks"
+              class="material-icons absolute -bottom-4 right-2 cursor-pointer text-slate-400"
+              :class="editMode ? 'text-2xl' : 'text-xl'"
+              @click="toggleEdit"
+            >
+              {{ editMode ? 'check' : 'edit' }}
+            </div>
+            <div
+              class="flex h-28 w-28 items-center justify-center rounded-xl drop-shadow-xl"
+              :style="bgColorStyle"
+            >
+              {{ totalScore }}
+            </div>
+          </div>
+          <!-- Task list-->
+          <draggable
+            v-if="userState.userData && selectedDate"
+            v-model="userState.userData[currentTimeframe].tasks[selectedDate]"
+            :disabled="!canCompleteTasks"
+            item-key="id"
+            @end="saveTasks"
+          >
+            <template #item="{ element: task }">
+              <div
+                :key="task.id"
+                class="mb-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b p-2 drop-shadow-md transition-colors"
+                :class="{
+                  'from-slate-100 to-slate-200 text-slate-700': task.done,
+                  'cursor-pointer': canCompleteTasks,
+                }"
+                :style="!task.done ? darkColorStyle : ''"
+                @click="toggleDone(task.id)"
+              >
+                <!-- task name -->
+                <div class="flex">
+                  <div
+                    class="w-6 text-center font-bold"
+                    :class="{
+                      'text-slate-500': task.done,
+                      'text-slate-200': !task.done,
+                    }"
+                  >
+                    <select
+                      v-if="editMode"
+                      v-model.number="task.score"
+                      class="w-full cursor-pointer appearance-none rounded bg-transparent text-center"
+                    >
+                      <option :value="1">1</option>
+                      <option :value="2">2</option>
+                      <option :value="3">3</option>
+                      <option :value="4">4</option>
+                      <option :value="5">5</option>
+                    </select>
+                    <span v-else>{{ task.score }}</span>
+                  </div>
+                  <input
+                    v-if="editMode"
+                    v-model="task.description"
+                    class="bg-transparent"
+                  />
+                  <span v-else>
+                    {{ task.description }}
+                  </span>
+                </div>
+                <div
+                  v-if="editMode"
+                  class="material-icons cursor-pointer"
+                  @click="removeTask(task.id)"
+                >
+                  delete
+                </div>
+                <div
+                  v-else
+                  class="h-5 w-5 rounded-full bg-gradient-to-br transition-colors"
+                  :class="{
+                    ' from-red-400 to-red-600': !task.done,
+                    ' from-green-400 to-green-600': task.done,
+                  }"
+                />
+              </div>
+            </template>
+          </draggable>
+          <!-- Add new task -->
           <div
             v-if="canEditTasks"
-            class="material-icons absolute -bottom-4 right-2 cursor-pointer text-slate-400"
-            :class="editMode ? 'text-2xl' : 'text-xl'"
-            @click="toggleEdit"
+            class="mt-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b from-slate-100 to-slate-200 py-px px-2 text-slate-700 drop-shadow-md transition-all"
           >
-            {{ editMode ? 'check' : 'edit' }}
-          </div>
-          <div
-            class="flex h-28 w-28 items-center justify-center rounded-xl drop-shadow-xl"
-            :style="bgColorStyle"
-          >
-            {{ totalScore }}
-          </div>
-        </div>
-        <!-- Task list-->
-        <draggable
-          v-if="userState.userData && selectedDate"
-          v-model="userState.userData[currentTimeframe].tasks[selectedDate]"
-          :disabled="!canCompleteTasks"
-          item-key="id"
-          @end="saveTasks"
-        >
-          <template #item="{ element: task }">
-            <div
-              :key="task.id"
-              class="mb-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b p-2 drop-shadow-md transition-colors"
-              :class="{
-                'from-slate-100 to-slate-200 text-slate-700': task.done,
-                'cursor-pointer': canCompleteTasks,
-              }"
-              :style="!task.done ? darkColorStyle : ''"
-              @click="toggleDone(task.id)"
-            >
-              <!-- task name -->
-              <div class="flex">
-                <div
-                  class="w-6 text-center"
-                  :class="{
-                    'text-slate-500': task.done,
-                    'text-slate-300': !task.done,
-                  }"
-                >
-                  <select
-                    v-if="editMode"
-                    v-model.number="task.score"
-                    class="w-full cursor-pointer appearance-none rounded bg-transparent text-center"
-                  >
-                    <option :value="1">1</option>
-                    <option :value="2">2</option>
-                    <option :value="3">3</option>
-                    <option :value="4">4</option>
-                    <option :value="5">5</option>
-                  </select>
-                  <span v-else>{{ task.score }}</span>
-                </div>
-                <input
-                  v-if="editMode"
-                  v-model="task.description"
-                  class="bg-transparent"
-                />
-                <span v-else>
-                  {{ task.description }}
-                </span>
-              </div>
-              <div
-                v-if="editMode"
-                class="material-icons cursor-pointer"
-                @click="removeTask(task.id)"
+            <div>
+              <select
+                v-model.number="newScore"
+                class="w-6 cursor-pointer appearance-none rounded bg-transparent text-center text-slate-500"
               >
-                delete
-              </div>
-              <div
-                v-else
-                class="h-5 w-5 rounded-full bg-gradient-to-br transition-colors"
-                :class="{
-                  ' from-red-400 to-red-600': !task.done,
-                  ' from-green-400 to-green-600': task.done,
-                }"
+                <option :value="1">1</option>
+                <option :value="2">2</option>
+                <option :value="3">3</option>
+                <option :value="4">4</option>
+                <option :value="5">5</option>
+              </select>
+              <input
+                v-model="newTask"
+                type="text"
+                placeholder="Add new goal"
+                class="bg-transparent outline-none"
+                @keyup.enter="addTask"
               />
             </div>
-          </template>
-        </draggable>
-        <div
-          v-if="canEditTasks"
-          class="mt-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b from-slate-100 to-slate-200 py-px px-2 text-slate-700 drop-shadow-md transition-all"
-        >
-          <div>
-            <select
-              v-model.number="newScore"
-              class="w-6 cursor-pointer appearance-none rounded bg-transparent text-center text-slate-500"
+            <div
+              class="material-icons cursor-pointer text-3xl"
+              @click="addTask"
             >
-              <option :value="1">1</option>
-              <option :value="2">2</option>
-              <option :value="3">3</option>
-              <option :value="4">4</option>
-              <option :value="5">5</option>
-            </select>
-            <input
-              v-model="newTask"
-              type="text"
-              placeholder="Add new goal"
-              class="bg-transparent outline-none"
-              @keyup.enter="addTask"
-            />
+              add
+            </div>
           </div>
-          <div class="material-icons cursor-pointer text-3xl" @click="addTask">
-            add
-          </div>
-        </div>
+        </template>
       </div>
     </div>
   </div>
@@ -201,7 +208,8 @@ import Login from '@/components/Login.vue'
 import type { Task, Timeframe } from '@/types/UserData'
 import { gradients } from '@/data/gradients'
 import { shade } from '@/lib/utils'
-
+import completeWav from '@/assets/audio/complete.wav'
+import allCompleteWav from '@/assets/audio/all_complete.wav'
 // const tasks: Ref<UserData> = ref({
 //   username: 'fuck',
 //   password: 'fuck',
@@ -225,6 +233,11 @@ import { shade } from '@/lib/utils'
 //     },
 //   },
 // })
+
+const complete = new Audio(completeWav)
+const allComplete = new Audio(allCompleteWav)
+complete.volume = 0.1
+allComplete.volume = 0.1
 
 // Timeframes
 const timeframes: Timeframe[] = ['daily', 'weekly']
@@ -313,13 +326,6 @@ const currentTasks = computed<Task[]>(
     []
 )
 
-// const maxScore = computed(() =>
-//   currentTasks.value.reduce(
-//     (total: number, task: Task) => task.score + total,
-//     0
-//   )
-// )
-
 const totalScore = computed(() =>
   currentTasks.value?.reduce(
     (total: number, task: Task) => (task.done ? total + task.score : total),
@@ -390,7 +396,10 @@ const removeTask = (id: number) => {
   )
 }
 
+// Confetti
 const smallConfetti = () => {
+  complete.load()
+  complete.play()
   confetti({
     particleCount: 100,
     spread: 70,
@@ -401,6 +410,8 @@ const smallConfetti = () => {
 const bigConfetti = () => {
   var end = Date.now() + 3 * 1000
 
+  allComplete.load()
+  allComplete.play()
   ;(function frame() {
     confetti({
       particleCount: 3,
@@ -421,18 +432,19 @@ const bigConfetti = () => {
   })()
 }
 
+// Colors
 const gradient = computed(
   () => gradients[Math.floor(Math.random() * gradients.length)]
 )
 
-const darkColorStyle = computed(() => ({
-  'background-image': `linear-gradient(0deg, ${shade(
-    gradient.value[0],
-    0.8
-  )} 0%, ${shade(gradient.value[1], 0.8)} 100%)`,
-}))
-
 const bgColorStyle = computed(() => ({
   'background-image': `linear-gradient(135deg, ${gradient.value[0]} 0%, ${gradient.value[1]} 100%)`,
+}))
+
+const darkColorStyle = computed(() => ({
+  'background-image': `linear-gradient(180deg, ${shade(
+    gradient.value[0],
+    0.9
+  )} 0%, ${shade(gradient.value[1], 0.9)} 100%)`,
 }))
 </script>

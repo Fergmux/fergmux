@@ -1,42 +1,47 @@
 <template>
-  <div class="flex flex-col items-start">
-    <label class="my-2">
-      Username:
-      <input
-        v-model="username"
-        class="rounded bg-slate-700"
-        type="text"
-        @keyup.enter="viewUser"
-      />
-    </label>
-    <label class="my-2">
-      Password:
-      <input
-        v-model="password"
-        class="rounded bg-slate-700"
-        type="password"
-        @keyup.enter="login()"
-      />
-    </label>
+  <div class="flex flex-col items-center text-slate-600">
+    <div class="signika mb-2 text-2xl font-semibold">Username</div>
+    <input
+      v-model="username"
+      class="w-56 rounded-lg border-2 border-slate-300 bg-transparent p-2"
+      type="text"
+      @keyup.enter="viewUser"
+    />
+    <div class="signika mb-2 mt-5 text-2xl font-semibold">Password</div>
+    <input
+      v-model="password"
+      class="mb-5 w-56 rounded-lg border-2 border-slate-300 bg-transparent p-2"
+      type="password"
+      @keyup.enter="login()"
+    />
 
-    <div class="my-5">
-      <button class="mr-5 rounded bg-slate-500 p-2" @click="createUser">
-        Create account
-      </button>
-      <button class="mr-5 rounded bg-slate-500 p-2" @click="login()">
-        Login
-      </button>
-      <button class="mr-5 rounded bg-slate-500 p-2" @click="viewUser">
-        View
-      </button>
-    </div>
-    <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
-    <span v-if="userNotFound" class="max-w-[500px]">
+    <span v-if="errorMessage" class="w-56 text-red-500">{{
+      errorMessage
+    }}</span>
+    <span v-if="userNotFound" class="w-56">
       This user wasn't found, if you would like to create an account with this
-      username please enter a password. Otherwise try again with a different
-      username.
+      username please {{ password ? '' : 'enter a password and ' }}click 'Create
+      account'.
     </span>
-    <br />
+
+    <button
+      class="mt-5 w-56 rounded bg-slate-600 p-2 text-slate-100"
+      @click="login()"
+    >
+      Login
+    </button>
+    <button
+      class="mt-5 w-56 rounded bg-slate-700 p-2 text-slate-100"
+      @click="viewUser"
+    >
+      View
+    </button>
+    <button
+      class="mt-5 w-56 rounded bg-slate-800 p-2 text-slate-100"
+      @click="createUser"
+    >
+      Create account
+    </button>
   </div>
 </template>
 
@@ -64,6 +69,7 @@ onMounted(() => {
   const username = localStorage.getItem('username')
   const password = localStorage.getItem('password')
   if (username && password) {
+    userState.showLoading = true
     login(username, password)
   }
 })
@@ -112,6 +118,7 @@ const login = async (
   } else {
     errorMessage.value = 'Incorrect password'
   }
+  userState.showLoading = false
 }
 
 const viewUser = async () => {

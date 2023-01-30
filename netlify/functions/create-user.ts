@@ -77,10 +77,12 @@ export { handler }
 // DONE enter key login/add task
 // DONE Calendar to view specific week
 // DONE all tasks npm install --save canvas-confetti
-// Ad hoc items // Any unfinished ad hoc roll over to next day
+// Clean up login screen
 // Loading screen
 // Edit old dates
 // Add tomorrow
+// Settings (turn off confetti/audio)
+// Ad hoc items // Any unfinished ad hoc roll over to next day
 
 // ----- Future -----
 // Graphs

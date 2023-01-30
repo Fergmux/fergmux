@@ -21,6 +21,7 @@ interface UserState {
   userData?: UserData
   userAuthorised: boolean
   showLogin: boolean
+  showLoading: boolean
 }
 
 type Timeframe = 'daily' | 'weekly'
