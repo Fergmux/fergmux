@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import api from '@/lib/api'
 import type { UserState, UserData } from '@/types/UserData'
+import { gradients } from '@/data/gradients'
 
 const userState: UserState = reactive({
   userData: undefined,
@@ -8,6 +9,8 @@ const userState: UserState = reactive({
   showLogin: true,
   showLoading: false,
 })
+
+const gradient = gradients[Math.floor(Math.random() * gradients.length)]
 
 const setUserData = (userData: UserData): void => {
   userState.userData = userData
@@ -28,4 +31,4 @@ const changeUser = (): void => {
   localStorage.removeItem('password')
 }
 
-export { userState, setUserData, changeUser, saveTasks }
+export { userState, gradient, setUserData, changeUser, saveTasks }

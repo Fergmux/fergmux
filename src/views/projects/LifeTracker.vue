@@ -4,7 +4,6 @@
       <h1 class="signika mb-5 text-5xl font-bold underline drop-shadow-xl">
         Life Tracker
       </h1>
-      <!-- <div class="my-5 text-2xl capitalize">{{ currentTimeframe }} Score</div> -->
       <div
         v-if="!userState.showLoading"
         class="mt-10 rounded-2xl bg-slate-100 p-5 drop-shadow-2xl"
@@ -55,7 +54,6 @@
                   {{ selectedDateFormatted }}
                 </template>
               </Datepicker>
-              <!-- class="absolute top-0 opacity-0" -->
             </span>
             <span
               v-if="dateIndex < datesLength - 1"
@@ -218,7 +216,7 @@
               <input
                 v-model="newTask"
                 type="text"
-                placeholder="Add new goal"
+                :placeholder="`Add new ${currentTimeframe} goal`"
                 class="bg-transparent outline-none"
                 @keyup.enter="addTask"
               />
@@ -249,10 +247,9 @@ import isThisWeek from 'date-fns/isThisWeek'
 import isToday from 'date-fns/isToday'
 import Datepicker from '@vuepic/vue-datepicker'
 import confetti from 'canvas-confetti'
-import { userState, saveTasks } from '@/store/lifeTrackerStore'
+import { userState, gradient, saveTasks } from '@/store/lifeTrackerStore'
 import Login from '@/components/Login.vue'
 import type { Task, Timeframe } from '@/types/UserData'
-import { gradients } from '@/data/gradients'
 import { shade } from '@/lib/utils'
 import completeWav from '@/assets/audio/complete.wav'
 import allCompleteWav from '@/assets/audio/all_complete.wav'
@@ -496,18 +493,15 @@ const bigConfetti = () => {
 }
 
 // Colors
-const gradient = computed(
-  () => gradients[Math.floor(Math.random() * gradients.length)]
-)
 
 const bgColorStyle = computed(() => ({
-  'background-image': `linear-gradient(135deg, ${gradient.value[0]} 0%, ${gradient.value[1]} 100%)`,
+  'background-image': `linear-gradient(135deg, ${gradient[0]} 0%, ${gradient[1]} 100%)`,
 }))
 
 const darkColorStyle = computed(() => ({
   'background-image': `linear-gradient(180deg, ${shade(
-    gradient.value[0],
+    gradient[0],
     0.9
-  )} 0%, ${shade(gradient.value[1], 0.9)} 100%)`,
+  )} 0%, ${shade(gradient[1], 0.9)} 100%)`,
 }))
 </script>
