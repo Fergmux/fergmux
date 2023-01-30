@@ -71,12 +71,12 @@
             class="signika relative mb-6 mt-4 flex justify-center text-[56pt] font-semibold"
           >
             <div
-              v-if="canEditTasks"
-              class="material-icons absolute -bottom-4 right-2 cursor-pointer text-slate-400"
-              :class="editMode ? 'text-2xl' : 'text-xl'"
-              @click="toggleEdit"
+              v-if="editMode"
+              class="material-icons absolute -bottom-4 left-2 cursor-pointer text-slate-400"
+              :class="editSettings ? 'text-2xl' : 'text-xl'"
+              @click="toggleSettings"
             >
-              {{ editMode ? 'check' : 'edit' }}
+              {{ editSettings ? 'check' : 'settings' }}
             </div>
             <div
               class="flex h-28 w-28 items-center justify-center rounded-xl drop-shadow-xl"
@@ -84,10 +84,56 @@
             >
               {{ totalScore }}
             </div>
+            <div
+              v-if="canEditTasks && !editSettings"
+              class="material-icons absolute -bottom-4 right-2 cursor-pointer text-slate-400"
+              :class="editMode ? 'text-2xl' : 'text-xl'"
+              @click="toggleEdit"
+            >
+              {{ editMode ? 'check' : 'edit' }}
+            </div>
+          </div>
+          <!-- Settings -->
+          <div
+            v-if="editSettings && userState.userData"
+            class="ml-2 flex flex-col"
+          >
+            <label
+              class="relative my-5 inline-flex cursor-pointer items-center"
+            >
+              <input
+                v-model="userState.userData.settings.confetti"
+                type="checkbox"
+                value=""
+                class="peer sr-only"
+              />
+              <div
+                class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"
+              />
+              <span class="ml-3 font-medium text-gray-900 dark:text-gray-300">
+                Confetti
+              </span>
+            </label>
+            <label
+              class="relative mb-5 inline-flex cursor-pointer items-center"
+            >
+              <input
+                v-model="userState.userData.settings.sounds"
+                type="checkbox"
+                value=""
+                class="peer sr-only"
+              />
+              <div
+                class="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:top-[2px] after:left-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:peer-focus:ring-blue-800"
+              />
+              <span class="ml-3 font-medium text-gray-900 dark:text-gray-300">
+                Sounds
+              </span>
+            </label>
           </div>
           <!-- Task list-->
           <draggable
-            v-if="userState.userData && selectedDate"
+            v-if="userState.userData && selectedDate && !editSettings"
             v-model="userState.userData[currentTimeframe].tasks[selectedDate]"
             :disabled="!canCompleteTasks"
             item-key="id"
@@ -155,7 +201,7 @@
           </draggable>
           <!-- Add new task -->
           <div
-            v-if="canEditTasks"
+            v-if="canEditTasks && !editSettings"
             class="mt-2 flex w-full items-center justify-between rounded-full border border-solid border-slate-300 bg-gradient-to-b from-slate-100 to-slate-200 py-px px-2 text-slate-700 drop-shadow-md transition-all"
           >
             <div>
@@ -396,40 +442,57 @@ const removeTask = (id: number) => {
   )
 }
 
+// Settings
+const editSettings = ref(false)
+const settings = computed(() => userState.userData?.settings)
+const toggleSettings = () => {
+  if (editSettings.value) {
+    saveTasks()
+  }
+  editSettings.value = !editSettings.value
+}
+
 // Confetti
 const smallConfetti = () => {
-  complete.load()
-  complete.play()
-  confetti({
-    particleCount: 100,
-    spread: 70,
-    origin: { y: 0.7 },
-  })
+  if (settings.value?.sounds) {
+    complete.load()
+    complete.play()
+  }
+  if (settings.value?.confetti) {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.7 },
+    })
+  }
 }
 
 const bigConfetti = () => {
   var end = Date.now() + 3 * 1000
+  if (settings.value?.sounds) {
+    allComplete.load()
+    allComplete.play()
+  }
+  if (settings.value?.confetti) {
+    (function frame() {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.7 },
+      })
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.7 },
+      })
 
-  allComplete.load()
-  allComplete.play()
-  ;(function frame() {
-    confetti({
-      particleCount: 3,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0, y: 0.7 },
-    })
-    confetti({
-      particleCount: 3,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1, y: 0.7 },
-    })
-
-    if (Date.now() < end) {
-      requestAnimationFrame(frame)
-    }
-  })()
+      if (Date.now() < end) {
+        requestAnimationFrame(frame)
+      }
+    })()
+  }
 }
 
 // Colors

@@ -15,6 +15,10 @@ const handler: Handler = async function (event) {
       const userData = {
         username: data.username,
         password: data.password,
+        settings: {
+          confetti: true,
+          sounds: true,
+        },
         daily: {
           dates: [dayStart],
           tasks: {
@@ -77,9 +81,9 @@ export { handler }
 // DONE enter key login/add task
 // DONE Calendar to view specific week
 // DONE all tasks npm install --save canvas-confetti
-// Clean up login screen
-// Loading screen
-// Edit old dates
+// DONE Clean up login screen
+// DONE? Loading screen
+// DONE Edit old dates
 // Add tomorrow
 // Settings (turn off confetti/audio)
 // Ad hoc items // Any unfinished ad hoc roll over to next day

@@ -1,8 +1,14 @@
 interface UserData {
   username: string
   password: string
+  settings: Settings
   daily: TimeData
   weekly: TimeData
+}
+
+interface Settings {
+  confetti: boolean
+  sounds: boolean
 }
 
 interface TimeData {
