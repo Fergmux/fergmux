@@ -86,9 +86,11 @@ export { handler }
 // DONE Edit old dates
 // DONE Settings (turn off confetti/audio)
 // Add tomorrow
-// Ad hoc items // Any unfinished ad hoc roll over to next day
+// Ad hoc items
+// Any unfinished ad hoc roll over to next day
 // Split app into chunks
 // User hints
+// Fix draggable thing
 
 // ----- Future -----
 // Graphs

@@ -3,14 +3,14 @@
     <div class="signika mb-2 text-2xl font-semibold">Username</div>
     <input
       v-model="username"
-      class="w-56 rounded-2xl border-2 border-slate-300 bg-transparent p-2 font-semibold"
+      class="w-56 rounded-lg border-2 border-slate-300 bg-transparent p-2 font-semibold"
       type="text"
       @keyup.enter="password ? login() : viewUser()"
     />
     <div class="signika mb-2 mt-5 text-2xl font-semibold">Password</div>
     <input
       v-model="password"
-      class="mb-5 w-56 rounded-2xl border-2 border-slate-300 bg-transparent p-2"
+      class="mb-5 w-56 rounded-lg border-2 border-slate-300 bg-transparent p-2"
       type="password"
       @keyup.enter="password ? login() : viewUser()"
     />
@@ -25,14 +25,14 @@
     </span>
 
     <button
-      class="mt-5 w-56 rounded p-2 text-slate-100"
+      class="mt-5 w-56 rounded-lg p-2 text-slate-100"
       :style="{ 'background-color': shade(gradient[0], 0.9) }"
       @click="password ? login() : viewUser()"
     >
       {{ password ? 'Login' : 'View' }}
     </button>
     <button
-      class="mt-5 w-56 rounded p-2 text-slate-100"
+      class="mt-5 w-56 rounded-lg p-2 text-slate-100"
       :style="{ 'background-color': shade(gradient[1], 0.9) }"
       @click="createUser"
     >
