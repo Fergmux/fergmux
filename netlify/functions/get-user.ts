@@ -22,7 +22,7 @@ const handler: Handler = async function (event) {
 
       if (!isSameDay(mostRecentDay, dayStart)) {
         dailyDates.push(dayStart)
-        dailyTasks[dayStart] = dailyTasks[mostRecentDay].filter((task) => ({
+        dailyTasks[dayStart] = dailyTasks[mostRecentDay].map((task) => ({
           ...task,
           done: false,
         }))
@@ -36,7 +36,7 @@ const handler: Handler = async function (event) {
 
       if (!isSameDay(mostRecentWeek, weekStart)) {
         weeklyDates.push(weekStart)
-        weeklyTasks[weekStart] = weeklyTasks[mostRecentWeek].filter((task) => ({
+        weeklyTasks[weekStart] = weeklyTasks[mostRecentWeek].map((task) => ({
           ...task,
           done: false,
         }))
