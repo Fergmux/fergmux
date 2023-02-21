@@ -57,6 +57,11 @@ export const projectConfig = [
     text: 'A satisfying simulation of the pendulum wave effect.',
   },
   {
+    name: 'Dice Solver',
+    route: 'dice',
+    text: 'Distribution model of multiple dice roll results.',
+  },
+  {
     name: 'Siege',
     route: 'siege',
     text: 'A Ranbow Six Siege rank calculator.',
