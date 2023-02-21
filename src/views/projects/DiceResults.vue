@@ -24,6 +24,7 @@
             </select>
           </span>
         </div>
+        <span>{{ resultType }}:</span>
         <canvas ref="chartRef"></canvas>
       </div>
     </div>
@@ -66,6 +67,9 @@ const makeNewChart = () => {
       },
       options: {
         plugins: {
+          legend: {
+            display: false,
+          },
           tooltip: {
             callbacks: {
               label: (tooltipItem: TooltipItem<'bar'>) => {
@@ -76,8 +80,21 @@ const makeNewChart = () => {
           },
         },
         scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Dice sum total',
+            },
+          },
           y: {
+            title: {
+              display: true,
+              text: 'Chance of result',
+            },
             beginAtZero: true,
+            ticks: {
+              callback: (value) => `${value}%`,
+            },
           },
         },
       },
@@ -97,6 +114,7 @@ onMounted(() => {
 
 const sides = ref(6)
 const dice = ref(1)
+const resultType = ref('')
 
 const resetInputs = () => {
   sides.value = 6
@@ -162,8 +180,10 @@ const getRandomSample = (): void => {
 const getGraphData = () => {
   if (dices.value.reduce((a, b) => a * b, 1) > 1000000) {
     getRandomSample()
+    resultType.value = 'Approximate distribution'
   } else {
     getResultsOfDieAndChildren(dices.value)
+    resultType.value = 'Exact distribution'
   }
 }
 
