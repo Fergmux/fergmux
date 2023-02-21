@@ -69,6 +69,14 @@ const routes = [
       import(/* webpackChunkName: "siege" */ '@/views/projects/Siege.vue'),
   },
   {
+    path: '/projects/life-tracker',
+    name: 'life-tracker',
+    component: () =>
+      import(
+        /* webpackChunkName: "life-tracker" */ '@/views/projects/LifeTracker.vue'
+      ),
+  },
+  {
     path: '/projects/chess/:id?',
     name: 'chess',
     component: () =>

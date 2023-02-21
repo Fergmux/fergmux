@@ -2,18 +2,34 @@
   <Transition name="slide-right">
     <div
       v-if="props.modelValue"
-      class="fixed top-0 right-0 z-20 h-full border-l bg-mint-200 w-80 menu border-mint-300 drop-shadow-3xl"
+      class="menu fixed top-0 right-0 z-20 h-full w-80 border-l border-mint-300 bg-mint-200 drop-shadow-3xl"
     >
-      <div class="flex items-center justify-end w-full">
+      <div class="flex w-full items-center justify-end">
         <div
-          class="m-2 text-3xl cursor-pointer material-icons md-dark"
+          class="material-icons md-dark m-2 cursor-pointer text-3xl"
           @click="hideMenu"
         >
           close
         </div>
       </div>
 
-      <div class="p-5 menu-item" @click="login()">Login</div>
+      <div class="mb-5">
+        <div
+          v-if="!userState.showLogin"
+          class="menu-item p-5"
+          @click="changeUserClicked"
+        >
+          {{ userState.userAuthorised ? 'Logout' : 'Change user' }}
+        </div>
+
+        <div
+          v-if="!userState.showLogin && !userState.userAuthorised"
+          class="menu-item p-5"
+          @click="login"
+        >
+          Login
+        </div>
+      </div>
 
       <router-link
         v-for="item in menuItems"
@@ -21,20 +37,20 @@
         :to="{ name: item.route }"
         @click="hideMenu"
       >
-        <div class="p-5 menu-item">
+        <div class="menu-item p-5">
           {{ item.name }}
         </div>
       </router-link>
 
       <router-link :to="{ name: 'projects' }" @click="hideMenu">
         <div
-          class="p-5 menu-item"
+          class="menu-item p-5"
           @mouseover="showProjects[0] = true"
           @mouseleave="hideProjects(0)"
         >
           Projects
           <span
-            class="transition-transform duration-500 material-icons-outlined"
+            class="material-icons-outlined transition-transform duration-500"
             :class="{ 'rotate-180': showProjects.some(Boolean) }"
           >
             arrow_drop_down
@@ -55,7 +71,7 @@
             :to="{ name: project.route }"
             @click="hideMenu"
           >
-            <div class="p-5 pl-8 menu-item">
+            <div class="menu-item p-5 pl-8">
               {{ project.name }}
             </div>
           </router-link>
@@ -68,6 +84,7 @@
 <script lang="ts" setup>
 import { menuConfig, projectConfig } from '@/data/menuConfig'
 import { ref } from 'vue'
+import { userState, changeUser } from '@/store/lifeTrackerStore'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -85,15 +102,20 @@ const hideProjects = (num: number) => {
   }, 10)
 }
 
-const emit = defineEmits(['update:modelValue', 'login'])
+const emit = defineEmits(['update:modelValue'])
 
 const hideMenu = () => {
   emit('update:modelValue', false)
 }
 
-const login = () => {
+const changeUserClicked = () => {
+  changeUser()
   hideMenu()
-  emit('login')
+}
+
+const login = () => {
+  userState.showLogin = true
+  hideMenu()
 }
 </script>
 
@@ -128,6 +150,6 @@ const login = () => {
 }
 
 .menu-item {
-  @apply h-14 bg-mint-300 hover:bg-mint-800 cursor-pointer border-t border-b border-mint-300 flex items-center justify-between hover:text-mint-300;
+  @apply flex h-14 cursor-pointer items-center justify-between border-t border-b border-mint-300 bg-mint-300 hover:bg-mint-800 hover:text-mint-300;
 }
 </style>

@@ -27,6 +27,11 @@ export const menuConfig = [
 
 export const projectConfig = [
   {
+    name: 'Life Tracker',
+    route: 'life-tracker',
+    text: 'A tracker for life goals and habits.',
+  },
+  {
     name: 'Chess',
     route: 'chess',
     text: 'An online chess game made in Pixi.',

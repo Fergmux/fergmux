@@ -6,7 +6,12 @@
   font-family: 'Inter';
   src: url('src/assets/fonts/inter/Inter-VariableFont.ttf')
     format('truetype-variations');
-  font-weight: 1 999;
+  font-weight:0 1 999;
+}
+
+@font-face {
+  font-family: 'Signika';
+  src: url('src/assets/fonts/SignikaNegative-VariableFont_wght.ttf');
 }
 
 .link {
@@ -39,6 +44,10 @@
 
 .button-dark {
   @apply bg-mint-300 hover:bg-mint-400 text-mint-800 font-bold px-4 rounded py-2 drop-shadow-3xl;
+}
+
+.signika {
+  font-family: 'Signika', Helvetica, sans-serif;
 }
 
 @media (min-width: 768px) {
