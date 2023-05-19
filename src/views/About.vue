@@ -1,10 +1,10 @@
 <template>
   <div class="bg-img bg-img-cover">
     <div
-      class="relative max-w-screen-xl min-h-screen px-10 pt-20 m-auto md:px-14 lg:px-20 lg:py-20 lg:pt-24"
+      class="relative m-auto min-h-screen max-w-screen-xl px-10 pt-20 md:px-14 lg:px-20 lg:py-20 lg:pt-24"
     >
       <div class="md md:w-3/4 lg:w-2/4">
-        <h1 class="mb-14 header-main">About Me</h1>
+        <h1 class="header-main mb-14">About Me</h1>
         <p class="mb-8 drop-shadow-3xl">
           Hi, my name's Fergus Mullineux, I'm a programmer/developer/general
           nerd, I mostly write frontend code but specialise in Vue. I briefly
@@ -15,7 +15,8 @@
           four years commercial experience with the majroity of that time spent
           as a frontend developer. You can check out my experience in more
           detail
-          <router-link to="career" class="link">here</router-link>.
+          <router-link to="career" class="link">here</router-link>, or check out
+          my CV <a href="/cv.html" class="link">here</a>.
         </p>
         <p class="mb-6 drop-shadow-3xl">
           If you want to get in touch with me you can message me on
@@ -27,7 +28,7 @@
           >, or send a message with the form below.
         </p>
 
-        <h2 class="mt-20 text-3xl font-semibold mb-7 drop-shadow-3xl">
+        <h2 class="mt-20 mb-7 text-3xl font-semibold drop-shadow-3xl">
           Contact Form
         </h2>
         <form
@@ -45,7 +46,7 @@
               v-model="formFields.name"
               type="text"
               name="name"
-              class="h-8 text-field"
+              class="text-field h-8"
             />
           </p>
           <p>
@@ -54,7 +55,7 @@
               v-model="formFields.email"
               type="email"
               name="email"
-              class="h-8 text-field"
+              class="text-field h-8"
             />
           </p>
           <p>
@@ -66,13 +67,13 @@
             />
           </p>
           <p>
-            <button type="submit" class="mt-4 button-light">Send</button>
+            <button type="submit" class="button-light mt-4">Send</button>
           </p>
         </form>
       </div>
       <img
         src="/src/assets/images/me.png"
-        class="bottom-0 w-full max-w-md m-auto lg:w-auto lg:max-w-full lg:h-4/5 lg:fixed right-10 drop-shadow-3xl"
+        class="bottom-0 right-10 m-auto w-full max-w-md drop-shadow-3xl lg:fixed lg:h-4/5 lg:w-auto lg:max-w-full"
       />
     </div>
   </div>

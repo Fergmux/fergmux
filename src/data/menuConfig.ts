@@ -121,6 +121,13 @@ export const careerSections = [
     title: 'CET UK',
     link: 'https://www.cet-uk.com/',
     subtitle: 'Front-end Developer',
-    text: 'Currently working at a home emergency insurance company refactoring a large complex system to be more robust, modular, and efficient.',
+    text: 'Worked at a home emergency insurance company refactoring a large complex system to be more robust, modular, and efficient.',
+  },
+  {
+    year: 2022,
+    title: 'Causeway Technologies',
+    link: 'https://www.causeway.com/',
+    subtitle: 'Web Developer',
+    text: 'Currently working at a company that provides tools to manage all kinds of assets, particularly in the construction space.',
   },
 ]
