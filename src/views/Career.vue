@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen pt-20 text-center bg-img bg-img-cover">
-    <h1 class="mb-7 header-main">Career</h1>
+  <div class="bg-img bg-img-cover min-h-screen pt-20 text-center">
+    <h1 class="header-main mb-7">Career</h1>
 
-    <div class="flex items-center justify-around w-full">
+    <div class="flex w-full items-center justify-around">
       <div class="relative w-4/5 text-right">
         <div
           v-for="(section, index) in sections"
           :key="section.year"
-          class="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-end w-4/5 m-auto"
+          class="absolute top-0 bottom-0 left-0 right-0 m-auto flex w-4/5 items-center justify-end"
           :class="{
             'section--show': index === sectionIndex,
             'z-20': index === sectionIndex,
@@ -35,9 +35,9 @@
         </div>
       </div>
 
-      <ul class="p-4 mr-20 years">
+      <ul class="years mr-20 p-4">
         <li
-          class="text-5xl material-icons drop-shadow-3xl"
+          class="material-icons text-5xl drop-shadow-3xl"
           :class="{
             'text-slate-500': !(sectionIndex > 0),
             'cursor-pointer': sectionIndex > 0,
@@ -49,7 +49,7 @@
         <li
           v-for="(section, index) in sections"
           :key="section.year"
-          class="m-4 text-2xl cursor-pointer year drop-shadow-3xl"
+          class="year m-4 cursor-pointer text-2xl drop-shadow-3xl"
           :class="{ 'year--active': index === sectionIndex }"
           @click="sectionIndex = index"
         >
@@ -60,7 +60,7 @@
             'text-slate-500': !(sectionIndex < maxSec),
             'cursor-pointer': sectionIndex < maxSec,
           }"
-          class="text-5xl rotate-180 material-icons drop-shadow-3xl"
+          class="material-icons rotate-180 text-5xl drop-shadow-3xl"
           @click="
             sectionIndex =
               sectionIndex < maxSec ? sectionIndex + 1 : sectionIndex
@@ -78,7 +78,7 @@ import { ref, computed } from 'vue'
 import { careerSections } from '@/data/menuConfig'
 
 const sectionIndex = ref(0)
-const sections = careerSections
+const sections = careerSections.reverse()
 const maxSec = computed(() => sections.length - 1)
 </script>
 
