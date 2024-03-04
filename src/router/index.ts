@@ -88,6 +88,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "dice" */ '@/views/projects/DiceResults.vue'),
   },
+  {
+    path: '/projects/map',
+    name: 'map',
+    component: () =>
+      import(/* webpackChunkName: "dice" */ '@/views/projects/MapGenerator.vue'),
+  },
 ]
 
 export default createRouter({

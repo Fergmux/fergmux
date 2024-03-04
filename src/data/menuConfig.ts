@@ -71,6 +71,11 @@ export const projectConfig = [
     route: 'siege',
     text: 'A Ranbow Six Siege rank calculator.',
   },
+  {
+    name: 'Map Generator',
+    route: 'map',
+    text: 'A 2d map generator for our game.',
+  },
 ]
 
 export const careerSections = [
