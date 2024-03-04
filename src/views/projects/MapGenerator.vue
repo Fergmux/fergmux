@@ -167,8 +167,8 @@ function main() {
 
   // place temple
   function placeTemple(image, size, maxOffset) {
-    const templeLocationX = Math.floor(Math.random() * (gridSize - 2*maxOffset)) + maxOffset;
-    const templeLocationY = Math.floor(Math.random() * (gridSize - 2*maxOffset)) + maxOffset;
+    const templeLocationX = Math.floor(Math.random() * (gridSize - 2*maxOffset - size)) + maxOffset;
+    const templeLocationY = Math.floor(Math.random() * (gridSize - 2*maxOffset - size)) + maxOffset;
 
     for (let i = templeLocationX; i < templeLocationX + size; i++) {
       for (let j = templeLocationY; j < templeLocationY + size; j++) {
@@ -198,7 +198,7 @@ function main() {
   // const bigTempleRange = Math.max(Math.round(gridSize/20 - 1), 1)
 
   // const largeTempleCount = Math.floor(Math.random() * bigTempleRange) + bigTempleRange
-    placeTemple(templeImg, 3, 5)
+    placeTemple(templeImg, 3, gridSize/5)
 
   
   const smallTempleCount = Math.floor(Math.random() * smallTempleRange) + smallTempleRange + 1
