@@ -191,8 +191,17 @@ function main() {
     }
   }
 
-  placeTemple(templeImg, 3, 5)
-  const smallTempleCount = Math.floor(Math.random() * 4) + 1
+  // up to 20 1 big
+  // up to 40 2 big
+  // up to 60 3 big
+  const smallTempleRange = Math.floor(gridSize/10)
+  // const bigTempleRange = Math.max(Math.round(gridSize/20 - 1), 1)
+
+  // const largeTempleCount = Math.floor(Math.random() * bigTempleRange) + bigTempleRange
+    placeTemple(templeImg, 3, 5)
+
+  
+  const smallTempleCount = Math.floor(Math.random() * smallTempleRange) + smallTempleRange + 1
   for (let i = 0; i < smallTempleCount; i++) {
     placeTemple(smallTempleImg, 2, 2)
   }
