@@ -62,11 +62,12 @@ let canvas
 export default {
   setup() {
 
+    let generating = false
+
     const gridSizeRef = ref(20)
 
 
     function load() {
-      console.log(images)
  ctx = canvas.getContext("2d");
  canvas.height = window.innerHeight - 100
   canvas.width = window.innerHeight - 100
@@ -84,8 +85,6 @@ Object.entries(images).forEach(([key, src]) => {  // for each image url
     imageCount += 1;
     images[key] = image; // add loading image to images array
     if(imageCount === Object.entries(images).length){ // have all loaded????
-      console.log(images)
-      // console.log(grassImg, pathImg)
       // main(); // call function to start rendering
     }
   }
@@ -126,6 +125,9 @@ ctx.fillStyle = "black";
 
 
 function main() {
+  if (generating) return
+  generating = true
+
   const gridSize = gridSizeRef.value
   cellWidth = width/gridSize
  cellHeight = height/gridSize
@@ -167,8 +169,9 @@ function main() {
 
   // place temple
   function placeTemple(image, size, maxOffset) {
-    const templeLocationX = Math.floor(Math.random() * (gridSize - 2*maxOffset - size)) + maxOffset;
-    const templeLocationY = Math.floor(Math.random() * (gridSize - 2*maxOffset - size)) + maxOffset;
+    
+    const templeLocationX = Math.floor(Math.random() * (gridSize - maxOffset - size)) + maxOffset;
+    const templeLocationY = Math.floor(Math.random() * (gridSize - maxOffset - size)) + maxOffset;
 
     for (let i = templeLocationX; i < templeLocationX + size; i++) {
       for (let j = templeLocationY; j < templeLocationY + size; j++) {
@@ -222,14 +225,12 @@ function main() {
         }
       }
     }
-    console.log(count)
     return count < 3
   }
 
 
   function makeConnections(cell, image) {
 
-    // console.log(cell.id)
     
     if (visitedCellIds.includes(cell.id)) {
       return
@@ -329,7 +330,7 @@ function main() {
   //   ctx.stroke();  
   // }
 
-  console.log(cells)
+  generating = false
 }
 
 
