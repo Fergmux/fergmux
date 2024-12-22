@@ -96,6 +96,14 @@ const routes = [
         /* webpackChunkName: "dice" */ '@/views/projects/MapGenerator.vue'
       ),
   },
+  {
+    path: '/projects/countries',
+    name: 'countries',
+    component: () =>
+      import(
+        /* webpackChunkName: "countries" */ '@/views/projects/Countries.vue'
+      ),
+  },
 ]
 
 export default createRouter({

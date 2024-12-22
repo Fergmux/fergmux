@@ -46,6 +46,14 @@
   @apply rounded bg-mint-300 px-4 py-2 font-bold text-mint-800 drop-shadow-3xl hover:bg-mint-400;
 }
 
+.checkbox {
+  @apply h-5 w-5 cursor-pointer appearance-none rounded border-2 border-mint-800 bg-mint-300 checked:bg-mint-800 hover:bg-mint-400 checked:hover:bg-mint-700;
+}
+
+.select {
+  @apply cursor-pointer appearance-none rounded border-2 border-mint-800 bg-transparent px-4 py-2 pr-8 font-bold text-mint-800 drop-shadow-3xl hover:bg-mint-400;
+}
+
 .signika {
   font-family: 'Signika', Helvetica, sans-serif;
 }

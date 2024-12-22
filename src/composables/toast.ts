@@ -1,5 +1,5 @@
 import Toast from '@/components/Toast.vue'
-import { defineComponent, createApp } from 'vue'
+import { createApp, defineComponent } from 'vue'
 
 const div = document.createElement('div')
 document.body.appendChild(div)
