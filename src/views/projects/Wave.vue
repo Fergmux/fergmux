@@ -1,5 +1,5 @@
 <template>
-  <div class="py-20 bg-img bg-img-cover">
+  <div class="bg-img bg-img-cover py-20">
     <div class="text-center">
       <h1 class="mx-auto mb-20 text-5xl font-semibold underline">Wave</h1>
       <div id="canvas" width="500" height="500"></div>

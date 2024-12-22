@@ -1,13 +1,13 @@
 <template>
-  <div class="min-h-screen py-20 pt-28 bg-img bg-img-cover">
+  <div class="bg-img bg-img-cover min-h-screen py-20 pt-28">
     <div
-      class="flex flex-col items-center justify-center max-w-screen-xl m-auto"
+      class="m-auto flex max-w-screen-xl flex-col items-center justify-center"
     >
       <div class="text-center">
-        <h1 class="font-bold text-8xl mb-7 text-mint-900 drop-shadow-3xl">
+        <h1 class="mb-7 text-8xl font-bold text-mint-900 drop-shadow-3xl">
           Fergmux
         </h1>
-        <p class="text-lg mb-7 drop-shadow-3xl">
+        <p class="mb-7 text-lg drop-shadow-3xl">
           Hi, my name's Fergus - welcome to my website.
         </p>
       </div>
@@ -15,7 +15,7 @@
         <section
           v-for="item in menuItems"
           :key="item.route"
-          class="px-10 py-5 menu-section"
+          class="menu-section px-10 py-5"
         >
           <router-link class="m-2" :to="{ name: item.route }">
             <h2 class="text-5xl font-semibold drop-shadow-3xl">
@@ -27,7 +27,7 @@
       </main>
 
       <div
-        class="absolute bottom-0 flex items-center justify-center w-full my-4"
+        class="absolute bottom-0 my-4 flex w-full items-center justify-center"
       >
         <a class="mx-3" href="https://github.com/Fergmux" target="_blank">
           <img src="@/assets/images/icons/github.svg" alt="GitHub" />

@@ -1,7 +1,7 @@
 <template>
   <div class="bg-img bg-img-cover">
-    <div class="flex flex-col items-center py-20 mx-auto">
-      <h1 class="text-5xl font-semibold underline mb-7">
+    <div class="mx-auto flex flex-col items-center py-20">
+      <h1 class="mb-7 text-5xl font-semibold underline">
         Game studio market share
       </h1>
 
@@ -16,16 +16,16 @@
         @on-blur="fieldFocused = false"
       />
 
-      <div class="flex items-center justify-center mt-5">
+      <div class="mt-5 flex items-center justify-center">
         <span
           v-if="state.indexes.length"
-          class="mr-2 text-base cursor-pointer material-icons-outlined"
+          class="material-icons-outlined mr-2 cursor-pointer text-base"
           @click="drillup(1)"
         >
           backspace
         </span>
 
-        <p class="text-sm pb-[0.2rem]">
+        <p class="pb-[0.2rem] text-sm">
           <template
             v-for="(path, index) in pagePath"
             :key="`path-level-${index}`"
@@ -43,7 +43,7 @@
 
         <span
           v-if="state.indexes.length > 1"
-          class="ml-2 text-base cursor-pointer material-icons"
+          class="material-icons ml-2 cursor-pointer text-base"
           @click="resetChart"
         >
           clear
@@ -52,9 +52,9 @@
 
       <p class="mt-1 text-lg font-semibold">{{ level }}</p>
 
-      <div class="flex justify-center mt-5">
+      <div class="mt-5 flex justify-center">
         <div
-          class="relative max-w-screen-sm chart-container"
+          class="chart-container relative max-w-screen-sm"
           style="width: 80vw"
         >
           <canvas ref="chartRef"></canvas>

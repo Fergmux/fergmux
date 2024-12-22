@@ -1,60 +1,60 @@
 <template>
-  <div class="w-full p-10 pt-16 md:p-20 bg-img bg-img-cover">
-    <div class="max-w-screen-lg m-auto">
-      <h1 class="mb-16 header-main">Chess</h1>
-      <div v-if="!gameToken" class="justify-between max-w-screen-md md:flex">
+  <div class="bg-img bg-img-cover w-full p-10 pt-16 md:p-20">
+    <div class="m-auto max-w-screen-lg">
+      <h1 class="header-main mb-16">Chess</h1>
+      <div v-if="!gameToken" class="max-w-screen-md justify-between md:flex">
         <div class="drop-shadow-3xl">
           <h1 class="mb-5 text-2xl font-semibold">Start a new game</h1>
           <p class="mb-2 text-lg">I want to play as:</p>
           <div>
-            <div class="my-2 form-check">
+            <div class="form-check my-2">
               <input
                 id="color-white"
                 v-model="playerColor"
-                class="mt-1 mr-2 radio"
+                class="radio mr-2 mt-1"
                 type="radio"
                 name="color"
                 value="white"
                 checked
               />
               <label
-                class="inline-block font-semibold form-check-label"
+                class="form-check-label inline-block font-semibold"
                 for="color-white"
               >
                 White
               </label>
             </div>
-            <div class="my-2 form-check">
+            <div class="form-check my-2">
               <input
                 id="color-black"
                 v-model="playerColor"
-                class="mt-1 mr-2 radio"
+                class="radio mr-2 mt-1"
                 type="radio"
                 name="color"
                 value="black"
               />
               <label
-                class="inline-block font-semibold form-check-label"
+                class="form-check-label inline-block font-semibold"
                 for="color-black"
               >
                 Black
               </label>
             </div>
           </div>
-          <button class="block mt-5 button-light" @click="createGame">
+          <button class="button-light mt-5 block" @click="createGame">
             Create game
           </button>
         </div>
         <div>
-          <h1 class="mt-10 mb-5 text-2xl font-semibold md:mt-0 drop-shadow-3xl">
+          <h1 class="mb-5 mt-10 text-2xl font-semibold drop-shadow-3xl md:mt-0">
             Join a game
           </h1>
           <input
             v-model="gameToken"
             placeholder="Game ID"
-            class="block text-field"
+            class="text-field block"
           />
-          <button class="block mt-5 button-light" @click="joinGame">
+          <button class="button-light mt-5 block" @click="joinGame">
             Join game
           </button>
         </div>
@@ -63,9 +63,9 @@
         <p class="mb-5 drop-shadow-3xl">
           Game ID: <span class="font-bold">{{ gameToken }}</span>
         </p>
-        <button class="mr-5 button-light" @click="newGame">New game</button>
+        <button class="button-light mr-5" @click="newGame">New game</button>
         <button class="button-light" @click="copyLink">Copy link</button>
-        <p class="mt-10 mb-5">
+        <p class="mb-5 mt-10">
           <template v-if="playerColor">
             It is {{ playerTurn ? 'your' : 'their' }} turn.
           </template>

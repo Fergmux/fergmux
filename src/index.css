@@ -6,7 +6,7 @@
   font-family: 'Inter';
   src: url('src/assets/fonts/inter/Inter-VariableFont.ttf')
     format('truetype-variations');
-  font-weight:0 1 999;
+  font-weight: 0 1 999;
 }
 
 @font-face {
@@ -15,15 +15,15 @@
 }
 
 .link {
-  @apply underline text-mint-800 cursor-pointer;
+  @apply cursor-pointer text-mint-800 underline;
 }
 
 .bg-img-cover {
-  @apply bg-cover bg-center bg-no-repeat h-full min-h-screen bg-fixed;
+  @apply h-full min-h-screen bg-cover bg-fixed bg-center bg-no-repeat;
 }
 
 .header-main {
-  @apply text-6xl text-mint-900 font-semibold drop-shadow-3xl;
+  @apply text-6xl font-semibold text-mint-900 drop-shadow-3xl;
 }
 
 .img-contain {
@@ -31,19 +31,19 @@
 }
 
 .text-field {
-  @apply border-solid border border-mint-500 rounded-sm mb-4 mt-1 w-full sm:w-80 p-2 bg-mint-200;
+  @apply mb-4 mt-1 w-full rounded-sm border border-solid border-mint-500 bg-mint-200 p-2 sm:w-80;
 }
 
 .radio {
-  @apply float-left w-4 h-4 align-top transition duration-200 bg-white bg-center bg-no-repeat bg-contain border-4 rounded-full appearance-none cursor-pointer border-mint-500 checked:border-mint-800 focus:outline-none;
+  @apply float-left h-4 w-4 cursor-pointer appearance-none rounded-full border-4 border-mint-500 bg-white bg-contain bg-center bg-no-repeat align-top transition duration-200 checked:border-mint-800 focus:outline-none;
 }
 
 .button-light {
-  @apply bg-mint-800 hover:bg-mint-700 text-mint-300 font-bold px-4 rounded py-2 drop-shadow-3xl;
+  @apply rounded bg-mint-800 px-4 py-2 font-bold text-mint-300 drop-shadow-3xl hover:bg-mint-700;
 }
 
 .button-dark {
-  @apply bg-mint-300 hover:bg-mint-400 text-mint-800 font-bold px-4 rounded py-2 drop-shadow-3xl;
+  @apply rounded bg-mint-300 px-4 py-2 font-bold text-mint-800 drop-shadow-3xl hover:bg-mint-400;
 }
 
 .signika {

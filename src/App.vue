@@ -1,14 +1,14 @@
 <template>
-  <div class="relative min-h-screen app">
-    <div class="fixed z-10 flex justify-between w-full">
+  <div class="app relative min-h-screen">
+    <div class="fixed z-10 flex w-full justify-between">
       <router-link
         to="/"
-        class="m-2 mx-3 text-2xl cursor-pointer material-icons"
+        class="material-icons m-2 mx-3 cursor-pointer text-2xl"
       >
         home
       </router-link>
       <div
-        class="m-2 mx-3 text-3xl cursor-pointer material-icons"
+        class="material-icons m-2 mx-3 cursor-pointer text-3xl"
         @click="showMenu = true"
       >
         menu
@@ -17,17 +17,16 @@
 
     <router-view></router-view>
 
-    <Menubar v-model="showMenu" ></Menubar>
+    <Menubar v-model="showMenu"></Menubar>
   </div>
 </template>
 
 <script lang="ts" setup>
-import './index.css'
-import { ref } from 'vue'
 import Menubar from '@/components/Menubar.vue'
+import { ref } from 'vue'
+import './index.css'
 
 const showMenu = ref(false)
-
 </script>
 
 <style lang="scss">

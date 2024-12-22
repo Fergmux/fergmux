@@ -1,17 +1,17 @@
 <template>
   <div
     id="toast"
-    class="fixed left-0 right-0 flex flex-col justify-center margin-auto hide"
+    class="margin-auto hide fixed left-0 right-0 flex flex-col justify-center"
   >
     <div
       id="static-example"
-      class="block max-w-full px-5 mx-auto mb-3 text-sm rounded-lg shadow-lg pointer-events-auto bg-mint-500 bg-clip-padding"
+      class="pointer-events-auto mx-auto mb-3 block max-w-full rounded-lg bg-mint-500 bg-clip-padding px-5 text-sm shadow-lg"
       role="alert"
       aria-live="assertive"
       aria-atomic="true"
       data-mdb-autohide="false"
     >
-      <div class="p-3 text-white break-words rounded-lg bg-mint-500">
+      <div class="break-words rounded-lg bg-mint-500 p-3 text-white">
         {{ text }}
       </div>
     </div>
