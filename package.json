@@ -5,7 +5,8 @@
     "serve": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "netlify": "netlify dev"
+    "netlify": "netlify dev",
+    "lint": "eslint --fix src"
   },
   "dependencies": {
     "@netlify/functions": "^1.6.0",

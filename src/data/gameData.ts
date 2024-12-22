@@ -1,9 +1,9 @@
-import {ChartConfiguration} from 'chart.js'
+import { ChartConfiguration } from 'chart.js'
 
 export interface GameData {
-  key: string | null;
-  value: number;
-  children: GameData[];
+  key: string | null
+  value: number
+  children: GameData[]
 }
 
 export const getLabels = (data: GameData[]) => data.map((item) => item.key)

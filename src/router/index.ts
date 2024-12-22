@@ -92,7 +92,9 @@ const routes = [
     path: '/projects/map',
     name: 'map',
     component: () =>
-      import(/* webpackChunkName: "dice" */ '@/views/projects/MapGenerator.vue'),
+      import(
+        /* webpackChunkName: "dice" */ '@/views/projects/MapGenerator.vue'
+      ),
   },
 ]
 

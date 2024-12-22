@@ -28,7 +28,7 @@
           >, or send a message with the form below.
         </p>
 
-        <h2 class="mt-20 mb-7 text-3xl font-semibold drop-shadow-3xl">
+        <h2 class="mb-7 mt-20 text-3xl font-semibold drop-shadow-3xl">
           Contact Form
         </h2>
         <form
@@ -80,8 +80,8 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
 import { useToast } from '@/composables/toast'
+import { onMounted, ref } from 'vue'
 
 const { toast } = useToast()
 
