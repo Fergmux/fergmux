@@ -76,6 +76,11 @@ export const projectConfig = [
     route: 'map',
     text: 'A 2d map generator for our game.',
   },
+  {
+    name: 'Countries',
+    route: 'countries',
+    text: 'A map of the world.',
+  },
 ]
 
 export const careerSections = [

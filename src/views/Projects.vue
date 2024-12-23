@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen pt-20 bg-img bg-img-cover">
+  <div class="bg-img bg-img-cover min-h-screen pt-20">
     <div
-      class="flex flex-col items-center justify-center max-w-screen-xl m-auto"
+      class="m-auto flex max-w-screen-xl flex-col items-center justify-center"
     >
       <div class="text-center">
-        <h1 class="mb-7 header-main">Projects</h1>
+        <h1 class="header-main mb-7">Projects</h1>
         <p class="mb-7 drop-shadow-3xl">
           Some micro-apps I've made while messing around.
         </p>
@@ -13,7 +13,7 @@
         <section
           v-for="project in projects"
           :key="project.route"
-          class="px-10 py-5 menu-section"
+          class="menu-section px-10 py-5"
         >
           <router-link class="m-2" :to="{ name: project.route }">
             <h2 class="text-4xl font-semibold underline drop-shadow-3xl">

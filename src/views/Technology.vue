@@ -1,8 +1,8 @@
 <template>
-  <div class="overflow-x-hidden bg-img bg-img-cover">
+  <div class="bg-img bg-img-cover overflow-x-hidden">
     <div class="py-20">
-      <div class="mt-10 mb-20 text-center">
-        <h1 class="mb-4 header-main">Technologies</h1>
+      <div class="mb-20 mt-10 text-center">
+        <h1 class="header-main mb-4">Technologies</h1>
         <p class="mb-7 drop-shadow-3xl">
           A list of technologies and tools that I use, or have used.
         </p>
@@ -11,15 +11,15 @@
       <section
         v-for="section in sections"
         :key="section.key"
-        class="max-w-screen-xl m-auto"
+        class="m-auto max-w-screen-xl"
       >
-        <div class="flex flex-col items-center justify-center w-full h-60">
+        <div class="flex h-60 w-full flex-col items-center justify-center">
           <h1 class="mb-4 text-5xl font-semibold drop-shadow-3xl">
             {{ section.title }}
           </h1>
           <p class="drop-shadow-3xl">{{ section.subtitle }}</p>
         </div>
-        <div class="grid grid-flow-row col-auto tech-grid">
+        <div class="tech-grid col-auto grid grid-flow-row">
           <a
             v-for="tech in techs[section.key]"
             :key="tech.id"
@@ -28,7 +28,7 @@
           >
             <div
               :style="{ backgroundColor: lighten(tech.color) }"
-              class="flex items-center justify-between p-5 text-3xl font-bold transition-transform cursor-pointer h-36 text-mint-200 hover:scale-110 hover:z-10 hover:drop-shadow-md"
+              class="flex h-36 cursor-pointer items-center justify-between p-5 text-3xl font-bold text-mint-200 transition-transform hover:z-10 hover:scale-110 hover:drop-shadow-md"
             >
               <div
                 class="logo img-contain drop-shadow-md"

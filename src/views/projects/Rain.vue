@@ -275,8 +275,6 @@ function animate(
 
   drawLines(drops)
 
-  // console.log(elapsedTime % 50)
-
   var density = Number(settings.density)
 
   // value on the density slider to switch from less than one to multiple drops per loop

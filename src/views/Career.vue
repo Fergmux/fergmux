@@ -7,7 +7,7 @@
         <div
           v-for="(section, index) in sections"
           :key="section.year"
-          class="absolute top-0 bottom-0 left-0 right-0 m-auto flex w-4/5 items-center justify-end"
+          class="absolute bottom-0 left-0 right-0 top-0 m-auto flex w-4/5 items-center justify-end"
           :class="{
             'section--show': index === sectionIndex,
             'z-20': index === sectionIndex,

@@ -1,7 +1,7 @@
-import { reactive } from 'vue'
-import api from '@/lib/api'
-import type { UserState, UserData } from '@/types/UserData'
 import { gradients } from '@/data/gradients'
+import api from '@/lib/api'
+import type { UserData, UserState } from '@/types/UserData'
+import { reactive } from 'vue'
 
 const userState: UserState = reactive({
   userData: undefined,
@@ -17,10 +17,7 @@ const setUserData = (userData: UserData): void => {
 }
 
 const saveTasks = async () => {
-  const result = await api.post(
-    '/.netlify/functions/save-user-data',
-    userState.userData
-  )
+  await api.post('/.netlify/functions/save-user-data', userState.userData)
 }
 
 const changeUser = (): void => {
@@ -31,4 +28,4 @@ const changeUser = (): void => {
   localStorage.removeItem('password')
 }
 
-export { userState, gradient, setUserData, changeUser, saveTasks }
+export { changeUser, gradient, saveTasks, setUserData, userState }

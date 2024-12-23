@@ -55,6 +55,11 @@ h4 {
   color: #777;
 }
 
+ul.bold,
+li.bold {
+  font-weight: bold;
+}
+
 #profile p {
   font-size: 18px;
   color: #333;
@@ -218,7 +223,13 @@ header ul {
 
   background: #eee;
   background: -moz-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f8f8f8), color-stop(100%, #dddddd));
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0%, #f8f8f8),
+    color-stop(100%, #dddddd)
+  );
   background: -webkit-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);
   background: -o-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);
   background: -ms-linear-gradient(top, #f8f8f8 0%, #dddddd 100%);

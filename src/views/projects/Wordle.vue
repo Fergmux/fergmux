@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen bg-img bg-img-cover">
+  <div class="bg-img bg-img-cover min-h-screen">
     <div class="flex flex-col items-center pt-20">
-      <h1 class="text-5xl font-semibold underline mb-7">Wordle solver</h1>
+      <h1 class="mb-7 text-5xl font-semibold underline">Wordle solver</h1>
 
-      <div class="grid grid-cols-5 gap-1 m-5 font-bold">
+      <div class="m-5 grid grid-cols-5 gap-1 font-bold">
         <div
           v-for="(_, i) in colorList"
           :key="i"
+          class="flex h-16 w-16 items-center justify-center border-2 border-mint-100 text-center text-4xl leading-relaxed text-gray-100"
           :class="{
-            'border-2': !colorList[i],
+            'bg-mint-300': !colorList[i],
             'bg-zinc-700': colorList[i] === 0 && letterList[i],
             'bg-yellow-600': colorList[i] === 1,
             'bg-green-600': colorList[i] === 2,
           }"
-          class="flex items-center justify-center w-16 h-16 text-4xl leading-relaxed text-center text-gray-100 border-mint-100 bg-mint-300"
           @click="changeColor(i)"
         >
           <p>
@@ -22,11 +22,11 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-11 gap-1 m-5 font-semibold">
+      <div class="m-5 grid grid-cols-11 gap-1 font-semibold">
         <div
           v-for="letter in letters"
           :key="letter"
-          class="flex items-center justify-center h-12 p-2 text-white bg-gray-500 rounded cursor-pointer select-none active:bg-gray-700"
+          class="flex h-12 cursor-pointer select-none items-center justify-center rounded bg-gray-500 p-2 text-white active:bg-gray-700"
           :class="{
             'col-span-2': ['Reset', 'Enter', 'backspace'].includes(letter),
             'material-icons-outlined text-base': [
@@ -34,7 +34,7 @@
               'backspace',
             ].includes(letter),
           }"
-          @click="handleKeyPress(new KeyboardEvent('keydown', { key: letter }))"
+          @click="handleKeyPress({ key: letter } as KeyboardEvent)"
         >
           {{ letter.length > 1 ? letter : letter.toUpperCase() }}
         </div>
@@ -43,7 +43,7 @@
       <div class="flex">
         <div class="m-4">
           <b class="text-xl">Most likely:</b>
-          <div class="grid grid-cols-2 gap-4 m-5">
+          <div class="m-5 grid grid-cols-2 gap-4">
             <div v-for="word in likelyWords" :key="word">
               {{ word.toUpperCase() }}
             </div>
@@ -52,7 +52,7 @@
 
         <div class="m-4">
           <b class="text-xl">Most information:</b>
-          <div class="grid grid-cols-2 gap-4 m-5">
+          <div class="m-5 grid grid-cols-2 gap-4">
             <div v-for="word in informativeWords" :key="word">
               {{ word.toUpperCase() }}
             </div>
@@ -64,11 +64,11 @@
 </template>
 
 <script lang="ts" setup>
-import indexesOf from 'indexes-of'
-import words from '@/data/words'
-import ordinal from 'ordinal'
-import { computed, ref, onMounted, Ref } from 'vue'
 import { useToast } from '@/composables/toast'
+import words from '@/data/words'
+import indexesOf from 'indexes-of'
+import ordinal from 'ordinal'
+import { computed, onMounted, ref, Ref } from 'vue'
 
 // CONSTANTS //
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
