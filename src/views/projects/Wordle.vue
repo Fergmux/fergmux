@@ -7,13 +7,13 @@
         <div
           v-for="(_, i) in colorList"
           :key="i"
+          class="flex h-16 w-16 items-center justify-center border-2 border-mint-100 text-center text-4xl leading-relaxed text-gray-100"
           :class="{
-            'border-2': !colorList[i],
+            'bg-mint-300': !colorList[i],
             'bg-zinc-700': colorList[i] === 0 && letterList[i],
             'bg-yellow-600': colorList[i] === 1,
             'bg-green-600': colorList[i] === 2,
           }"
-          class="flex h-16 w-16 items-center justify-center border-mint-100 bg-mint-300 text-center text-4xl leading-relaxed text-gray-100"
           @click="changeColor(i)"
         >
           <p>
@@ -34,7 +34,7 @@
               'backspace',
             ].includes(letter),
           }"
-          @click="handleKeyPress(new KeyboardEvent('keydown', { key: letter }))"
+          @click="handleKeyPress({ key: letter } as KeyboardEvent)"
         >
           {{ letter.length > 1 ? letter : letter.toUpperCase() }}
         </div>
@@ -64,11 +64,11 @@
 </template>
 
 <script lang="ts" setup>
-import indexesOf from 'indexes-of'
-import words from '@/data/words'
-import ordinal from 'ordinal'
-import { computed, ref, onMounted, Ref } from 'vue'
 import { useToast } from '@/composables/toast'
+import words from '@/data/words'
+import indexesOf from 'indexes-of'
+import ordinal from 'ordinal'
+import { computed, onMounted, ref, Ref } from 'vue'
 
 // CONSTANTS //
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')

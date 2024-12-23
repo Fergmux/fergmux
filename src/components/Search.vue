@@ -1,10 +1,10 @@
 <template>
-  <div class="relative mx-auto w-full max-w-md text-black">
+  <div class="relative mx-auto w-full max-w-md">
     <input
       ref="input"
       v-model="query"
       type="text"
-      class="w-full rounded-md border p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      class="text-input !w-full"
       placeholder="Search..."
       @input="onInput"
       @keydown.down="moveDown"
@@ -13,13 +13,15 @@
     />
     <ul
       v-if="filteredList.length"
-      class="absolute z-20 mt-2 max-h-60 w-full overflow-auto rounded-md border bg-white shadow-lg"
+      ref="listContainer"
+      class="scrollbar-none absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md border border-mint-700 bg-mint-300 shadow-lg"
     >
       <li
         v-for="(item, index) in filteredList"
         :key="index"
+        :ref="(el) => { if(index === selectedIndex) selectedItem = el as HTMLElement }"
         :class="{
-          'bg-indigo-100': index === selectedIndex,
+          'bg-mint-500': index === selectedIndex,
           'cursor-pointer px-4 py-2': true,
         }"
         @click="selectItem(item)"
@@ -34,7 +36,7 @@
 <script setup lang="ts">
 import Fuse from 'fuse.js'
 import type { Ref } from 'vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 // Define the props for the component
 const props = defineProps({
@@ -48,11 +50,32 @@ const props = defineProps({
 const emit = defineEmits({ select: (item: string) => item })
 
 const input: Ref<HTMLInputElement | null> = ref(null)
+const listContainer: Ref<HTMLUListElement | null> = ref(null)
+const selectedItem: Ref<HTMLElement | null> = ref(null)
 
 // Reactive query, filtered list, and selected index for arrow key navigation
 const query = ref('')
 const filteredList: Ref<string[]> = ref([])
 const selectedIndex = ref(0) // Tracks the selected index for navigation
+
+// Watch for changes to selectedItem and ensure it's visible
+watch(selectedItem, (el) => {
+  if (el && listContainer.value) {
+    const container = listContainer.value
+    const itemTop = el.offsetTop
+    const itemBottom = itemTop + el.offsetHeight
+    const containerTop = container.scrollTop
+    const containerBottom = containerTop + container.offsetHeight
+
+    if (itemTop < containerTop) {
+      // Scroll up if item is above visible area
+      container.scrollTop = itemTop
+    } else if (itemBottom > containerBottom) {
+      // Scroll down if item is below visible area
+      container.scrollTop = itemBottom - container.offsetHeight
+    }
+  }
+})
 
 // Computed property for Fuse instance that updates whenever the list changes
 const fuse = computed(() => {

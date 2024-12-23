@@ -1,10 +1,11 @@
 <template>
   <div>
     <div v-if="stage === Stage.Prepare" class="flex flex-col items-center">
-      <div class="mt-14 flex w-80 items-center justify-between">
+      <p class="text-2xl font-semibold">Pick your settings</p>
+      <div class="mt-7 flex w-80 items-center justify-between">
         <p>How many rounds?</p>
         <div class="relative">
-          <select v-model="numberOfQuestions" class="select text-black">
+          <select v-model="numberOfQuestionsInput" class="select text-black">
             <option value="2">2</option>
             <option value="10">10</option>
             <option value="25">25</option>
@@ -32,14 +33,23 @@
         <p>Hard mode?</p>
         <input v-model="hardMode" class="checkbox" type="checkbox" />
       </div>
+      <div class="mt-7 flex w-80 items-center justify-between">
+        <p>Show timer?</p>
+        <input v-model="showTimer" class="checkbox" type="checkbox" />
+      </div>
       <div class="mt-14">
         <button class="button-light" @click="startChallenge">Start</button>
       </div>
     </div>
 
-    <div v-if="stage === Stage.Flag" class="mt-14 flex flex-col items-center">
+    <div v-if="stage !== Stage.Prepare && showTimer" class="mb-7 text-center">
+      <p v-if="stage === Stage.Results">You did it in:</p>
+      <p class="text-2xl font-semibold">{{ prettyTimer }}</p>
+    </div>
+
+    <div v-if="stage === Stage.Flag" class="flex flex-col items-center">
       <p class="text-2xl">What flag is this?</p>
-      <img :src="flag" alt="" class="mt-14 h-52" />
+      <img :src="flag" alt="" class="mt-7 h-52" />
       <Search
         ref="countryInput"
         :list="countries"
@@ -47,7 +57,7 @@
         @keyup.enter="nextStage"
         @select="countrySelected"
       />
-      <div v-if="selectedCountry" class="mt-7 text-xl">
+      <div v-if="selectedCountry" class="my-7 text-xl">
         <p>
           <span
             :class="{
@@ -55,7 +65,7 @@
               'text-red-500': !selectedCountryCorrect,
             }"
           >
-            {{ selectedCountryCorrect ? 'Correct. It is ' : 'Nope. It is ' }}
+            {{ selectedCountryCorrect ? 'Correct! It is ' : 'Nope. It is ' }}
           </span>
           <b>{{ correctCountry }}</b>
         </p>
@@ -71,10 +81,10 @@
     </div>
 
     <template v-if="stage === Stage.Map">
-      <div class="mt-14 flex flex-col items-center">
+      <div class="flex flex-col items-center">
         <p class="text-2xl">Where is {{ correctCountry }} on the map?</p>
         <div id="map" class="mt-7 w-[960px]"></div>
-        <template v-if="selectedMapCountry">
+        <div v-if="selectedMapCountry" class="my-7">
           <div
             class="mt-7 text-2xl"
             :class="{
@@ -85,45 +95,51 @@
             {{
               selectedMapCountryCorrect
                 ? "Correct! That's the one!"
-                : 'Nope! it was here'
+                : 'Nope. It is here!'
             }}
           </div>
-          <button ref="nextButton" class="button-light mt-7" @click="nextStage">
+          <button
+            ref="nextButton"
+            class="button-light m-auto mt-7 block"
+            @click="nextStage"
+          >
             Next
           </button>
-        </template>
+        </div>
       </div>
     </template>
 
     <template v-if="stage === Stage.Capital">
-      <p class="mt-14 text-2xl">
-        What is the capital city of {{ correctCountry }}?
-      </p>
-      <Search
-        ref="cityInput"
-        :list="cities"
-        class="mt-14"
-        @select="capitalSelected"
-      />
-      <div v-if="selectedCapital" class="mt-7 flex flex-col items-center">
-        <p class="text-xl">
-          <span
-            :class="{
-              'text-green-500': selectedCapitalCorrect,
-              'text-red-500': !selectedCapitalCorrect,
-            }"
-          >
-            {{ selectedCapitalCorrect ? 'Correct! It is ' : 'Nope! it is ' }}
-          </span>
-          <b>{{ citiesMap[selectedCode] }}</b>
+      <div class="flex flex-col items-center">
+        <p class="text-2xl">
+          What is the capital city of {{ correctCountry }}?
         </p>
-        <button
-          ref="nextButton"
-          class="button-light mt-7 block"
-          @click="nextQuestion"
-        >
-          Next
-        </button>
+        <Search
+          ref="cityInput"
+          :list="cities"
+          class="mt-7"
+          @select="capitalSelected"
+        />
+        <div v-if="selectedCapital" class="my-7 flex flex-col items-center">
+          <p class="text-xl">
+            <span
+              :class="{
+                'text-green-500': selectedCapitalCorrect,
+                'text-red-500': !selectedCapitalCorrect,
+              }"
+            >
+              {{ selectedCapitalCorrect ? 'Correct! It is ' : 'Nope. It is ' }}
+            </span>
+            <b>{{ citiesMap[selectedCode] }}</b>
+          </p>
+          <button
+            ref="nextButton"
+            class="button-light mt-7 block"
+            @click="nextQuestion"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </template>
 
@@ -157,47 +173,32 @@
     </template>
 
     <template v-if="stage !== Stage.Results && stage !== Stage.Prepare">
-      <p class="mt-14 text-center">
+      <p class="mt-7 text-center">
         You have answered
         {{ scores.flags + scores.locations + scores.capitals }}/{{
           questions.flags + questions.locations + questions.capitals
         }}
         questions correctly.
       </p>
-      <div class="mt-7 flex justify-center gap-7">
+      <div class="m-auto mt-7 flex max-w-md justify-center gap-7">
         <button
-          class="button-dark m-auto mt-7 border-2 border-mint-700"
-          @click="reset"
+          class="button-dark m-auto border-2 border-mint-700"
+          @click="resetGame"
         >
           Reset
         </button>
-        <button class="button-light m-auto mt-7" @click="skip">Skip</button>
+        <button class="button-light m-auto" @click="skip">Skip</button>
       </div>
     </template>
 
     <template v-if="stage === Stage.Results">
       <button
         class="button-dark m-auto mt-7 block border-2 border-mint-700"
-        @click="reset"
+        @click="resetGame"
       >
         Reset
       </button>
     </template>
-    <!--       
-      <div class="mt-14 flex items-center justify-evenly">
-        <div class="flex w-96 flex-col items-center gap-2">
-          <template v-if="correctCountry">
-            <p>Country:</p>
-            <b class="text-2xl">{{ correctCountry }}</b>
-          </template>
-
-          <template v-if="cities[selectedCode]">
-            <p class="mt-4">Capital city:</p>
-            <b class="text-2xl">{{ cities[selectedCode] }}</b>
-          </template>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -208,7 +209,13 @@ import citiesMap from '@/data/capitalCities'
 import easyCountries from '@/data/easyCountries'
 import * as d3 from 'd3'
 import type { Ref } from 'vue'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
+
+const counter = ref(0)
+let timer: NodeJS.Timeout
+onBeforeUnmount(() => {
+  clearInterval(timer)
+})
 
 const { toast } = useToast()
 
@@ -257,8 +264,21 @@ const countryNameMap = computed(() => {
   )
 })
 
-const numberOfQuestions = ref(10)
+const numberOfQuestionsInput = ref('10')
+const numberOfQuestions = computed(() => {
+  if (numberOfQuestionsInput.value === 'max') {
+    return countries.value?.length ?? 10
+  }
+  return Number(numberOfQuestionsInput.value)
+})
 const hardMode = ref(false)
+
+const showTimer = ref(false)
+const prettyTimer = computed(() => {
+  const minutes = Math.floor(counter.value / 60)
+  const seconds = counter.value % 60
+  return `${minutes || '0'}:${seconds.toString().padStart(2, '0')}`
+})
 
 const stage = ref(Stage.Prepare)
 const selectedCountry = ref('')
@@ -302,7 +322,7 @@ const percentage = computed(() => {
 })
 const result = computed(() => {
   const percent = percentage.value
-  if (percent === 0.05) {
+  if (percent <= 0.05) {
     return 'Maybe give easy mode a try. 😅'
   } else if (percent < 0.2) {
     return 'You can do better! 👍'
@@ -337,7 +357,7 @@ const initMap = () => {
     .append('svg')
     .attr('width', width)
     .attr('height', height)
-    .style('background-color', '#f0f8ff')
+    .style('background-color', '#1C2541')
 
   // Define a projection and a path generator
   const projection = d3
@@ -406,12 +426,16 @@ const initMap = () => {
           }
           return null // Ignore non-polygon geometries
         })
-        .attr('fill', '#d9d9d9')
+        .attr('fill', '#5BC0BE')
         .on('mouseover', function () {
-          d3.select(this).attr('fill', '#a6cee3')
+          d3.select(this).attr('fill', '#6FFFE9')
         })
-        .on('mouseout', function () {
-          d3.select(this).attr('fill', '#d9d9d9')
+        .on('mouseout', function (event, d) {
+          if (selectedCode.value === d.properties?.ISO_A2.toLowerCase()) {
+            d3.select(this).attr('fill', '#ffffff')
+          } else {
+            d3.select(this).attr('fill', '#5BC0BE')
+          }
         })
         .on('click', async function (event, d) {
           if (selectedMapCountry.value) return
@@ -421,13 +445,13 @@ const initMap = () => {
           }
           selectedMapCountry.value = code
           g.selectAll('path')
-            .attr('fill', '#d9d9d9') // Reset all countries
+            .attr('fill', '#5BC0BE') // Reset all countries
             .filter(
               (d) =>
                 (d as GeoJSON.Feature).properties?.ISO_A2.toLowerCase() ===
                 selectedCode.value?.toLowerCase()
             )
-            .attr('fill', '#ffcc00') // Highlight the selected country
+            .attr('fill', '#ffffff') // Highlight the selected country
           if (selectedCode.value !== selectedMapCountry.value) {
             moveToCountry(selectedCode.value)
           } else {
@@ -449,7 +473,6 @@ onMounted(() => {
   fetch('https://flagcdn.com/en/codes.json')
     .then((response) => response.json())
     .then((data) => {
-      console.log(data)
       countryCodeMapBase.value = Object.fromEntries(
         Object.entries(data as Record<string, string>).filter(
           ([key]) => !key.includes('-')
@@ -473,7 +496,7 @@ const moveToCountry = (countryName: string) => {
     const dy = y1 - y0
     const x = (x0 + x1) / 2
     const y = (y0 + y1) / 2
-    const scale = Math.min(8, 0.9 / Math.max(dx / width, dy / height))
+    const scale = Math.min(1000, 0.9 / Math.max(dx / width, dy / height))
     const translate = [width / 2 - scale * x, height / 2 - scale * y]
 
     const transform = d3.zoomIdentity
@@ -481,13 +504,13 @@ const moveToCountry = (countryName: string) => {
       .scale(scale)
 
     g.selectAll('path')
-      .attr('fill', '#d9d9d9') // Reset all countries
+      .attr('fill', '#5BC0BE') // Reset all countries
       .filter(
         (d) =>
           (d as GeoJSON.Feature).properties?.ISO_A2.toLowerCase() ===
           countryCode?.toLowerCase()
       )
-      .attr('fill', '#ffcc00') // Highlight the selected country
+      .attr('fill', '#ffffff') // Highlight the selected country
 
     g.transition()
       .duration(750)
@@ -508,6 +531,11 @@ const startChallenge = async () => {
   ) {
     startChallenge()
   } else {
+    if (previousAnswers.value.length === 0) {
+      timer = setInterval(() => {
+        counter.value++
+      }, 1000)
+    }
     selectedCode.value =
       (randomCountry && countryNameMap.value?.[randomCountry]) || ''
     stage.value = Stage.Flag
@@ -560,6 +588,7 @@ const nextQuestion = () => {
   questionCounter.value++
   if (questionCounter.value >= numberOfQuestions.value) {
     stage.value = Stage.Results
+    clearInterval(timer)
   } else {
     previousAnswers.value.push(selectedCode.value)
     startChallenge()
@@ -587,7 +616,10 @@ const skip = () => {
   }
 }
 
-const reset = () => {
+const resetGame = () => {
+  clearInterval(timer)
+  clearTimeout(timer)
+  counter.value = 0
   stage.value = Stage.Prepare
   scores.value = {
     flags: 0,

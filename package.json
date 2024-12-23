@@ -14,6 +14,7 @@
     "@types/chess.js": "^0.11.2",
     "@types/geojson": "^7946.0.15",
     "@vuepic/vue-datepicker": "^3.6.8",
+    "@vueuse/core": "^12.1.0",
     "canvas-confetti": "^1.9.2",
     "chart.js": "^3.9.1",
     "chess.js": "^0.12.1",

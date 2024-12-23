@@ -83,8 +83,8 @@
 
 <script lang="ts" setup>
 import { menuConfig, projectConfig } from '@/data/menuConfig'
+import { changeUser, userState } from '@/store/lifeTrackerStore'
 import { ref } from 'vue'
-import { userState, changeUser } from '@/store/lifeTrackerStore'
 
 const props = defineProps({
   modelValue: Boolean,
@@ -97,7 +97,6 @@ const menuItems = ref(menuConfig.filter((item) => item.route !== 'projects'))
 
 const hideProjects = (num: number) => {
   window.setTimeout(() => {
-    console.log(showProjects.value)
     showProjects.value[num] = false
   }, 10)
 }
@@ -148,7 +147,9 @@ const login = () => {
 .rotate {
   transition: spin 0.5s ease 1;
 }
+</style>
 
+<style lang="postcss">
 .menu-item {
   @apply flex h-14 cursor-pointer items-center justify-between border-b border-t border-mint-300 bg-mint-300 hover:bg-mint-800 hover:text-mint-300;
 }

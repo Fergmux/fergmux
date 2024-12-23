@@ -1,7 +1,8 @@
 <template>
   <div>
     <div>
-      <Search :list="countries" class="mt-14" @select="moveToCountry" />
+      <p class="text-center text-2xl font-semibold">Search for a country</p>
+      <Search :list="countries" class="mt-7" @select="moveToCountry" />
       <div id="map" class="mt-14 w-[960px]"></div>
       <div class="mt-14 flex items-center justify-evenly">
         <div class="flex w-96 flex-col items-center gap-2">
@@ -76,7 +77,7 @@ onMounted(() => {
     .append('svg')
     .attr('width', width)
     .attr('height', height)
-    .style('background-color', '#f0f8ff')
+    .style('background-color', '#1C2541')
 
   // Define a projection and a path generator
   const projection = d3
@@ -92,7 +93,7 @@ onMounted(() => {
   // Define zoom behavior
   zoom = d3
     .zoom()
-    .scaleExtent([4, 1000]) // Minimum and maximum zoom levels
+    .scaleExtent([2, 1000]) // Minimum and maximum zoom levels
     .translateExtent([
       [0, 0],
       [width, height],
@@ -154,17 +155,17 @@ onMounted(() => {
           }
           return null // Ignore non-polygon geometries
         })
-        .attr('fill', '#d9d9d9')
+        .attr('fill', '#5BC0BE')
         .on('mouseover', function (event, d) {
-          d3.select(this).attr('fill', '#a6cee3')
+          d3.select(this).attr('fill', '#6FFFE9')
           const tooltip = d3.select('#tooltip')
           tooltip.style('visibility', 'visible').text(d.properties?.ADMIN)
         })
         .on('mouseout', function (event, d) {
           if (selectedCode.value === d.properties?.ISO_A2.toLowerCase()) {
-            d3.select(this).attr('fill', '#ffcc00')
+            d3.select(this).attr('fill', '#ffffff')
           } else {
-            d3.select(this).attr('fill', '#d9d9d9')
+            d3.select(this).attr('fill', '#5BC0BE')
           }
           d3.select('#tooltip').style('visibility', 'hidden')
         })
@@ -175,8 +176,6 @@ onMounted(() => {
             .style('top', event.pageY + 10 + 'px')
         })
         .on('click', function (event, d) {
-          console.log(d.properties)
-          console.log(countryNameMap.value)
           let code = d.properties?.ISO_A2.toLowerCase()
           if (code === '-') {
             code = countryNameMap.value?.[d.properties?.ADMIN]
@@ -187,13 +186,13 @@ onMounted(() => {
             selectedCode.value = code
           }
           g.selectAll('path')
-            .attr('fill', '#d9d9d9') // Reset all countries
+            .attr('fill', '#5BC0BE') // Reset all countries
             .filter(
               (d) =>
                 (d as GeoJSON.Feature).properties?.ISO_A2.toLowerCase() ===
                 selectedCode.value?.toLowerCase()
             )
-            .attr('fill', '#ffcc00') // Highlight the selected country
+            .attr('fill', '#ffffff') // Highlight the selected country
         })
         .attr('stroke', '#333')
         .attr('stroke-width', 0.5 / zoomLevel.value)
@@ -215,7 +214,7 @@ const moveToCountry = (countryName: string) => {
     const dy = y1 - y0
     const x = (x0 + x1) / 2
     const y = (y0 + y1) / 2
-    const scale = Math.min(8, 0.9 / Math.max(dx / width, dy / height))
+    const scale = Math.min(1000, 0.9 / Math.max(dx / width, dy / height))
     const translate = [width / 2 - scale * x, height / 2 - scale * y]
 
     const transform = d3.zoomIdentity
@@ -223,13 +222,13 @@ const moveToCountry = (countryName: string) => {
       .scale(scale)
 
     g.selectAll('path')
-      .attr('fill', '#d9d9d9') // Reset all countries
+      .attr('fill', '#5BC0BE') // Reset all countries
       .filter(
         (d) =>
           (d as GeoJSON.Feature).properties?.ISO_A2.toLowerCase() ===
           countryCode?.toLowerCase()
       )
-      .attr('fill', '#ffcc00') // Highlight the selected country
+      .attr('fill', '#ffffff') // Highlight the selected country
 
     g.transition()
       .duration(750)
