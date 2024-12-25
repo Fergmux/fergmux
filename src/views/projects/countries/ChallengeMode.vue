@@ -431,7 +431,7 @@ const initMap = () => {
           d3.select(this).attr('fill', '#6FFFE9')
         })
         .on('mouseout', function (event, d) {
-          if (selectedCode.value === d.properties?.ISO_A2.toLowerCase()) {
+          if (selectedMapCountry.value === d.properties?.ISO_A2.toLowerCase()) {
             d3.select(this).attr('fill', '#ffffff')
           } else {
             d3.select(this).attr('fill', '#5BC0BE')
