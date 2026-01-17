@@ -27,11 +27,17 @@
 </template>
 
 <script setup lang="ts">
-import Search from '@/components/Search.vue'
-import cities from '@/data/capitalCities'
-import * as d3 from 'd3'
-import type { Ref } from 'vue'
-import { computed, onMounted, ref } from 'vue'
+import type { Ref } from 'vue';
+import {
+  computed,
+  onMounted,
+  ref,
+} from 'vue';
+
+import * as d3 from 'd3';
+
+import Search from '@/components/Search.vue';
+import cities from '@/data/capitalCities';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -132,7 +138,7 @@ onMounted(() => {
         const unusedCodes = Object.entries(countryCodeMap.value).filter(
           ([code]) =>
             geoData.features.some(
-              (d) => d.properties?.ISO_A2.toLowerCase() === code
+              (d) => d.properties?.['ISO3166-1-Alpha-2']?.toLowerCase() === code
             )
         )
         countryCodeMap.value = Object.fromEntries(unusedCodes)
@@ -159,10 +165,10 @@ onMounted(() => {
         .on('mouseover', function (event, d) {
           d3.select(this).attr('fill', '#6FFFE9')
           const tooltip = d3.select('#tooltip')
-          tooltip.style('visibility', 'visible').text(d.properties?.ADMIN)
+          tooltip.style('visibility', 'visible').text(d.properties?.name)
         })
         .on('mouseout', function (event, d) {
-          if (selectedCode.value === d.properties?.ISO_A2.toLowerCase()) {
+          if (selectedCode.value === d.properties?.['ISO3166-1-Alpha-2'].toLowerCase()) {
             d3.select(this).attr('fill', '#ffffff')
           } else {
             d3.select(this).attr('fill', '#5BC0BE')
@@ -176,9 +182,9 @@ onMounted(() => {
             .style('top', event.pageY + 10 + 'px')
         })
         .on('click', function (event, d) {
-          let code = d.properties?.ISO_A2.toLowerCase()
+          let code = d.properties?.['ISO3166-1-Alpha-2'].toLowerCase()
           if (code === '-') {
-            code = countryNameMap.value?.[d.properties?.ADMIN]
+            code = countryNameMap.value?.[d.properties?.name]
           }
           if (code === selectedCode.value) {
             selectedCode.value = ''
@@ -189,7 +195,7 @@ onMounted(() => {
             .attr('fill', '#5BC0BE') // Reset all countries
             .filter(
               (d) =>
-                (d as GeoJSON.Feature).properties?.ISO_A2.toLowerCase() ===
+                (d as GeoJSON.Feature).properties?.['ISO3166-1-Alpha-2'].toLowerCase() ===
                 selectedCode.value?.toLowerCase()
             )
             .attr('fill', '#ffffff') // Highlight the selected country
@@ -206,7 +212,7 @@ const moveToCountry = (countryName: string) => {
   const countryCode = countryNameMap.value?.[countryName]
   selectedCode.value = countryCode?.toLowerCase() ?? ''
   const country = geoData.features.find(
-    (d) => d.properties?.ISO_A2.toLowerCase() === countryCode?.toLowerCase()
+    (d) => d.properties?.['ISO3166-1-Alpha-2'].toLowerCase() === countryCode?.toLowerCase()
   )
   if (country) {
     const [[x0, y0], [x1, y1]] = path.bounds(country)
@@ -225,7 +231,7 @@ const moveToCountry = (countryName: string) => {
       .attr('fill', '#5BC0BE') // Reset all countries
       .filter(
         (d) =>
-          (d as GeoJSON.Feature).properties?.ISO_A2.toLowerCase() ===
+          (d as GeoJSON.Feature).properties?.['ISO3166-1-Alpha-2'].toLowerCase() ===
           countryCode?.toLowerCase()
       )
       .attr('fill', '#ffffff') // Highlight the selected country

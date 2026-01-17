@@ -124,7 +124,7 @@ export const careerSections = [
     title: 'Bought By Many',
     link: 'https://boughtbymany.com/',
     subtitle: 'Front-end Developer',
-    text: 'Worked at a pet insurance company on their various webistes, handling policies/users/payments/etc. This is where I first learnt Vue and most other front-end tooling.',
+    text: 'Worked at a pet insurance company on their various websites, handling policies/users/payments/etc. This is where I first learnt Vue and most other front-end tooling.',
   },
   {
     year: 2021,
@@ -138,6 +138,13 @@ export const careerSections = [
     title: 'Causeway Technologies',
     link: 'https://www.causeway.com/',
     subtitle: 'Web Developer',
-    text: 'Currently working at a company that provides tools to manage all kinds of assets, particularly in the construction space.',
+    text: 'Worked at a company that provides tools to manage all kinds of assets, particularly in the construction space.',
+  },
+  {
+    year: 2025,
+    title: 'Troop Travel',
+    link: 'https://www.trooptravel.com/',
+    subtitle: 'Software Engineer',
+    text: 'Currently working at a travel company enabling businesses to organise flights and travel logistics for attendees from multiple countries.',
   },
 ]
