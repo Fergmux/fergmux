@@ -30,11 +30,10 @@
               :style="{ backgroundColor: lighten(tech.color) }"
               class="flex h-36 cursor-pointer items-center justify-between p-5 text-3xl font-bold text-mint-200 transition-transform hover:z-10 hover:scale-110 hover:drop-shadow-md"
             >
-              <div
-                class="logo img-contain drop-shadow-md"
-                :style="{
-                  backgroundImage: `url(${tech.logo})`,
-                }"
+              <img
+                :src="tech.logo"
+                :alt="tech.name"
+                class="logo drop-shadow-md"
               />
               <span class="mx-3">{{ tech.name }}</span>
             </div>
@@ -46,14 +45,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref } from 'vue'
 import {
-  techSections,
+  ref,
+  Ref,
+} from 'vue';
+
+import hexRgb from 'hex-rgb';
+
+import {
+  Section,
   technologies,
   Technologies,
-  Section,
-} from '@/data/technologies'
-import hexRgb from 'hex-rgb'
+  techSections,
+} from '@/data/technologies';
 
 const sections: Ref<Section[]> = ref(techSections)
 const techs: Ref<Technologies> = ref(technologies)
@@ -74,6 +78,7 @@ const lighten = (hex: string) => {
 .logo {
   width: 80px;
   height: 70%;
+  object-fit: contain;
 }
 .bg-img {
   background-image: url('@/assets/images/backgrounds/shiny.svg');
