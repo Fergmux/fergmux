@@ -16,7 +16,7 @@
             <b class="text-2xl">{{ cities[selectedCode] }}</b>
           </template>
         </div>
-        <img :src="flag" alt="" class="mt-4 h-52" />
+        <img v-if="selectedCode":src="flag" alt="" class="mt-4 h-52" />
       </div>
     </div>
     <div

@@ -1,6 +1,6 @@
 <template>
   <div class="app relative min-h-screen">
-    <div class="fixed z-10 flex w-full justify-between">
+    <div class="fixed flex w-full justify-between">
       <router-link
         to="/"
         class="material-icons m-2 mx-3 cursor-pointer text-2xl"
@@ -22,9 +22,9 @@
 </template>
 
 <script lang="ts" setup>
-import Menubar from '@/components/Menubar.vue'
-import { ref } from 'vue'
-import './index.css'
+import Menubar from '@/components/Menubar.vue';
+import { ref } from 'vue';
+import './index.css';
 
 const showMenu = ref(false)
 </script>
