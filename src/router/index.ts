@@ -1,4 +1,7 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {
+  createRouter,
+  createWebHashHistory,
+} from 'vue-router';
 
 const routes = [
   {
@@ -104,6 +107,14 @@ const routes = [
         /* webpackChunkName: "countries" */ '@/views/projects/Countries.vue'
       ),
   },
+  {
+    path: '/gravity',
+    name: 'gravity',
+    redirect: () => {
+      window.location.href = '/gravity.html'
+      return '/'
+    }
+  }
 ]
 
 export default createRouter({

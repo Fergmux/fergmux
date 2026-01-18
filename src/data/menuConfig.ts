@@ -81,6 +81,11 @@ export const projectConfig = [
     route: 'countries',
     text: 'A map of the world.',
   },
+  {
+    name: 'Gravity',
+    route: 'gravity',
+    text: 'A WebGPU gravity demo.',
+  },
 ]
 
 export const careerSections = [

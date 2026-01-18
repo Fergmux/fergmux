@@ -36,6 +36,10 @@
         font-size: 13px;
         line-height: 1.35;
         user-select: none;
+        opacity: 0;
+        &:hover {
+          opacity: 1;
+        }
       }
       .ui b {
         color: #fff;
@@ -515,7 +519,7 @@ fn fs(in: VSOut) -> @location(0) vec4<f32> {
           const clickPull = leftDown ? 0.3 : rightDown ? -0.3 : 0.0;
 
           // Slightly more damping while repelling helps avoid unstable blow-ups at high counts.
-          const damping = rightDown ? 0.999 : 0.999;
+          const damping = rightDown ? 0.997 : 0.997;
 
           const sizePx = 1.4;
 
