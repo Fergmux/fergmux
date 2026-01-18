@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>WebGPU Galaxy — 1 to 1,000,000 particles</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: #05070c;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100vw;
+        height: 100vh;
+        display: block;
+      }
+
+      .ui {
+        position: fixed;
+        left: 14px;
+        top: 14px;
+        width: 300px;
+        padding: 12px;
+        border: 1px solid rgba(140, 170, 255, 0.25);
+        border-radius: 14px;
+        background: rgba(10, 12, 20, 0.7);
+        backdrop-filter: blur(6px);
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto;
+        color: rgba(220, 230, 255, 0.92);
+        font-size: 13px;
+        line-height: 1.35;
+        user-select: none;
+      }
+      .ui b {
+        color: #fff;
+        font-weight: 650;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: baseline;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      .muted {
+        color: rgba(200, 210, 240, 0.75);
+      }
+      .hint {
+        margin-top: 6px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border: 1px solid rgba(140, 170, 255, 0.25);
+        border-radius: 999px;
+        background: rgba(40, 55, 95, 0.25);
+        color: rgba(230, 240, 255, 0.95);
+        font-variant-numeric: tabular-nums;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+
+    <div class="ui">
+      <div class="row">
+        <div><b>WebGPU Galaxy</b></div>
+        <div class="pill" id="fps">-- FPS</div>
+      </div>
+
+      <div class="row" style="margin-top: 8px">
+        <div>Particles</div>
+        <div class="pill" id="count">120,000</div>
+      </div>
+
+      <!-- log10 slider: 0..6 => 1..1,000,000 -->
+      <input
+        id="slider"
+        type="range"
+        min="0"
+        max="6"
+        step="0.01"
+        value="5.07918"
+      />
+
+      <div class="hint muted">
+        Mouse: attractor · <b>Left hold</b>: Pull · <b>Right hold</b>: push away
+        · R: reseed<br />
+        Slider uses a log scale (10<sup>x</sup>) and rebuilds on release.
+      </div>
+
+      <div class="muted" style="margin-top: 8px" id="status"></div>
+    </div>
+
+    <script type="module">
+      (async () => {
+        const canvas = document.getElementById("c");
+        const slider = document.getElementById("slider");
+        const countEl = document.getElementById("count");
+        const fpsEl = document.getElementById("fps");
+        const statusEl = document.getElementById("status");
+
+        if (!("gpu" in navigator)) {
+          statusEl.textContent = "WebGPU not available in this browser.";
+          return;
+        }
+
+        const adapter = await navigator.gpu.requestAdapter();
+        if (!adapter) {
+          statusEl.textContent = "No suitable GPU adapter found.";
+          return;
+        }
+
+        const device = await adapter.requestDevice();
+        const ctx = canvas.getContext("webgpu");
+        const format = navigator.gpu.getPreferredCanvasFormat();
+
+        function configure() {
+          const dpr = Math.min(2, window.devicePixelRatio || 1);
+          const w = Math.max(1, Math.floor(innerWidth * dpr));
+          const h = Math.max(1, Math.floor(innerHeight * dpr));
+          canvas.width = w;
+          canvas.height = h;
+          ctx.configure({ device, format, alphaMode: "premultiplied" });
+          return { w, h, dpr };
+        }
+        let { dpr } = configure();
+        addEventListener("resize", () => {
+          ({ dpr } = configure());
+        });
+
+        // Disable default right-click menu (prevents context menu stealing focus)
+        canvas.addEventListener("contextmenu", (e) => e.preventDefault(), {
+          passive: false,
+        });
+
+        // ----------------------------
+        // Shaders (stable bindings)
+        // ----------------------------
+        const WG = 256;
+
+        const computeWGSL = /* wgsl */ `
+struct Particle { pos: vec2<f32>, vel: vec2<f32> };
+
+struct Params {
+  attractor : vec2<f32>,
+  dt       : f32,
+  time     : f32,
+
+  canvas   : vec2<f32>,
+  pull     : f32,
+  clickPull: f32,
+
+  aspect   : f32,
+  sizePx   : f32,
+  damping  : f32,
+  pad0     : f32,
+};
+
+@group(0) @binding(0) var<storage, read>       srcParticles : array<Particle>;
+@group(0) @binding(1) var<storage, read_write> dstParticles : array<Particle>;
+@group(0) @binding(2) var<uniform> params : Params;
+
+fn hash(p: vec2<f32>) -> f32 {
+  let h = dot(p, vec2<f32>(127.1, 311.7));
+  return fract(sin(h) * 43758.5453123);
+}
+
+@compute @workgroup_size(${WG})
+fn cs(@builtin(global_invocation_id) id: vec3<u32>) {
+  let i = id.x;
+  if (i >= arrayLength(&srcParticles)) { return; }
+
+  var p = srcParticles[i];
+  let dt = params.dt;
+
+  let toA = params.attractor - p.pos;
+  let d2 = max(0.0007, dot(toA, toA));
+  let inv = inverseSqrt(d2);
+
+  let tang = vec2<f32>(-toA.y, toA.x) * inv;
+ let pull = params.pull + params.clickPull;
+  let fieldOn = select(0.0, 1.0, abs(pull) > 0.00001);
+
+  let gravity = toA * (pull * inv * inv);
+  let swirl   = tang * (0.12 + 0.10 * sin(params.time * 0.9 + f32(i) * 0.00003)) * fieldOn;
+
+
+  let n = hash(p.pos * 12.0 + vec2<f32>(params.time * 0.05, params.time * 0.03)) - 0.5;
+  let turb = vec2<f32>(-p.vel.y, p.vel.x) * (n * 0.02);
+
+  p.vel += (gravity + swirl + turb) * dt;
+  p.vel *= params.damping;
+  p.pos += p.vel * dt;
+
+  if (p.pos.x < -1.2) { p.pos.x =  1.2; }
+  if (p.pos.x >  1.2) { p.pos.x = -1.2; }
+  if (p.pos.y < -1.2) { p.pos.y =  1.2; }
+  if (p.pos.y >  1.2) { p.pos.y = -1.2; }
+
+  dstParticles[i] = p;
+}
+`;
+
+        const renderWGSL = /* wgsl */ `
+struct Particle { pos: vec2<f32>, vel: vec2<f32> };
+
+struct Params {
+  attractor : vec2<f32>,
+  dt       : f32,
+  time     : f32,
+
+  canvas   : vec2<f32>,
+  pull     : f32,
+  clickPull: f32,
+
+  aspect   : f32,
+  sizePx   : f32,
+  damping  : f32,
+  pad0     : f32,
+};
+
+@group(0) @binding(0) var<storage, read> particles : array<Particle>;
+@group(0) @binding(1) var<uniform> params : Params;
+
+struct VSOut {
+  @builtin(position) pos : vec4<f32>,
+  @location(0) uv : vec2<f32>,
+  @location(1) vmag : f32,
+};
+
+fn quad_vertex(vid: u32) -> vec2<f32> {
+  switch vid {
+    case 0u: { return vec2<f32>(-1.0, -1.0); }
+    case 1u: { return vec2<f32>( 1.0, -1.0); }
+    case 2u: { return vec2<f32>(-1.0,  1.0); }
+    case 3u: { return vec2<f32>(-1.0,  1.0); }
+    case 4u: { return vec2<f32>( 1.0, -1.0); }
+    default:{ return vec2<f32>( 1.0,  1.0); }
+  }
+}
+
+@vertex
+fn vs(@builtin(vertex_index) vid: u32,
+      @builtin(instance_index) iid: u32) -> VSOut {
+  var out: VSOut;
+
+  let p = particles[iid];
+  let pos = p.pos;
+  let vel = p.vel;
+
+  let aspect = params.aspect;
+  let q = quad_vertex(vid);
+
+  // px -> NDC scale
+  let sx = (params.sizePx / params.canvas.x) * 2.0;
+  let sy = (params.sizePx / params.canvas.y) * 2.0;
+
+  let vm = clamp(length(vel) * 10.0, 0.0, 6.0);
+  let scale = 1.0 + vm * 0.12;
+
+  var offset = vec2<f32>(q.x * sx, q.y * sy) * scale;
+  offset.y /= aspect;
+
+  let x = pos.x + offset.x;
+  let y = pos.y + offset.y;
+
+  out.pos = vec4<f32>(x, y * aspect, 0.0, 1.0);
+  out.uv = q * 0.5 + vec2<f32>(0.5, 0.5);
+  out.vmag = vm;
+  return out;
+}
+
+@fragment
+fn fs(in: VSOut) -> @location(0) vec4<f32> {
+  let p = in.uv * 2.0 - vec2<f32>(1.0, 1.0);
+  let r2 = dot(p, p);
+
+  let core = 1.0 - smoothstep(0.0, 0.55, r2);
+  let halo = 1.0 - smoothstep(0.25, 1.25, r2);
+
+  let t = clamp(in.vmag / 6.0, 0.0, 1.0);
+  let cool = vec3<f32>(0.30, 0.55, 1.00);
+  let warm = vec3<f32>(1.00, 0.40, 0.78);
+  let col = mix(cool, warm, t);
+
+  let a = (core * 0.9 + halo * 0.55) * 0.9;
+  let rgb = col * (core * 1.1 + halo * 0.65);
+
+  return vec4<f32>(rgb, a);
+}
+`;
+
+        const computeModule = device.createShaderModule({ code: computeWGSL });
+        const renderModule = device.createShaderModule({ code: renderWGSL });
+
+        const computePipeline = device.createComputePipeline({
+          layout: "auto",
+          compute: { module: computeModule, entryPoint: "cs" },
+        });
+
+        const renderPipeline = device.createRenderPipeline({
+          layout: "auto",
+          vertex: { module: renderModule, entryPoint: "vs" },
+          fragment: {
+            module: renderModule,
+            entryPoint: "fs",
+            targets: [
+              {
+                format,
+                blend: {
+                  color: {
+                    srcFactor: "src-alpha",
+                    dstFactor: "one",
+                    operation: "add",
+                  },
+                  alpha: {
+                    srcFactor: "one",
+                    dstFactor: "one-minus-src-alpha",
+                    operation: "add",
+                  },
+                },
+              },
+            ],
+          },
+          primitive: { topology: "triangle-list" },
+        });
+
+        // ----------------------------
+        // GPU resources that change with particle count
+        // ----------------------------
+        let NUM = 120_000;
+        let DISPATCH = Math.ceil(NUM / WG);
+
+        let bufA = null,
+          bufB = null;
+        let computeBG = null,
+          renderBG = null;
+
+        const uniformBuffer = device.createBuffer({
+          size: 64,
+          usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+        });
+
+        function seed(buffer, count) {
+          const data = new Float32Array(count * 4);
+          for (let i = 0; i < count; i++) {
+            const a = Math.random() * Math.PI * 2;
+            const r = Math.pow(Math.random(), 0.55) * 0.98;
+            const x = Math.cos(a) * r;
+            const y = Math.sin(a) * r;
+
+            const tx = -y,
+              ty = x;
+            const v = 0.14 + 0.36 * (1 - r);
+
+            data[i * 4 + 0] = x;
+            data[i * 4 + 1] = y;
+            data[i * 4 + 2] = tx * v * (0.85 + Math.random() * 0.3);
+            data[i * 4 + 3] = ty * v * (0.85 + Math.random() * 0.3);
+          }
+          device.queue.writeBuffer(buffer, 0, data);
+        }
+
+        function makeComputeBG(src, dst) {
+          return device.createBindGroup({
+            layout: computePipeline.getBindGroupLayout(0),
+            entries: [
+              { binding: 0, resource: { buffer: src } },
+              { binding: 1, resource: { buffer: dst } },
+              { binding: 2, resource: { buffer: uniformBuffer } },
+            ],
+          });
+        }
+        function makeRenderBG(src) {
+          return device.createBindGroup({
+            layout: renderPipeline.getBindGroupLayout(0),
+            entries: [
+              { binding: 0, resource: { buffer: src } },
+              { binding: 1, resource: { buffer: uniformBuffer } },
+            ],
+          });
+        }
+
+        function rebuildForCount(newCount) {
+          const clamped = Math.max(1, Math.min(1_000_000, newCount | 0));
+          NUM = clamped;
+          DISPATCH = Math.ceil(NUM / WG);
+
+          const bytes = NUM * 16;
+          bufA = device.createBuffer({
+            size: bytes,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+          });
+          bufB = device.createBuffer({
+            size: bytes,
+            usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST,
+          });
+
+          seed(bufA, NUM);
+          seed(bufB, NUM);
+
+          computeBG = makeComputeBG(bufA, bufB);
+          renderBG = makeRenderBG(bufB);
+
+          countEl.textContent = NUM.toLocaleString();
+          statusEl.textContent = `Dispatch: ${DISPATCH.toLocaleString()} workgroups · ${(
+            bytes /
+            1024 /
+            1024
+          ).toFixed(1)} MiB per buffer`;
+        }
+
+        rebuildForCount(NUM);
+
+        // ----------------------------
+        // Slider (log scale, rebuild on release)
+        // ----------------------------
+        function sliderToCount(v) {
+          const n = Math.pow(10, Number(v)); // 10^v
+          return Math.round(n);
+        }
+
+        slider.addEventListener("input", () => {
+          const preview = sliderToCount(slider.value);
+          countEl.textContent = preview.toLocaleString();
+        });
+
+        function commitSlider() {
+          const n = sliderToCount(slider.value);
+          rebuildForCount(n);
+        }
+        slider.addEventListener("change", commitSlider);
+        slider.addEventListener("pointerup", commitSlider);
+        slider.addEventListener("touchend", commitSlider);
+
+        // ----------------------------
+        // Input (mouse attractor + left/right click)
+        // ----------------------------
+        let mx = 0,
+          my = 0;
+        let leftDown = false;
+        let rightDown = false;
+
+        function toNDC(clientX, clientY) {
+          const rect = canvas.getBoundingClientRect();
+          const px = (clientX - rect.left) * dpr;
+          const py = (clientY - rect.top) * dpr;
+          const x = (px / canvas.width) * 2 - 1;
+          const y = -((py / canvas.height) * 2 - 1);
+          return { x, y };
+        }
+
+        addEventListener("pointermove", (e) => {
+          const ndc = toNDC(e.clientX, e.clientY);
+
+          // Aspect-correct attractor space so cursor and gravity well align visually.
+          const aspect = canvas.width / canvas.height;
+          mx = ndc.x;
+          my = ndc.y / aspect;
+        });
+
+        addEventListener("pointerdown", (e) => {
+          if (e.button === 0) leftDown = true;
+          if (e.button === 2) rightDown = true;
+        });
+        addEventListener("pointerup", (e) => {
+          if (e.button === 0) leftDown = false;
+          if (e.button === 2) rightDown = false;
+        });
+        addEventListener("pointercancel", () => {
+          leftDown = false;
+          rightDown = false;
+        });
+        addEventListener("blur", () => {
+          leftDown = false;
+          rightDown = false;
+        });
+
+        addEventListener("keydown", (e) => {
+          if (e.code === "KeyR") {
+            if (bufA && bufB) {
+              seed(bufA, NUM);
+              seed(bufB, NUM);
+            }
+          }
+        });
+
+        // ----------------------------
+        // Loop + FPS
+        // ----------------------------
+        let lastT = performance.now();
+        let fpsAcc = 0,
+          fpsCount = 0;
+
+        function frame(now) {
+          const dt = Math.min(0.033, (now - lastT) / 1000);
+          lastT = now;
+
+          const aspect = canvas.width / canvas.height;
+
+          // tuning
+          const pull = 0.0;
+
+          // Continuous "anti gravity well" on right click (repel).
+          // Positive attracts, negative repels.
+          const clickPull = leftDown ? 0.3 : rightDown ? -0.3 : 0.0;
+
+          // Slightly more damping while repelling helps avoid unstable blow-ups at high counts.
+          const damping = rightDown ? 0.999 : 0.999;
+
+          const sizePx = 1.4;
+
+          const u = new Float32Array([
+            mx,
+            my,
+            dt,
+            now / 1000,
+            canvas.width,
+            canvas.height,
+            pull,
+            clickPull,
+            aspect,
+            sizePx,
+            damping,
+            0,
+          ]);
+          device.queue.writeBuffer(uniformBuffer, 0, u);
+
+          const encoder = device.createCommandEncoder();
+
+          // compute: A -> B
+          {
+            const pass = encoder.beginComputePass();
+            pass.setPipeline(computePipeline);
+            pass.setBindGroup(0, computeBG);
+            pass.dispatchWorkgroups(DISPATCH);
+            pass.end();
+          }
+
+          // render: draw from latest = B
+          {
+            const view = ctx.getCurrentTexture().createView();
+            const pass = encoder.beginRenderPass({
+              colorAttachments: [
+                {
+                  view,
+                  clearValue: { r: 0.02, g: 0.03, b: 0.06, a: 1.0 },
+                  loadOp: "clear",
+                  storeOp: "store",
+                },
+              ],
+            });
+            pass.setPipeline(renderPipeline);
+            pass.setBindGroup(0, renderBG);
+            pass.draw(6, NUM);
+            pass.end();
+          }
+
+          device.queue.submit([encoder.finish()]);
+
+          // swap ping-pong buffers
+          {
+            const tmp = bufA;
+            bufA = bufB;
+            bufB = tmp;
+            computeBG = makeComputeBG(bufA, bufB);
+            renderBG = makeRenderBG(bufB);
+          }
+
+          // fps
+          fpsAcc += dt;
+          fpsCount++;
+          if (fpsAcc >= 0.5) {
+            const fps = Math.round(fpsCount / fpsAcc);
+            fpsEl.textContent = `${fps} FPS`;
+            fpsAcc = 0;
+            fpsCount = 0;
+          }
+
+          requestAnimationFrame(frame);
+        }
+
+        requestAnimationFrame(frame);
+      })();
+    </script>
+  </body>
+</html>
