@@ -114,7 +114,15 @@ const routes = [
       window.location.href = '/gravity.html'
       return '/'
     }
-  }
+  },
+  {
+    path: '/projects/journey',
+    name: 'journey',
+    redirect: () => {
+      window.location.href = 'https://dice-journey.netlify.app/'
+      return '/'
+    },
+  },
 ]
 
 export default createRouter({

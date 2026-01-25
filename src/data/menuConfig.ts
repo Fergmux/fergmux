@@ -86,6 +86,16 @@ export const projectConfig = [
     route: 'gravity',
     text: 'A WebGPU gravity demo.',
   },
+  {
+    name: 'Gravity',
+    route: 'gravity',
+    text: 'A WebGPU gravity demo.',
+  },
+  {
+    name: 'Dice Journey',
+    route: 'journey',
+    text: 'A DnD dice sequence builder.',
+  },
 ]
 
 export const careerSections = [
