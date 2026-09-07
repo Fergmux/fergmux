@@ -1,7 +1,9 @@
 <template>
   <div class="bg-img bg-img-cover min-h-screen">
     <div class="flex flex-col items-center pt-20">
-      <h1 class="mb-7 text-5xl font-semibold underline">Wordle solver</h1>
+      <h1 class="mb-7 text-5xl font-semibold underline drop-shadow-3xl">
+        Wordle solver
+      </h1>
 
       <div class="m-5 grid grid-cols-5 gap-1 font-bold">
         <div

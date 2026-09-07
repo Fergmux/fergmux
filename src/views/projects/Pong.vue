@@ -1,7 +1,9 @@
 <template>
   <div class="bg-img bg-img-cover min-h-screen">
     <div class="flex flex-col items-center pt-20">
-      <h1 class="mb-7 text-5xl font-semibold underline">Pong</h1>
+      <h1 class="mb-7 text-5xl font-semibold underline drop-shadow-3xl">
+        Pong
+      </h1>
       <canvas id="mycanvas" class="pong-canvas"></canvas>
     </div>
   </div>

@@ -119,9 +119,10 @@ export default {
       if (generating) return
       generating = true
 
-      const gridSize = gridSizeRef.value
+      const gridSize = Number(gridSizeRef.value)
       cellWidth = width / gridSize
       cellHeight = height / gridSize
+      ctx.clearRect(0, 0, width, height)
 
       const cells = []
       const {
@@ -160,10 +161,12 @@ export default {
 
       // place temple
       function placeTemple(image, size, maxOffset) {
+        const offset = Math.floor(maxOffset)
+        const locationRange = gridSize - offset - size + 1
         const templeLocationX =
-          Math.floor(Math.random() * (gridSize - maxOffset - size)) + maxOffset
+          Math.floor(Math.random() * locationRange) + offset
         const templeLocationY =
-          Math.floor(Math.random() * (gridSize - maxOffset - size)) + maxOffset
+          Math.floor(Math.random() * locationRange) + offset
 
         for (let i = templeLocationX; i < templeLocationX + size; i++) {
           for (let j = templeLocationY; j < templeLocationY + size; j++) {

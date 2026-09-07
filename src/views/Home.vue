@@ -15,13 +15,19 @@
         <section
           v-for="item in menuItems"
           :key="item.route"
-          class="menu-section px-10 py-5"
+          class="menu-section group px-10 py-5 transition duration-200 hover:-translate-y-1"
         >
           <router-link class="m-2" :to="{ name: item.route }">
-            <h2 class="text-5xl font-semibold drop-shadow-3xl">
+            <h2
+              class="text-5xl font-semibold drop-shadow-3xl transition-colors duration-200 group-hover:text-mint-900"
+            >
               {{ item.name }}
             </h2>
-            <p class="py-5 text-lg drop-shadow-3xl">{{ item.text }}</p>
+            <p
+              class="py-5 text-lg text-mint-900 drop-shadow-3xl transition-colors duration-200 group-hover:text-white"
+            >
+              {{ item.text }}
+            </p>
           </router-link>
         </section>
       </main>

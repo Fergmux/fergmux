@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen w-full p-10 md:p-16" :style="bgColorStyle">
     <div class="flex flex-col items-center pt-10">
-      <h1 class="signika mb-5 text-5xl font-bold underline drop-shadow-xl">
+      <h1 class="signika mb-5 text-5xl font-bold underline drop-shadow-3xl">
         Life Tracker
       </h1>
       <div

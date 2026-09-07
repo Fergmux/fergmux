@@ -87,14 +87,16 @@ export const projectConfig = [
     text: 'A WebGPU gravity demo.',
   },
   {
-    name: 'Gravity',
-    route: 'gravity',
-    text: 'A WebGPU gravity demo.',
-  },
-  {
     name: 'Dice Journey',
     route: 'journey',
     text: 'A DnD dice sequence builder.',
+    href: 'https://dice-journey.netlify.app/',
+  },
+  {
+    name: 'Yu-Gi-Oh! Sandbox',
+    route: 'yugioh-sandbox',
+    text: 'A sandbox for testing Yu-Gi-Oh card interactions.',
+    href: 'https://yugiohsandbox.com',
   },
 ]
 

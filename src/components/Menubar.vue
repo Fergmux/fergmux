@@ -65,16 +65,29 @@
           @mouseover="showProjects[1] = true"
           @mouseleave="hideProjects(1)"
         >
-          <router-link
-            v-for="project in projects"
-            :key="project.route"
-            :to="{ name: project.route }"
-            @click="hideMenu"
-          >
-            <div class="menu-item p-5 pl-8">
-              {{ project.name }}
-            </div>
-          </router-link>
+          <template v-for="project in projects" :key="project.route">
+            <a
+              v-if="project.href"
+              :href="project.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              @click="hideMenu"
+            >
+              <div class="menu-item p-5 pl-8">
+                {{ project.name }}
+              </div>
+            </a>
+
+            <router-link
+              v-else
+              :to="{ name: project.route }"
+              @click="hideMenu"
+            >
+              <div class="menu-item p-5 pl-8">
+                {{ project.name }}
+              </div>
+            </router-link>
+          </template>
         </div>
       </Transition>
     </div>
@@ -84,14 +97,14 @@
 <script lang="ts" setup>
 import { menuConfig, projectConfig } from '@/data/menuConfig'
 import { changeUser, userState } from '@/store/lifeTrackerStore'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const props = defineProps({
   modelValue: Boolean,
 })
 
 const showProjects = ref([false, false])
-const projects = ref(projectConfig)
+const projects = computed(() => [...projectConfig].reverse())
 
 const menuItems = ref(menuConfig.filter((item) => item.route !== 'projects'))
 

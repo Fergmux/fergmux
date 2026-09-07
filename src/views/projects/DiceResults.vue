@@ -1,7 +1,9 @@
 <template>
   <div class="bg-img bg-img-cover min-h-screen">
     <div class="flex flex-col items-center pt-20">
-      <h1 class="mb-10 text-5xl font-semibold underline">Dice results</h1>
+      <h1 class="mb-10 text-5xl font-semibold underline drop-shadow-3xl">
+        Dice results
+      </h1>
       <div class="flex w-full max-w-3xl flex-col items-center">
         <div class="mb-5 flex items-start text-center">
           Distribution when you roll a

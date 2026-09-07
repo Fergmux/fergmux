@@ -1,7 +1,7 @@
 <template>
   <div class="bg-img bg-img-cover">
     <div class="mx-auto flex flex-col items-center py-20">
-      <h1 class="mb-7 text-5xl font-semibold underline">
+      <h1 class="mb-7 text-5xl font-semibold underline drop-shadow-3xl">
         Game studio market share
       </h1>
 
