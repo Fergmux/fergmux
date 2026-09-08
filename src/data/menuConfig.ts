@@ -27,6 +27,11 @@ export const menuConfig = [
 
 export const projectConfig = [
   {
+    name: 'AoE II Hotkey Reader',
+    route: 'aoe-hotkeys',
+    text: 'Read, search and export Age of Empires II: DE hotkeys as plain text.',
+  },
+  {
     name: 'Life Tracker',
     route: 'life-tracker',
     text: 'A tracker for life goals and habits.',

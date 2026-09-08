@@ -5,6 +5,11 @@ import {
 
 const routes = [
   {
+    path: '/projects/aoe-hotkeys',
+    name: 'aoe-hotkeys',
+    component: () => import('@/views/projects/AoeHotkeys.vue'),
+  },
+  {
     path: '/',
     name: 'home',
     component: () => import('@/views/Home.vue'),
