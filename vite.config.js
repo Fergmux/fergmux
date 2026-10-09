@@ -15,6 +15,8 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env': process.env,
+    'process.env': {
+      FAUNADB_SERVER_SECRET: process.env.FAUNADB_SERVER_SECRET,
+    },
   },
 })

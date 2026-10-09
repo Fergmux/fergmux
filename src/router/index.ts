@@ -5,6 +5,11 @@ import {
 
 const routes = [
   {
+    path: '/projects/dragonwilds-save-converter',
+    name: 'dragonwilds-save-converter',
+    component: () => import('@/views/projects/DragonwildsConverter.vue'),
+  },
+  {
     path: '/projects/aoe-hotkeys',
     name: 'aoe-hotkeys',
     component: () => import('@/views/projects/AoeHotkeys.vue'),

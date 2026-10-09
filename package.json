@@ -2,6 +2,7 @@
   "name": "fergmux",
   "version": "0.0.0",
   "scripts": {
+    "test:dragonwilds": "tsc src/lib/dragonwilds.ts --outDir .netlify/dragonwilds-test --module commonjs --target es2022 --moduleResolution node --skipLibCheck --strict && node --test tests/dragonwilds.test.cjs",
     "test:hkp": "tsc netlify/functions/read-hkp.ts netlify/functions/write-hkp.ts --outDir .netlify/hkp-test --module commonjs --target es2022 --moduleResolution node --resolveJsonModule --esModuleInterop --skipLibCheck --strict && node --test tests/hkp.test.cjs",
     "serve": "vite",
     "build": "vite build",

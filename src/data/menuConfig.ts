@@ -27,6 +27,11 @@ export const menuConfig = [
 
 export const projectConfig = [
   {
+    name: 'Dragonwilds Save Converter',
+    route: 'dragonwilds-save-converter',
+    text: 'Access Xbox and PC Game Pass world saves as downloadable .sav files, privately in your browser.',
+  },
+  {
     name: 'AoE II Hotkey Reader',
     route: 'aoe-hotkeys',
     text: 'Read, search and export Age of Empires II: DE hotkeys as plain text.',
